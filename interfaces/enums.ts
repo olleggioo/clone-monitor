@@ -4,10 +4,11 @@ export enum PagesEnum {
   devices = 'Устройства',
   users = 'Пользователи',
   areas = 'Площадки',
+  // boxes = 'Коробки',
   pools = 'Шаблоны пулов',
   models = 'Модели',
   archive = 'Расторжение',
-  roleAccess = 'Доступы роли'
+  roleAccess = 'Роли'
 }
 
 export enum PagesEnumClients {
@@ -19,11 +20,13 @@ export enum PagesRolledEnum {
   // home = '',
   statistics = '',
   devices = '',
-  archive = '',
   users = '',
   areas = '',
+  // boxes = '',
   pools = '',
-  models = ''
+  models = '',
+  archive = '',
+  roleAccess = '',
 }
 
 export enum PagesRolledClientsEnum {

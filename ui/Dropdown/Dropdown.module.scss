@@ -145,6 +145,7 @@
   text-align: center;
   align-items: center;
   height: 44px;
+  min-width: 159px;
 }
 
 .itemFlex {
@@ -171,4 +172,12 @@
       stroke: #D2D2D2;
     }
   }
+}
+
+.empty {
+  text-align: center;
+  height: 44px;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 100%;
 }

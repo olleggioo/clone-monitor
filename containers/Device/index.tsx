@@ -37,6 +37,8 @@ import { Menu, MenuItem } from '@mui/material'
 import ArrowDown from '@/icons/ArrowDown'
 import { useRouter } from 'next/router'
 import Comments from '@/modals/PoolSettings/Comments'
+import { hasAccess } from '@/helpers/AccessControl'
+import { requestsAccessMap } from '@/helpers/componentAccessMap'
 
 const tabControls = [
   { text: 'Хэшрейт' },
@@ -76,9 +78,9 @@ const Device: FC<DeviceI> = ({
   comment,
   devicePools,
   deviceLogs,
-  deviceComments
+  deviceComments,
+  energyDay
 }) => {
-  console.log("Daa", deviceBoards)
   const [reloadModal, setReloadModal] = useState(false)
   const [editSingleDevice, setEditSingleDevice] = useState<{id?: string, flag: boolean} | null>({
     id: id,
@@ -103,13 +105,13 @@ const Device: FC<DeviceI> = ({
   const Buttons = () => {
     return (
         <div className={styles.buttons}>
-          <Button
+          {hasAccess(requestsAccessMap.reloadManyDevices) && <Button
             appearance="icon"
             icon={<IconRefresh width={22} height={22} />}
             className={styles.btn}
             onClick={() => setReloadModal(true)}
-          />
-          <Button
+          />}
+          {hasAccess(requestsAccessMap.updateDevice) && <Button
             appearance="icon"
             icon={<IconSettings width={22} height={22} />}
             // href={`/edit-device?id=${id}`}
@@ -120,7 +122,7 @@ const Device: FC<DeviceI> = ({
               }
             })}
             className={styles.btn}
-          />
+          />}
         </div>
       )
   }
@@ -248,13 +250,15 @@ const Device: FC<DeviceI> = ({
         item.value = date
         break
       case 'текущая эффективность':
-        const hoursPassed = moment().diff(moment().startOf('day'), 'hours', true);
-        const value = uptimeTotal && ((uptimeTotal / 12) / (nominalEnergy * nominalHashrate * hoursPassed)) * 100
-        item.value = uptimeTotal 
-          ? value > 100
-            ? "100 %"
-            : value.toFixed(2).toString() + " %"
-          : "0 %"
+        const value = energyDay && (energyDay.sum / (nominalHashrate * energyDay.length)) * 100
+        item.value = value ? value.toFixed(2).toString() + " %" : " %"
+        // const hoursPassed = moment().diff(moment().startOf('day'), 'hours', true);
+        // const value = uptimeTotal && ((uptimeTotal / 12) / (nominalEnergy * nominalHashrate * hoursPassed)) * 100
+        // item.value = uptimeTotal 
+        //   ? value > 100
+        //     ? "100 %"
+        //     : value.toFixed(2).toString() + " %"
+        //   : "0 %"
         break
     }
     return item
@@ -349,32 +353,36 @@ const Device: FC<DeviceI> = ({
           <Boards data={deviceBoards} algorithm={algorithm.name} />
         )}
 
-        <Comment 
+        {hasAccess(requestsAccessMap.getComments) && <Comment 
           deviceComments={deviceComments} 
           setModalComment={setModalComment}
-        />
+        />}
 
         {devicePools && !!devicePools.length && (
           <Pools data={devicePools} />
         )}
-
-        {deviceFan && deviceFan.length !== 0 && <Coolers modelId={model.name} data={deviceFan} />}
+        {deviceFan && deviceFan.length !== 0 && <div style={!hasAccess(requestsAccessMap.getComments) ? {
+          gridColumn: "span 2"
+        } : {}}>
+          <Coolers modelId={model.name} data={deviceFan} />  
+        </div>}
         <ChartWithControls
           deviceId={id}
           modelId={model.name}
           tabControls={tabControls}
           algorithm={algorithm.name}
+          filterAlgorithm={algorithm}
         />
 
       </div>
         <Dashboard className={styles.wrapperLogs}>
 
-          <AccordionComponent 
+          {hasAccess(requestsAccessMap.getDeviceDataHistory) && <AccordionComponent 
             title='История действия с устройством'
             editable={false}
           >
             <Log id={id} listLog={listLog && listLog.rows && listLog.rows.length !== 0 ? listLog : {rows: []}} />
-          </AccordionComponent>
+          </AccordionComponent>}
           {deviceLogs && deviceLogs.length !== 0 && <AccordionComponent 
             title="Ошибки с устройства"
             editable={false}
@@ -472,12 +480,12 @@ const Device: FC<DeviceI> = ({
         </div>
           <Dashboard className={styles.wrapperLogs}>
   
-            <AccordionComponent 
+            {hasAccess(requestsAccessMap.getDeviceDataHistory) && <AccordionComponent 
               title='История действия с устройством'
               editable={false}
             >
               <Log id={id} listLog={listLog && listLog.rows && listLog.rows.length !== 0 ? listLog : {rows: []}} />
-            </AccordionComponent>
+            </AccordionComponent>}
             {deviceLogs && deviceLogs.length !== 0 && <AccordionComponent 
               title="Ошибки с устройства"
               editable={false}

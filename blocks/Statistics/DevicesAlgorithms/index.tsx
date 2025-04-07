@@ -69,6 +69,8 @@ const StatsDevicesAlgorithms: FC<{ className?: string, periodType: ChartPeriodTy
               deviceAPI.getDevicesHashrateCacheDaySum({
                 where: {
                   algorithmId: algorithm.id,
+                  areaId: filterState.area || null,
+                  userId: filterState.client || null,
                   createdAt: `$Between([\"${moment().subtract(5, 'minutes').subtract(3, 'hour').format('YYYY-MM-DD HH:mm:ss')}\",\"${moment().subtract(3, 'hour').format('YYYY-MM-DD HH:mm:ss')}\"])`
                 },
                 select: {
@@ -88,11 +90,17 @@ const StatsDevicesAlgorithms: FC<{ className?: string, periodType: ChartPeriodTy
             algorithmss.map((algorithm) => 
               deviceAPI.getDevicesStatusCount({
                 where: {
-                  userId: filterState.client || null,
+                  // userId: filterState.client || null,
+                  userDevices: {
+                    userId: filterState. client || null
+                  },
                   algorithmId: algorithm.id,
                   areaId: filterState.area || null,
                   modelId: filterState.model || null,
                   rangeipId: null,
+                },
+                select: {
+                  userDevices: true
                 }
               },
               { signal: abortController.signal } // Передаём signal в запрос

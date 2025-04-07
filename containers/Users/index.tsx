@@ -21,8 +21,9 @@ import { Button } from '@/ui'
 import { AddClientModal, AddUserModal } from '@/modals'
 import { hasAccess } from '@/helpers/AccessControl'
 import { requestsAccessMap } from '@/helpers/componentAccessMap'
+import AddUsersModal from '@/modals/User/Add/AddUsersModal'
 
-type ModalStateType = 'add-user' | 'add-client' | null
+type ModalStateType = 'add-user' | 'add-client' | 'add-users' | null
 
 const TABS: TabsControlI[] = [
   { text: RoleGroup.Clients },
@@ -43,9 +44,17 @@ const UsersContainer: FC = () => {
   const [totalCountUser, setTotalCountUser] = useState(0)
   const [state, setState] = useAtom(devicesUserIdFilterAtom)
 
-  const currentTabUsers = useMemo(() => usersList.filter(
-    (user) => RoleToGroup[user?.role?.name as RoleName] === currentTab
-  ), [usersList, currentTab, setUsersList])
+  // const currentTabUsers = useMemo(() => usersList.filter(
+  //   (user) => RoleToGroup[user?.role?.name as RoleName] === currentTab
+  // ), [usersList, currentTab, setUsersList])
+
+  const currentTabUsers = useMemo(() => 
+    usersList.filter((user) => {
+      const isTeamTab = currentTab === RoleGroup.Team;
+      return isTeamTab ? user?.role?.isTeam : !user?.role?.isTeam;
+    }), 
+    [usersList, currentTab]
+  );
   const paginationOffset = USERS_PER_PAGE * (page - 1)
 
   const test = document.getElementById("main-table")
@@ -60,12 +69,19 @@ const UsersContainer: FC = () => {
       phone?: string
       contract?: string
       roleId?: string
+      role?: any
     } = {}
 
     if(currentTab === RoleGroup.Clients) {
-      where.roleId === process.env.ROLE_CLIENT_ID      
+      // where.roleId === process.env.ROLE_CLIENT_ID
+      where.role = {
+        isTeam: false
+      }      
     } else {
-      where.roleId = `$In([\"${process.env.ROLE_MANAGER_ID}\", \"${process.env.ROLE_ROOT_ID}\"])`
+      // where.roleId = `$In([\"${process.env.ROLE_MANAGER_ID}\", \"${process.env.ROLE_ROOT_ID}\"])`
+      where.role = {
+        isTeam: true
+      }
     }
 
     if(filter.name.length !== 0) {
@@ -75,7 +91,7 @@ const UsersContainer: FC = () => {
       where.phone = `$Like("%${filter.phone}%")`
     }
     if(filter.contract.length !== 0) {
-      where.contract = `$Like("%${filter.contract}%")`
+      where.contract = `${filter.contract}`
     }
     Promise.all([
       userAPI
@@ -127,19 +143,35 @@ const UsersContainer: FC = () => {
   }, [filter, sortUserFilter, setUsersList, page, currentTab])
 
   useEffect(() => {
-    Promise.all([
-      userAPI.getUsersRole(),
-      deviceAPI.getDevicesStatus()
-    ]).then((res) => {
-      const [
-        roles, 
-        status
-      ] = res
-        console.log("big roles", roles)
-        setRolesList(roles.rows)
-        setStatuses(status.rows)
-    }).catch(console.error)
+    userAPI.getUsersRole()
+      .then((res) => {
+        setRolesList(res.rows)
+      })
+      .catch(err => console.error(err))
   }, [])
+
+  useEffect(() => {
+    deviceAPI.getDevicesStatus()
+      .then((res) => {
+        setStatuses(res.rows)
+        console.log("TEST")
+      })
+      .catch(err => console.error(err))
+  }, [])
+
+  // useEffect(() => {
+  //   Promise.all([
+  //     userAPI.getUsersRole(),
+  //     deviceAPI.getDevicesStatus()
+  //   ]).then((res) => {
+  //     const [
+  //       roles, 
+  //       status
+  //     ] = res
+  //       setRolesList(roles.rows)
+  //       setStatuses(status.rows)
+  //   }).catch(console.error)
+  // }, [])
 
   const [miningStateManyModal, setMiningStateModal] = useAtom(changeManyMiningStateInUsers)
   const [deleteManyUsers, setDeleteManyUsers] = useState(false)
@@ -236,8 +268,14 @@ const UsersContainer: FC = () => {
           />
           {modal === 'add-client' && <AddClientModal onClose={handleCloseModal} />}
           {modal === 'add-user' && <AddUserModal onClose={handleCloseModal} />}
+          {modal === 'add-users' && <AddUsersModal onClose={handleCloseModal} />}
           {hasAccess(requestsAccessMap.createUser) && <div className={styles.buttons}>
             <Button
+              title="Добавить пользователя"
+              icon={<IconUserPlus width={22} height={22} />}
+              onClick={() => setModal('add-users')}
+            />
+            {/* <Button
               title="Добавить клиента"
               icon={<IconUserPlus width={22} height={22} />}
               onClick={() => setModal('add-client')}
@@ -246,7 +284,7 @@ const UsersContainer: FC = () => {
               title="Добавить администратора"
               icon={<IconUserPlus width={22} height={22} />}
               onClick={() => setModal('add-user')}
-            />
+            /> */}
           </div>}
         </div>
         <UsersFilter setPage={setPage} />

@@ -68,7 +68,7 @@ const OneDayEnergyChart: FC<{
   }
   const dateNow = moment().subtract(3, 'hour').format('YYYY-MM-DD HH:mm:ss')
   useEffect(() => {
-    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog)) {
+    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) {
 
       setChartData([])
         
@@ -145,7 +145,7 @@ const OneDayEnergyChart: FC<{
               order: {
                 createdAt: "ASC"
               },
-              limit: 96
+              limit: 500
             }
             if (filterParams.areaId) {
               params.where.areaId = filterParams.areaId;
@@ -269,13 +269,15 @@ const OneDayEnergyChart: FC<{
           downloadData={downloadData}
         />
       </div>
-        {!isFetchingData && hasAccess(requestsAccessMap.getDevicesLogEnergyLog) && <Chart
-            filterParams={filterState}
-            chartData={chartData}
-            dataType={chartDataType}
-            period={periodType}
-            loading={loading}
-            chartRef={chartRef}
+        {!isFetchingData && 
+        (hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) && 
+        <Chart
+          filterParams={filterState}
+          chartData={chartData}
+          dataType={chartDataType}
+          period={periodType}
+          loading={loading}
+          chartRef={chartRef}
         />}
     </Dashboard>
   )

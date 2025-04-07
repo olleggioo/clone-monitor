@@ -38,7 +38,7 @@ export const getUsersTableData = (
       let title
       if (cell.accessor) {
         if (cell.accessor === 'role') {
-            title = Roles[user[cell.accessor].name as RoleName];
+            title = Roles[user[cell.accessor].name as RoleName] || user.role.name;
         } else if (cell.accessor === 'statuses') {
             // Формируем строку с количеством устройств по каждому статусу
             title = statuses.map(status => {

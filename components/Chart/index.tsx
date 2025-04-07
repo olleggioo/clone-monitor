@@ -22,6 +22,8 @@ import { getDataValues, getUnit } from '@/helpers/buildChart'
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useAtom } from 'jotai'
 import { atomChartType } from '@/atoms/statsAtom'
+import getHashRate from '@/helpers/getHashrate'
+import { getHashRateUnit } from '@/helpers'
 
 ChartJS.register(
   CategoryScale,
@@ -38,14 +40,12 @@ const generateLabelsAndDataWithGaps = (chartData: any, period: any, stepInterval
   const newChart: any = [];
   const gapDuration = stepInterval;
   const gapRanges: any = [];
-
   for (let i = 0; i < chartData.length; i++) {
     const currentTime = moment(chartData[i].createdAt).valueOf();
     if(period === "day") {
       if (i > 0) {
         const previousTime = moment(chartData[i - 1].createdAt).valueOf();
         const missingSteps = Math.floor((currentTime - previousTime) / gapDuration);
-
         if (missingSteps > 1) {
           gapRanges.push({
             start: previousTime,
@@ -62,11 +62,18 @@ const generateLabelsAndDataWithGaps = (chartData: any, period: any, stepInterval
         }
       }
     }
+    if(period !== "week" && period !== "month") {
 
-    newChart.push({
-      createdAt: moment(currentTime).add(3, 'hour').format('YYYY-MM-DD HH:mm:ss'),
-      value: Number(chartData[i].value)
-    });
+      newChart.push({
+        createdAt: moment(currentTime).add(3, 'hour').format('YYYY-MM-DD HH:mm:ss'),
+        value: Number(chartData[i].value)
+      });
+    } else {
+      newChart.push({
+        createdAt: moment(currentTime).format('YYYY-MM-DD HH:mm:ss'),
+        value: Number(chartData[i].value)
+      });
+    }
   }
 
 
@@ -83,24 +90,24 @@ const Chart: FC<ChartI> = ({
   loading,
   chartRef,
   date,
-  setDate
+  setDate,
+  filterAlgorithm
 }) => {
   const isScrypt = algorithm === 'scrypt'
-  const unitMap = useMemo(() => getUnit(algorithm, filterParams, dataType, period, chartData), [algorithm, filterParams, dataType, period, chartData]);
-
+  const unitMap = useMemo(() => getUnit(algorithm, filterParams, dataType, period, chartData), [algorithm, filterAlgorithm, dataType, period, chartData]);
+  console.log("filter", filterAlgorithm)
+  const {newChart, gapRanges} = useMemo(() => generateLabelsAndDataWithGaps(chartData, period), [chartData, period]);
+  const labels = useMemo(() => newChart.map((item: any) => moment(item.createdAt).format('D MMM HH:mm')), [newChart]);
+  const {datasetData, unitValue} = useMemo(() => getDataValues(newChart, dataType, algorithm, filterParams, period), [newChart, dataType, algorithm, filterParams, period]);
+  const datasetDataNumber = datasetData.map(Number)
+  console.log("unitValue", unitMap)
   const unitsMap: any = {
-    hashrate: `${unitMap}/s`,
+    hashrate: `${unitMap === "KH" ? "kH" : unitMap}/s`,
     consumption: unitMap,
     temperature: 'C°',
     fans: 'RPM',
     uptime: '%'
   }
-
-  const {newChart, gapRanges} = useMemo(() => generateLabelsAndDataWithGaps(chartData, period), [chartData, period]);
-  const labels = useMemo(() => newChart.map((item: any) => moment(item.createdAt).format('D MMM HH:mm')), [newChart]);
-  const datasetData = useMemo(() => getDataValues(newChart, dataType, algorithm, filterParams, period), [newChart, dataType, algorithm, filterParams, period]);
-  const datasetDataNumber = datasetData.map(Number)
-
   const minVal = Math.min(...datasetDataNumber)
   const maxVal = Math.max(...datasetDataNumber)
   const options: any = {

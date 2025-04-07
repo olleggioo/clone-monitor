@@ -20,8 +20,11 @@ import IconTool from "@/icons/Tool"
 import IconSave2 from "@/icons/Save2"
 import IconRollBrush from "@/icons/RollBrush"
 import IconPower from "@/icons/Power"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
 
 interface TableRowNewI extends TableRowI {
+  accessId?: string
   index: number
   length?: number
   whichTable?: string
@@ -43,6 +46,7 @@ interface TableRowNewI extends TableRowI {
 
 const Row: FC<TableRowNewI> = ({
     id,
+    accessId,
     devicesId,
     userId,
     status,
@@ -75,7 +79,6 @@ const Row: FC<TableRowNewI> = ({
 
   const [state, setState] = useAtom(devicesUserIdFilterAtom)
   const [checked, setChecked] = useState(state.filter((item: any) => item.id === id)[0]?.flag || false);
-  const [lastUpdatedItem, setLastUpdatedItem] = useState(null);
 
   const [modalInfo, setModalInfo] = useAtom(modalInfoAtom)
   const [deviceId, setDeviceId] = useState<any>(null)
@@ -102,47 +105,6 @@ const Row: FC<TableRowNewI> = ({
       onClick && onClick()
     }
   }
-
-  const hasUserId = (userIdToCheck: string) => {
-    return state.some(device => device.id === userIdToCheck);
-  };
-
-  const handleCheckboxChange = (evt: any) => {
-    const newChecked = !checked;
-    if (newChecked === checked) {
-      return;
-    }
-    const currentRow = state.filter((item: any) => item.id === id);
-    setState((prevState) => {
-      const uniqueState = prevState.filter(
-        (item, index, array) => array.findIndex((t) => t.id === item.id) === index
-      );
-  
-      if (newChecked && currentRow.length === 0) {
-        setTextColor('red')
-        return [...uniqueState, { flag: true, id }];
-      } else {
-        setTextColor('black')
-        return uniqueState.filter((device) => device.id !== id);
-      }
-    });
-    if(devicesId !== undefined) {
-      setStateDevicesId((prevState: any) => {
-        const uniqueState = prevState.filter(
-          (item: any, index: any, array: any) => array.findIndex((t: any) => t.devicesId === item.devicesId) === index
-        );
-        if (newChecked) {
-          setTextColor('red')
-          return [...uniqueState, { devicesId }];
-        } else {
-          setTextColor('black')
-          return uniqueState.filter((device: any) => device.devicesId !== devicesId);
-        }
-      })
-    }
-  
-    setChecked(newChecked);
-  };
 
   useEffect(() => {
     setChecked(false);
@@ -214,34 +176,26 @@ const Row: FC<TableRowNewI> = ({
 
   let someItems: DropdownItemI[] = []
 
-  // if(whichTable === "archive" && dropdownItems) {
-  //   let index = dropdownItems
-  //   if(status === "In archive") {
-  //     index?.push({
-  //       text: "Вывести из расторжения",
-  //       icon: <IconArchive width={20} height={20} />,
-  //       onClick: () => {}
-  //     })
-  //   }
-  //   someItems = index
-  // }
-
   if(whichTable === "device" && dropdownItems?.filter((item: any) => item.text === "Состояние")) {
     const miningState = columns.filter((item: any) => item.accessor === "miningState")[0]?.title
     let index = dropdownItems.filter((item: any) => item.text !== "Состояние")
     let lastArray = index[index.length - 1]
     index.pop()
     if(status && status === "Not online") {
-      index.push({
-        text: "В расторжение",
-        icon: <IconArchive width={20} height={20} />,
-        onClick: archiveDeviceModal
-      })
-      index.push({
-        text: "В ремонт",
-        icon: <IconTool width={20} height={20} />,
-        onClick: repairDeviceModal
-      })
+      if(hasAccess(requestsAccessMap.archiveDevice)) {
+        index.push({
+          text: "В расторжение",
+          icon: <IconArchive width={20} height={20} />,
+          onClick: archiveDeviceModal
+        })
+      }
+      if(hasAccess(requestsAccessMap.updateDevice)) {
+        index.push({
+          text: "В ремонт",
+          icon: <IconTool width={20} height={20} />,
+          onClick: repairDeviceModal
+        })
+      }
     }
     if(miningState === "Включено") {
       index.push({
@@ -250,13 +204,15 @@ const Row: FC<TableRowNewI> = ({
         onClick: disableDeviceModal
       })
       if(isReserved) {
-        index.unshift({
-          text: 'Восстановить',
-          icon: <IconRollBrush width={20} height={20} />,
-          onClick: restoreDeviceModal
-        })
+        if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+          index.unshift({
+            text: 'Восстановить',
+            icon: <IconRollBrush width={20} height={20} />,
+            onClick: restoreDeviceModal
+          })
+        }
       }
-      if(roleId === process.env.ROLE_ROOT_ID) {
+      if(hasAccess(requestsAccessMap.reserveDeviceById)) {
         index.unshift({
           text: 'Зарезервировать',
           icon: <IconSave2 width={20} height={20} />,
@@ -279,12 +235,14 @@ const Row: FC<TableRowNewI> = ({
       let lastArray = index[index.length - 1]
       index.pop()
       if((miningState === "Включен" || miningState === "Частично выключен")) {
-      index.unshift({
-          text: 'Восстановить',
-          icon: <IconRollBrush width={20} height={20} />,
-          onClick: restoreDeviceUserModal
-      })
-      if(roleId === process.env.ROLE_ROOT_ID) {
+        if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+          index.unshift({
+              text: 'Восстановить',
+              icon: <IconRollBrush width={20} height={20} />,
+              onClick: restoreDeviceUserModal
+          })
+        }
+      if(hasAccess(requestsAccessMap.reserveDeviceById)) {
         index.unshift({
           text: 'Зарезервировать',
           icon: <IconSave2 width={20} height={20} />,
@@ -421,8 +379,6 @@ const Row: FC<TableRowNewI> = ({
         <Checkbox
           value={userId}
           dataIndex={index}
-          // checked={checked || selectedRow.has(index)}
-          // checked={state.filter((item: any) => item.id === id)[0]?.flag || false}
           checked={checkedI}
           onChange={onChangeInput}
           keys={id}
@@ -461,19 +417,19 @@ const Row: FC<TableRowNewI> = ({
         })}
     {dropdownItems && 
       requiredAction && 
-      <div style={{
-        display: "flex",
-        gap: "20px",
-        alignItems: "center",
-        position: "sticky",
-        right: whichTable === "device" ? "0px" : "0px",
-        zIndex: 1,
-        width: "100%",
-        marginBottom: "20px",
-        background: "white",
-        // height: "100%",
-      // padding: "0px 23px"
-      }}>
+      <div 
+        style={{
+          display: "flex",
+          gap: "20px",
+          alignItems: "center",
+          position: "sticky",
+          right: whichTable === "device" ? "0px" : "0px",
+          zIndex: 1,
+          width: "100%",
+          marginBottom: "20px",
+          background: "white",
+        }}
+      >
 
       {roleId === process.env.ROLE_MANAGER_ID
         ? dropdownItems && requiredAction && whichTable === "comments" 
@@ -488,32 +444,6 @@ const Row: FC<TableRowNewI> = ({
               id={id} 
               whichTable={whichTable}
               className={styles.dropdown} 
-              style={length && 
-                required ? 
-                  whichTable === "device"
-                    ? { 
-                      "top": index === 0 ? "-50px" : "none", 
-                      "bottom": index === 1 ? "-30px" : "none", 
-                      "height": index === 0 ? "11.2rem" : "auto", 
-                      "right": "100px"
-                    } 
-                    : whichTable === "users"
-                      ? {
-                        "top": index === 0 ? "-50px" : "none", 
-                        "bottom": index === 1 ? "-30px" : "none", 
-                        "height": index === 0 ? "8.5rem" : "auto", 
-                        "right": "100px"
-                      }
-                      : { 
-                        "top": index === 0 ? "-50px" : "none", 
-                        "right": "100px"
-                      }
-                    : { 
-                      "top": index === 0 ? "-20px" : "none", 
-                      "height": index === 0 ? "3rem" : "auto",
-                      "right": "100px", 
-                    }
-              } 
             />
         : dropdownItems && requiredAction && whichTable === "comments" 
         
@@ -524,43 +454,28 @@ const Row: FC<TableRowNewI> = ({
         /> : <DropdownTest 
             items={someItems.length !== 0 ? someItems : dropdownItems} 
             id={id} 
+            accessId={accessId}
             whichTable={whichTable}
-            className={styles.dropdown} 
-            style={length && 
-              required 
-                ? whichTable === "device"
-                  ? { 
-                    "top": index === 0 ? "-50px" : "none", 
-                    "bottom": index === 1 ? "-30px" : "none", 
-                    "height": index === 0 ? "16.5rem" : "auto", 
-                    "right": "100px"
-                  } 
-                  : whichTable === "users" && view === RoleGroup.Clients
-                    ? {
-                      "top": index === 0 ? "-50px" : "none", 
-                      "bottom": index === 1 ? "-90px" : "none", 
-                      "height": index === 0 ? "19.2rem" : "auto", 
-                      "right": "100px"
-                    }
-                    : { 
-                      "top": index === 0 ? "-50px" : "none", 
-                      "height": index === 0 ? "8.2rem" : "auto",
-                      "right": "100px", 
-                    }
-                : { 
-                  "top": index === 0 ? "-69px" : "none", 
-                  "right": "100px"
-                }
-            } 
+            className={styles.dropdown}
           />
       }
       {(whichTable === "device" || whichTable === "users") && <div className={styles.addingColumn}>
-          <button
-            onClick={handleLinkDevice}
-            className={styles.toLink}
-          >
-            <IconPieChart width={20} height={20} />
-          </button>
+        {whichTable === "users" 
+          ? hasAccess(requestsAccessMap.getUserId) 
+            ? <button
+              onClick={handleLinkDevice}
+              className={styles.toLink}
+            >
+              <IconPieChart width={20} height={20} />
+            </button>
+            : <></>
+          : <button
+              onClick={handleLinkDevice}
+              className={styles.toLink}
+            >
+              <IconPieChart width={20} height={20} />
+            </button>
+            }
         </div>}
     </div>}
   </>

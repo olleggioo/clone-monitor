@@ -22,7 +22,7 @@ const UsersPage: NextPage = () => {
       <Head>
         <title>Пользователи</title>
       </Head>
-      {hasAccess(requestsAccessMap.getUsers)
+      {hasAccess(requestsAccessMap.getUsers) || hasAccess(requestsAccessMap.getUsersAuthedUserId)
         ? roleId === process.env.ROLE_ROOT_ID 
           ? <UsersContainer />
           : roleId === process.env.ROLE_MANAGER_ID ? <UsersContainerManager /> : <UsersContainer />

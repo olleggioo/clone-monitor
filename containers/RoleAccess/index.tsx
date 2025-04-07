@@ -16,18 +16,18 @@ import CreateAccessModal from "@/modals/Roles/CreateAccess";
 import CreateRole from "@/modals/Roles/CreateRole";
 import Alert from "@/modals/Areas/Alert";
 import { enqueueSnackbar } from "notistack";
+import EditRoleName from "@/modals/Roles/EditRoleName";
 
 const RoleAccessContainer = () => {
     const roleId = localStorage.getItem(`${process.env.API_URL}_role`)
 
     const [checkboxes, setCheckboxes] = useState(Object.entries(requestsAccessTranslation).map(item => item[1]));
     const [roles, setRoles] = useState<RoleDataStateI | null>(null)
-    console.log("roles", roles)
 
     useEffect(() => {
         userAPI.getUsersRole({
             where: {
-                id: `$Not($In(["${process.env.ROLE_ROOT_ID}"]))`
+                id: `$Not($In(["${process.env.ROLE_ROOT_ID}", "${process.env.ROLE_BOX_ID}"]))`
             },
             relations: {
                 roleAccesses: {
@@ -36,7 +36,6 @@ const RoleAccessContainer = () => {
             }
         })
             .then((res) => {
-                console.log("RES", res)
                 setRoles(res)
             })
             .catch(err => console.error(err))
@@ -59,11 +58,19 @@ const RoleAccessContainer = () => {
     const [modal, setModal] = useState<any>(null)
     const [roleIds, setRoleIds] = useState<any>(null)
     const [alertMessage, setAlertMessage] = useState<boolean>(false)
+    const [editRoleAlert, setEditRoleAlert] = useState<boolean>(false)
 
     const softDeleteArea = (id?: string) => {
         if(id) {
             setRoleIds(id);
             setAlertMessage(true)
+        }
+    }
+
+    const editRoleName = (id?: string) => {
+        if(id) {
+            setRoleIds(id);
+            setEditRoleAlert(true)
         }
     }
 
@@ -73,7 +80,7 @@ const RoleAccessContainer = () => {
                 .then((res) => {
                     userAPI.getUsersRole({
                         where: {
-                            id: `$Not($In(["${process.env.ROLE_ROOT_ID}"]))`
+                            id: `$Not($In(["${process.env.ROLE_ROOT_ID}", "${process.env.ROLE_BOX_ID}"]))`
                         },
                         relations: {
                             roleAccesses: {
@@ -82,7 +89,6 @@ const RoleAccessContainer = () => {
                         }
                     })
                         .then((res) => {
-                            console.log("RES", res)
                             setRoles(res)
                             setAlertMessage(false)
                             setRoleIds(null)
@@ -105,6 +111,11 @@ const RoleAccessContainer = () => {
         }
     }
 
+    const closeEditRole = () => {
+        setRoleIds(null)
+        setEditRoleAlert(false)
+    }
+
 
     return <Layout header={<ProfileUser title="Роли" />}>
         <Button
@@ -114,6 +125,7 @@ const RoleAccessContainer = () => {
             className={styles.btnAdd}
         />
         {modal === "create-role" && <CreateRole setRoles={setRoles} onClose={() => setModal(null)} />}
+        {roleIds !== null && roleIds.length !== 0 && editRoleAlert && <EditRoleName roles={roles} setRoles={setRoles} id={roleIds} onClose={closeEditRole} />}
         {alertMessage && roleIds && <Alert 
             title={"Удаление роли"} 
             content={""} 
@@ -131,8 +143,8 @@ const RoleAccessContainer = () => {
                             <div className={styles.connector}>
                                 <Button 
                                     icon={<IconEdit3 width={22} height={22} />}
-                                    title="Переименовать"
-                                    onClick={() => {}}
+                                    title="Редактировать"
+                                    onClick={() => editRoleName(item.id)}
                                     className={styles.btn}
                                 />
                                 <Button 
@@ -149,7 +161,7 @@ const RoleAccessContainer = () => {
                             </div>
                         </div>
                         <div className={styles.combineBlock}>
-                            <RolesTable rows={item.roleAccesses} />
+                            <RolesTable rows={item.roleAccesses} setRoles={setRoles} />
                         </div>
                     </AccordionComponent>
                 </div>

@@ -11,6 +11,8 @@ import CommentTable from "@/blocks/Devices/Comment/CommentTable";
 import { Button, Field } from "@/ui";
 import { isEqual } from "lodash";
 import { atomDataDevice } from "@/atoms/statsAtom";
+import { hasAccess } from "@/helpers/AccessControl";
+import { requestsAccessMap } from "@/helpers/componentAccessMap";
 
 interface CommentsI {
     id: string
@@ -41,33 +43,35 @@ const Comments: FC<CommentsI> = ({
     const [inputComment, setInputComment] = useState("")
 
     useEffect(() => {
-        let intervalId: NodeJS.Timeout;
-        const refresh = () => {
-            // setLoading(true)
-            deviceAPI.getComments({
-                where: {
-                    deviceId: id
-                },
-                order: {
-                    createdAt: "DESC"
-                }
-            }).then((res) => {
-                if(!isEqual(res, commentData)) {
-                    setCommentData(res)
-                }
-              }).catch((err: any) => {
-                console.error(err)
-            })
+        if(hasAccess(requestsAccessMap.getComments)) {
+            let intervalId: NodeJS.Timeout;
+            const refresh = () => {
+                // setLoading(true)
+                deviceAPI.getComments({
+                    where: {
+                        deviceId: id
+                    },
+                    order: {
+                        createdAt: "DESC"
+                    }
+                }).then((res) => {
+                    if(!isEqual(res, commentData)) {
+                        setCommentData(res)
+                    }
+                  }).catch((err: any) => {
+                    console.error(err)
+                })
+            }
+    
+            if (id) {
+                refresh();
+                intervalId = setInterval(refresh, 5000);
+            }
+    
+            return () => {
+                clearInterval(intervalId); 
+            };
         }
-
-        if (id) {
-            refresh();
-            intervalId = setInterval(refresh, 5000);
-        }
-
-        return () => {
-            clearInterval(intervalId); 
-        };
     }, [id, setCommentData])
 
     // useEffect(() => {
@@ -133,16 +137,19 @@ const Comments: FC<CommentsI> = ({
             })}
         </div> */}
         {commentData && commentData.rows.length !== 0 && <CommentTable rows={commentData.rows} />}
-        <Field 
-            placeholder="Комментарий"
-            value={inputComment}
-            onChange={(evt: any) => setInputComment(evt.target.value)}
-        />
-        <Button 
-            title="Добавить"
-            disabled={inputComment.length === 0}
-            onClick={commentSubmit}
-        />
+        
+        {hasAccess(requestsAccessMap.createComment) && <>
+            <Field 
+                placeholder="Комментарий"
+                value={inputComment}
+                onChange={(evt: any) => setInputComment(evt.target.value)}
+            />
+            <Button 
+                title="Добавить"
+                disabled={inputComment.length === 0}
+                onClick={commentSubmit}
+            />
+        </>}
   </Dialog>
 }
 

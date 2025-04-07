@@ -57,15 +57,15 @@ const StatisticsContainer: FC = () => {
       setPeriodType("day")
     }
     else if(diffDays > 1 && diffDays < 8) {
-      setPeriodType("month")
+      setPeriodType("week")
     } else if(diffDays > 8) {
       setPeriodType("month")
     }
   }, [startDate, endDate])
 
-  useEffect(() => {
-    deviceAPI.getAccess().then((res) => console.log("RES, :",res)).catch(err => console.error(err))
-  }, [])
+  // useEffect(() => {
+  //   deviceAPI.getAccess().then((res) => console.log("RES, :",res)).catch(err => console.error(err))
+  // }, [])
 
   useEffect(() => {
     if(hasAccess(requestsAccessMap.getDevicesAlgorithm)) {
@@ -187,7 +187,7 @@ const StatisticsContainer: FC = () => {
   }, [])
 
   useEffect(() => {
-    if(hasAccess(requestsAccessMap.getDevicesStatus) && hasAccess(requestsAccessMap.getDevices)) {
+    if(hasAccess(requestsAccessMap.getDevicesStatus) && (hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId))) {
       deviceAPI.getDevicesStatus({
           
       })
@@ -196,11 +196,17 @@ const StatisticsContainer: FC = () => {
             return deviceAPI.getDevicesStatusCount({ 
               where: { 
                 statusId: row.id, 
-                userId: filterState.client,
+                // userId: filterState.client,
+                userDevices: {
+                  userId: filterState. client || null
+                },
                 areaId: filterState.area, 
                 algorithmId: filterState.algorithm,
                 modelId: filterState.model 
-            } 
+              },
+              select: {
+                userDevices: true
+              } 
             });
           });
 
@@ -234,18 +240,24 @@ const StatisticsContainer: FC = () => {
           console.error("Error status", err)
         })
     }
-  }, [])
+  }, [filterState])
 
   useEffect(() => {
-    if(hasAccess(requestsAccessMap.getDevices)) {
+    if(hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId)) {
       deviceAPI.getDevicesStatusCount({
         where: {
-          userId: filterState. client || null,
+          userDevices: {
+            userId: filterState. client || null
+          },
+          // userId: filterState. client || null,
           areaId: filterState.area || null,
           algorithmId: filterState.algorithm || null,
           modelId: filterState.model || null,
           rangeipId: filterState.ranges || null,
           statusId: `$Not($In(["1eda7201-913e-11ef-8367-bc2411b3fd76"]))`
+        },
+        select: {
+          userDevices: true
         }
       })
         .then((res) => {
@@ -392,7 +404,6 @@ const StatisticsContainer: FC = () => {
   //     })
   // }, [filterState])
 
-  console.log("hasAccess(requestsAccessMap.getDevicesLogEnergyLog)", hasAccess(requestsAccessMap.getDevicesLogEnergyLog))
 
   return device !== "mobile" ? <Layout header={<ProfileUser title='Статистика' />}>
       <div className={styles.grid}>
@@ -403,14 +414,17 @@ const StatisticsContainer: FC = () => {
         />
         <StatsDashboard periodType={periodType} />
         {hasAccess(requestsAccessMap.getDevicesStatus) && <StatsDevicesStatuses className={styles.heightDashboard} />}
-        {hasAccess(requestsAccessMap.getDevicesLogEnergyLog) && <StatsDevicesAlgorithms periodType={periodType} className={styles.algorithmsTable} />}
+        {((hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) &&
+        (hasAccess(requestsAccessMap.getDevicesHashRateLogAuthedUserId) || hasAccess(requestsAccessMap.getDevicesHashRateLog)) && 
+        hasAccess(requestsAccessMap.getDevicesAlgorithm)
+      ) && <StatsDevicesAlgorithms periodType={periodType} className={styles.algorithmsTable} />}
         {currentChart === "Энергопотребление"
           ? periodType === "day"
             ? <OneDayEnergyChart 
               currentChart={currentChart} 
               periodType={periodType} 
               className={styles.filter_col_4} 
-              setCurrentChart={setCurrentChart}
+              setCurrentChart={setCurrentChart} 
               setPeriodType={setPeriodType}
               />
             : <EnergyChart 

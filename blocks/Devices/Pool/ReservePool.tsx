@@ -10,8 +10,8 @@ import { get, isEqual } from "lodash"
 const ReservePool: FC<{ data: DevicePoolI[]}> = ({
     data
 }) => {
-    const tableData = getPoolReserveTableData(data)
-    console.log("data", data)
+    const sortedData = data.sort((a: any, b: any) => a.pool.index - b.pool.index);
+    const tableData = getPoolReserveTableData(sortedData)
 
     return <div>
         <TestTable 

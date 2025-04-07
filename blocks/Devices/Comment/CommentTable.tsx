@@ -9,6 +9,9 @@ import Alert from "@/modals/Areas/Alert"
 import { deviceAPI } from "@/api"
 import { useAtom } from "jotai"
 import { atomDataDevice } from "@/atoms/statsAtom"
+import TableNew from "@/components/Table/TableNew"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
 
 const CommentTable = ({rows}: any) => {
     const [modalDelete, setModalDelete] = useState(false)
@@ -50,14 +53,16 @@ const CommentTable = ({rows}: any) => {
         }
     }
 
-    const tableDropDownItems: DropdownItemI[] = [
-        {
+    const tableDropDownItems: DropdownItemI[] = []
+
+    if(hasAccess(requestsAccessMap.deleteComment)) {
+        tableDropDownItems.push({
             text: 'Удалить',
             icon: <IconTrash width={20} height={20} />,
             onClick: handleDeleteClick,
             mod: "red"
-        },
-    ]
+        })
+    }
 
     return <>
         {modalDelete && <Alert 
@@ -67,12 +72,12 @@ const CommentTable = ({rows}: any) => {
             setOpen={setModalDelete} 
             handleDeleteClick={handleDeleteClick} 
         />}
-        <TestTable 
+        <TableNew 
             rows={tableData}
             columns={commentsTableHead}
             required={false}
             reqSort={false}
-            dropdownItems={tableDropDownItems}
+            dropdownItems={tableDropDownItems.length > 0 ? tableDropDownItems : undefined}
             // requiredAction={false}
             className={styles.container}
             whichTable="comments"

@@ -46,7 +46,13 @@ const StatsDashboard: FC<{periodType: ChartPeriodType}> = ({ periodType }) => {
   const filterParams = getDevicesFilterParams(filterState)
 
   const buildParams = (customDates: boolean = false) => {
-    const params: any = { where: {} }
+    const params: any = { 
+      where: {},
+      order: {
+        createdAt: "ASC"
+      },
+      limit: 5000,
+    }
     if (filterParams.areaId) params.where.areaId = filterParams.areaId
     if (filterParams.algorithm) params.where.algorithmId = filterParams.algorithm
     if (filterParams.model) params.where.modelId = filterParams.model
@@ -76,9 +82,8 @@ const StatsDashboard: FC<{periodType: ChartPeriodType}> = ({ periodType }) => {
           deviceAPI.getDevicesEnergyCacheDaySum(params)
         ])
       } else {
-        [energy, uptimes] = await Promise.all([
+        [energy] = await Promise.all([
           deviceAPI.getDevicesEnergyCacheMonth(params),
-          deviceAPI.getDevicesUptimeCacheMonthAvg(params)
         ])
       }
       sortByDate(energy, 'createdAt')
@@ -103,7 +108,7 @@ const StatsDashboard: FC<{periodType: ChartPeriodType}> = ({ periodType }) => {
   }, [filterState, periodType, startDate, endDate])
 
   useEffect(() => {
-    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog)) {
+    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) {
       const params = buildParams()
       fetchEnergyAndUptime(params, periodType)
     }
@@ -118,20 +123,27 @@ const StatsDashboard: FC<{periodType: ChartPeriodType}> = ({ periodType }) => {
         icon={<IconCpu width={20} height={20} />}
         className={styles.el}
       />
-      {hasAccess(requestsAccessMap.getDevicesLogEnergyLog) && <StatCard
+      {(hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) && <StatCard
         title={periodType === "day" ? "Текущее энергопотребление" : "Среднее энергопотребление"}
         value={(isNaN(Number(valueEnergy?.value)) ? "0" : valueEnergy.value)}
         unit={valueEnergy.unit}
         icon={<IconElectricity width={20} height={20} />}
         className={styles.el}
       />}
-      {hasAccess(requestsAccessMap.getDevicesLogEnergyLog) && <StatCard
+      {(hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) && <StatCard
         title="Общее энергопотребление"
         value={(isNaN(Number(valueEnergySum?.value)) ? "0" : valueEnergySum.value)}
         unit={valueEnergySum.unit}
         icon={<IconElectricity width={20} height={20} />}
         className={styles.el}
       />}
+      {/* <StatCard
+        title={uptimeData.algorithm ? `UpTime ${uptimeData.algorithm}` : "Общий UpTime"}
+        value={uptime.toFixed(2)}
+        unit="%"
+        icon={<IconClock width={20} height={20} />}
+        className={styles.el}
+      /> */}
     </div>
   )
 }

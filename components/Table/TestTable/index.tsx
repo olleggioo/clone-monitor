@@ -1,24 +1,36 @@
-import { FC, useMemo, useState, useEffect, useRef, memo, useCallback } from 'react'
-import { TableCellI, TableI, TableRowI } from '../Table'
-import styles from './Test.module.scss'
-import Head from './Head'
-import { useSnackbar } from 'notistack'
+import { 
+    FC, 
+    useMemo, 
+    useState, 
+    useEffect, 
+    useRef, 
+    memo, 
+    useCallback
+} from 'react'
+import moment from 'moment'
 import { useAtom } from 'jotai'
-import { checkedAtom, devicesUserIdFilterAtom, selectedInputAtom, sortConfigOptionsAtom, sortFilterAtom, sortUserFilterAtom } from '@/atoms/appDataAtom'
-import Row from './Row'
-import { Dropdown, IconButton } from '@/ui'
 import classNames from 'classnames'
-import { inet_aton } from '@/util/iten_atom'
-import { ArrowBack, ArrowBackIos, ArrowForwardIos, ArrowLeft, BackHandOutlined } from '@mui/icons-material'
-import { Column, Table, AutoSizer } from 'react-virtualized';
-import { FixedSizeList as List } from "react-window";
-import InfiniteLoader from "react-window-infinite-loader";
-import { Container } from '@mui/material'
+import { range, uniq } from 'lodash'
+import { useSnackbar } from 'notistack'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import moment from 'moment'
-import { dir } from 'console'
-import { range, uniq } from 'lodash'
+import Row from './Row'
+import Head from './Head'
+import { 
+    TableCellI, 
+    TableI, 
+    TableRowI 
+} from '../Table'
+import { 
+    checkedAtom, 
+    devicesUserIdFilterAtom, 
+    selectedInputAtom, 
+    sortConfigOptionsAtom, 
+    sortFilterAtom, 
+    sortUserFilterAtom 
+} from '@/atoms/appDataAtom'
+import { inet_aton } from '@/util/iten_atom'
+import styles from './Test.module.scss'
 
 interface TableNewI extends TableI {
     whichTable?: string
@@ -42,23 +54,22 @@ const TestTable:FC<TableNewI> = ({
     view,
     classNameHead,
 }) => {
-    const elementScrollRefLink = useRef<HTMLDivElement>(null);
     const elementScrollRef = useRef<any>(null);
     let mx = 0;
     let sx = 0;
-    const handleMouseDown = (e: any) => {
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         sx = elementScrollRef.current.scrollLeft;
         mx = e.pageX - elementScrollRef.current.offsetLeft;
     
         elementScrollRef.current.addEventListener("mousemove", handleMouseMove);
-      };
+    };
     
     const handleMouseUp = () => {
         mx = 0;
         elementScrollRef.current.removeEventListener("mousemove", handleMouseMove);
     };
 
-    const handleMouseMove = (e: any) => {
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.buttons !== 1) {
             return;
         }
@@ -109,7 +120,7 @@ const TestTable:FC<TableNewI> = ({
     const sortRows = (key: string) => {
         let direction = 'ASC';
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ASC') {
-        direction = 'DESC';
+            direction = 'DESC';
         }
         setSortConfig({ key, direction });
         const orders: any = {}
@@ -277,9 +288,6 @@ const TestTable:FC<TableNewI> = ({
         setSortFilter(orders)
         setSortUserFilter(ordersUser)
     };
-    const handleSelect = () => {
-        setSelected((prevState: boolean) => !prevState)
-    }
 
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [isSelectingf, setIsSelectingf] = useState(false);
@@ -294,7 +302,6 @@ const TestTable:FC<TableNewI> = ({
     };
 
     const handleMouseEnter = (index: number, id: string) => {}
-    const checkboxes = new Array(20).fill(null);
 
     // const [checked, setChecked] = useState<any>([]);
     const [checked, setChecked] = useAtom(checkedAtom)
@@ -335,7 +342,6 @@ const TestTable:FC<TableNewI> = ({
                 array.findIndex((t: any) => t.id === item.id) === index
             );
       
-            // Добавляем новые элементы только если их еще нет в состоянии
             const newItems = rowsArray
               .filter((_, i) => [...range(start + 1, end), end].includes(i))
               .map((item) => ({ flag: true, id: item.id }))
@@ -360,7 +366,6 @@ const TestTable:FC<TableNewI> = ({
                 array.findIndex((t: any) => t.id === item.id) === index
             );
       
-            // Добавляем новый элемент только если его нет в состоянии
             if (!uniqueState.some((item: any) => item.id === newElem)) {
               return [...uniqueState, { flag: true, id: newElem }];
             }
@@ -380,24 +385,6 @@ const TestTable:FC<TableNewI> = ({
 
     return (
         <div>
-            {/* <input
-                type="checkbox"
-                onChange={handleSelectAll}
-                checked={checked.length === rowsArray.length}
-            />
-            {checkboxes.map((_, i) => (
-                <div key={i}>
-                    <label>
-                        <input
-                        checked={checked.includes(i)}
-                        data-index={i}
-                        type="checkbox"
-                        onChange={handleChange}
-                        />
-                        checkbox {i}
-                    </label>
-                </div>
-            ))} */}
             <DndProvider backend={HTML5Backend}>
                 <div 
                     id="main-table"

@@ -246,6 +246,34 @@ export const updateDeviceMany = async (params: ReqQueryParamsI, data: any) => {
   return res.data
 }
 
+export const updateDeviceBlinkOn = async (params: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
+
+  const res = await axiosPatchInstance({
+    url: `/device/mass/blink-enable${query}`,
+    params: {
+      accessToken,
+    },
+  })
+  return res.data
+}
+
+export const updateDeviceBlinkOff = async (params: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
+
+  const res = await axiosPatchInstance({
+    url: `/device/mass/blink-disable${query}`,
+    params: {
+      accessToken,
+    },
+  })
+  return res.data
+}
+
 
 export const deleteDevice = async (id: string) => {
   const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
@@ -413,10 +441,168 @@ export const createOnePoolMock = async (data: {
   return res.data
 }
 
-export const getDeviceArea = async (id: string) => {
+export const getDeviceArea = async (id: string, params?: ReqQueryParamsI) => {
   const instance = createInstance()
+  const query = getReqQueryString(params)
   const res = await instance<AreaI>({
-    url: `/area/${id}`
+    url: `/area/${id}${query}`
+  })
+  return res.data
+}
+
+export const getBoxJournal = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/journal${query}`
+  })
+  return res.data
+}
+
+export const getBoxCpuCore = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/cpu-core${query}`
+  })
+  return res.data
+}
+
+export const getBoxCpuProc = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/cpu-process${query}`
+  })
+
+  return res.data
+}
+
+export const getBoxDisk = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/disk${query}`
+  })
+
+  return res.data
+}
+
+export const getBoxRam = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/memory${query}`
+  })
+
+  return res.data
+}
+
+export const getBoxNetBytes = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/box/net-rxbytes${query}`
+  })
+
+  return res.data
+}
+
+export const getLoggingPoll = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<AreaI>({
+    url: `/logging-poll${query}`
+  })
+  return res.data
+}
+
+export const getLoggingMap = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<AreaI>({
+    url: `/logging-map${query}`
+  })
+  return res.data
+}
+
+export const getSyncBoxById = async (id: string) => {
+  const instance = createInstance()
+  // const query = getReqQueryString(params)
+  const res = await instance<AreaI>({
+    url: `/sync-box/snapshot/${id}`
+  })
+  return res.data
+}
+
+export const getLoggingClickhouse = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-clickhouse${query}`
+  })
+  return res.data
+}
+
+export const getLoggingWorker = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-worker${query}`
+  })
+  return res.data
+}
+
+export const getLoggingCpuCore = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-cpu-core${query}`
+  })
+  return res.data
+}
+
+export const getLoggingCpuProc = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-cpu-proc${query}`
+  })
+  return res.data
+}
+
+export const getLoggingTrafficIncoming = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-traffic-incoming${query}`
+  })
+  return res.data
+}
+
+export const getLoggingTrafficOutgoing = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-traffic-outgoing${query}`
+  })
+  return res.data
+}
+
+export const getLoggingRamSwap = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-ram-swap${query}`
+  })
+  return res.data
+}
+
+export const getLoggingRamMem = async (params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance<DeviceStatusResI>({
+    url: `/logging-ram-mem${query}`
   })
   return res.data
 }
@@ -1681,6 +1867,36 @@ export const getAccess = async (params?: ReqQueryParamsI) => {
   return res.data
 }
 
+export const getAccessId = async (id: string, params?: ReqQueryParamsI) => {
+  const instance = createInstance()
+  const query = getReqQueryString(params)
+  const res = await instance({
+    url: `/access/${id}${query}`
+  })
+  return res.data
+}
+
+
+export const updateAccessById = async (id: string, data: {
+  name?: string
+  description?: string
+}) => {
+  const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
+  // const query = getReqQueryString(params)
+  const formData = new FormData()
+  formData.append('accessToken', accessToken || '')
+  Object.entries(data).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  const res = await axiosPatchInstance({
+    url: `/access/${id}`,
+    params: {
+      accessToken
+    },
+    data: formData
+  })
+  return res.data
+}
 
 export const getDeviceModel = async (params?: ReqQueryParamsI) => {
   const instance = createInstance() 
@@ -2173,7 +2389,7 @@ export const createCommentMany = async (data: any) => {
   Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value)
   })
-  const res = await axiosPostInstance({
+  const res = await axiosAuthPostInstanceJSON({
     url: '/device-comment/many',
     params: {
       accessToken

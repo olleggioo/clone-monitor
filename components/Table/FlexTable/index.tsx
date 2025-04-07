@@ -34,7 +34,7 @@ const FlexTable: FC<PropsFlexTable> = ({
                                 {/* {column.title} */}
                                 {column.status ?
                                     <Status 
-                                        onClick={column.onClick} 
+                                        onClick={item.onClick} 
                                         href={`${column.url}`} 
                                         tagName="span" 
                                         correctTitle={column.state?.firmwareData?.modelId} 

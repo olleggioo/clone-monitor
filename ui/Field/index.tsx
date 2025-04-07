@@ -1,6 +1,6 @@
 import { FC, memo, useId, useRef, useState } from 'react'
 import styles from './Field.module.scss'
-import { FieldI } from '@/ui/Field/Field'
+import { FieldFileI, FieldI } from '@/ui/Field/Field'
 import classNames from 'classnames'
 import { IconEye, IconEyeOff } from '@/icons'
 

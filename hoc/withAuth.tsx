@@ -82,7 +82,6 @@ const withAuth = (Component: NextPage) => {
           const initialCheckboxes = rows.filter((item: any) => item.role.id === roleId);
     
           localStorage.setItem('currentRoleAccess', JSON.stringify(initialCheckboxes));
-          console.log('Role access updated:', initialCheckboxes);
         }
       } catch (error) {
         console.error('Ошибка обновления role-access:', error);

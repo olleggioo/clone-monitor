@@ -1,6 +1,6 @@
 import { Dialog } from "@/components";
 import styles from "./Roles.module.scss"
-import { Button, Field } from "@/ui";
+import { Button, Checkbox, Field } from "@/ui";
 import { useState } from "react";
 import { deviceAPI, userAPI } from "@/api";
 import { useSnackbar } from "notistack";
@@ -10,22 +10,25 @@ const CreateRole = ({
     onClose
 }: any) => {
     const {enqueueSnackbar} = useSnackbar()
-    const [roleName, setRoleName] = useState("")
+    const [roleName, setRoleName] = useState({
+        name: "",
+        isTeam: false
+    })
 
     const handleSubmit = () => {
-        if(roleName.length !== 0) {
+        if(roleName.name.length !== 0) {
             userAPI.createRole({
-                name: roleName
+                name: roleName.name,
+                isTeam: roleName.isTeam,
             })
                 .then((res) => {
-                    console.log("RES create role", res)
                     deviceAPI.createRoleAccess({
                         roleId: res.id,
                         accessId: "277ffc4c-c70d-40f8-8c66-dff6ad692fda"
                     }).then((resAcs) => {
                         userAPI.getUsersRole({
                             where: {
-                                id: `$Not($In(["${process.env.ROLE_ROOT_ID}"]))`
+                                id: `$Not($In(["${process.env.ROLE_ROOT_ID}", "${process.env.ROLE_BOX_ID}"]))`
                             },
                             relations: {
                                 roleAccesses: {
@@ -34,7 +37,6 @@ const CreateRole = ({
                             }
                         })
                             .then((res) => {
-                                console.log("RES", res)
                                 setRoles(res)
                                 onClose()
                                 enqueueSnackbar("Роль успешно создана", {
@@ -57,6 +59,24 @@ const CreateRole = ({
         }
     }
 
+    const handleChangeName = (e: any) => {
+        setRoleName((prevState) => {
+            return {
+                ...prevState,
+                name: e.target.value
+            }
+        })
+    }
+
+    const handleChangeIsTeam = (e: any) => {
+        setRoleName((prevState) => {
+            return {
+                ...prevState,
+                isTeam: !prevState.isTeam
+            }
+        })
+    }
+
     return (
         <Dialog
           title="Создание роли"
@@ -64,17 +84,25 @@ const CreateRole = ({
           closeBtn
           className={styles.el}
         >
-              <Field 
-                  placeholder="Название роли"
-                  type="text"
-                  wrapClassname={styles.field_small}
-                  onChange={(e) => setRoleName(e.target.value)}
-                  value={roleName}
-              />
-              <Button 
-                  title="Создать"
-                  onClick={handleSubmit}
-              />
+            <Field 
+                placeholder="Название роли"
+                type="text"
+                wrapClassname={styles.field_small}
+                onChange={handleChangeName}
+                value={roleName.name}
+            />
+            <Checkbox 
+                label="В разделе команда"
+                name="isTeam"
+                isChecked={roleName.isTeam}
+                onChange={handleChangeIsTeam}
+                value=""
+                // isDisabled={blockCheckbox}
+            />
+            <Button 
+                title="Создать"
+                onClick={handleSubmit}
+            />
         </Dialog>
       )
 }

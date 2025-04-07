@@ -1,0 +1,30 @@
+@import "../../../styles/functions.scss";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.btnActions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.arrow {
+    border: 0;
+    gap: 0px;
+    padding: 0px 0px rem(2) 0px;
+    border-radius: 0px;
+    span {
+        margin-right: rem(4);
+    }
+
+    &:hover {
+        background-color: white;
+        color: var(--color-text-muted);
+    }
+
+    &:disabled {
+        pointer-events: none;
+        color: var(--color-disabled);
+        background-color: white;
+        border-color: var(--color-purple-light);
+    }
+}

@@ -16,9 +16,9 @@ import { requestsAccessMap } from '@/helpers/componentAccessMap'
 
 const restrictedPages = {
   areas: requestsAccessMap.getDevicesArea,
-  users: requestsAccessMap.getUsers,
-  devices: requestsAccessMap.getDevices,
-  models: requestsAccessMap.getDeviceModel,
+  // users: requestsAccessMap.getUsers,
+  // devices: requestsAccessMap.getDevices || requestsAccessMap.getDevicesAuthedUserId,
+  // models: requestsAccessMap.getDeviceModel,
 };
 
 const Sidebar: FC = () => {
@@ -32,10 +32,23 @@ const Sidebar: FC = () => {
   }
 
   const filteredPagesNavList = pagesNavList.filter((page) => {
-    console.log("page", page)
     if(page.name === "roleAccess") {
       return hasRootAccess()
     }
+    if(page.name === "pools") {
+      return hasAccess(requestsAccessMap.getDevicesPoolMocks)
+    }
+    if(page.name === "models") {
+      return hasAccess(requestsAccessMap.getDeviceModel)
+    }
+    if(page.name === "devices") {
+      return hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId)
+    }
+
+    if(page.name === "users") {
+      return hasAccess(requestsAccessMap.getUsers) || hasAccess(requestsAccessMap.getUsersAuthedUserId)
+    }
+    
     const accessCheck = restrictedPages[page.name as keyof typeof restrictedPages];
     return !accessCheck || hasAccess(accessCheck);
   });
@@ -44,7 +57,6 @@ const Sidebar: FC = () => {
     const accessCheck = restrictedPages[page.name as keyof typeof restrictedPages];
     return !accessCheck || hasAccess(accessCheck);
   });
-  console.log(filteredPagesNavList)
   // if(roleId === process.env.ROLE_ROOT_ID) {
   //   filteredPagesNavList.push({
   //     name: "roleAccess", 

@@ -16,6 +16,7 @@ const PoolReserve: FC<CommentsI> = ({
     onClose
 }) => {
     const [poolData, setPoolData] = useState<any>(null)
+    const [errorMessage, setErrorMessage] = useState<any>(null)
     console.log("pooldata", poolData)
     useEffect(() => {
         deviceAPI.getDevicesPoolReserve({
@@ -27,7 +28,11 @@ const PoolReserve: FC<CommentsI> = ({
             }
         }).then((res) => {
             setPoolData(res)
-        }).catch(err => console.error(err))
+        }).catch(err => {
+            console.log("ERR", err.response.data.message)
+            setErrorMessage(err.response.data.message)
+            console.error(err)
+        })
     }, [deviceId])
 
     return <Dialog
@@ -39,7 +44,9 @@ const PoolReserve: FC<CommentsI> = ({
     >
         {poolData !== null && poolData.rows && poolData.rows.length !== 0 
             ? <ReservePool data={poolData.rows} />
-            : <span>Резервных пулов нет</span>
+            : errorMessage && errorMessage.length !== 0 
+                ? <span>{errorMessage}</span>
+                : <span>Резервных пулов нет</span>
         }
         {/* <div>
             {commentData && commentData.rows && commentData.rows.length !== 0 && commentData.rows.map((item: CommentInI) => {

@@ -12,6 +12,8 @@ import { deviceAPI } from "@/api"
 import { useSnackbar } from "notistack"
 import { modelInfoAtom } from "@/atoms/appDataAtom"
 import { useAtom } from "jotai"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
 
 const ModelsTable: FC<{rows: ModelI[]}> = ({
     rows
@@ -57,12 +59,16 @@ const ModelsTable: FC<{rows: ModelI[]}> = ({
     }
 
     const tableDropDownItems: DropdownItemI[] = [
-        {
+        
+    ]
+
+    if(hasAccess(requestsAccessMap.updateModelId)) {
+        tableDropDownItems.push({
             text: 'Редактировать',
             icon: <IconEdit2 width={20} height={20} />,
             onClick: editModel
-        }
-    ]
+        })
+    }
 
     // const tableDropDownItems: DropdownItemI[] = [
         // {
@@ -78,7 +84,7 @@ const ModelsTable: FC<{rows: ModelI[]}> = ({
         // },
     // ]
 
-    if(roleId === process.env.ROLE_ROOT_ID) {
+    if(hasAccess(requestsAccessMap.deleteModelById)) {
         tableDropDownItems.push({
             text: 'Удалить',
             icon: <IconTrash width={20} height={20} />,

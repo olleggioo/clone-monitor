@@ -160,7 +160,7 @@ const DevicesTable: FC<{
     },
   ]
 
-  if(hasAccess(requestsAccessMap.reloadManyDevices)) {
+  if(hasAccess(requestsAccessMap.reloadManyDevices) || hasAccess(requestsAccessMap.reloadManyDevicesAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Перезагрузить',
       icon: <IconRefresh width={20} height={20} />,
@@ -168,7 +168,7 @@ const DevicesTable: FC<{
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateDevice)) {
+  if(hasAccess(requestsAccessMap.updateDevice) || hasAccess(requestsAccessMap.updateDeviceAuthedUserId)) {
     tableDropDownItems.unshift({
       text: "Сделать подмену",
       icon: <IconRepeat width={20} height={20} />,
@@ -176,7 +176,9 @@ const DevicesTable: FC<{
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateManyDevicesPools)) {
+  if(hasAccess(requestsAccessMap.updateManyDevicesPools) || 
+    hasAccess(requestsAccessMap.updateManyDevicesPoolsAuthedUserId) || 
+    hasAccess(requestsAccessMap.updateManyDevicesPoolsAuthedAreaId)) {
     tableDropDownItems.unshift({
       text: 'Настройка пулов',
       icon: <IconSliders width={20} height={20} />,
@@ -184,7 +186,7 @@ const DevicesTable: FC<{
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateManyOverclock)) {
+  if(hasAccess(requestsAccessMap.updateManyOverclock) || hasAccess(requestsAccessMap.updateManyOverclockAuthedAreaId)) {
     tableDropDownItems.unshift({
       text: 'Разогнать',
       icon: <IconDashboardPerfomance width={20} height={20} />,
@@ -192,7 +194,7 @@ const DevicesTable: FC<{
     })
   }
 
-  if(hasAccess(requestsAccessMap.createUserDevice) && hasAccess(requestsAccessMap.updateDevice)) {
+  if(hasAccess(requestsAccessMap.createUserDevice) && (hasAccess(requestsAccessMap.updateDevice) || hasAccess(requestsAccessMap.updateDeviceAuthedUserId))) {
     tableDropDownItems.unshift({
       text: 'Редактировать',
       icon: <IconEdit2 width={20} height={20} />,
@@ -201,7 +203,7 @@ const DevicesTable: FC<{
     })
   }
 
-  if(hasAccess(requestsAccessMap.deleteDevice)) {
+  if(hasAccess(requestsAccessMap.deleteDevice) || hasAccess(requestsAccessMap.deleteDeviceAuthedUserId)) {
     tableDropDownItems.push({
       text: 'Удалить',
       icon: <IconTrash width={20} height={20} />,

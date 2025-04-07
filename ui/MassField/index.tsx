@@ -103,7 +103,6 @@ const MassField = ({
     // onChange({target: {value: ''}})
   }
 
-  console.log("value", value)
 
   const closeIconButton = () => {
     setMassSnInput("")

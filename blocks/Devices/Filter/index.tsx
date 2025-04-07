@@ -39,7 +39,7 @@ const DevicesFilter = () => {
     const [state, setState] = useState<DevicesFilterStateI>(() => {
       const savedState = sessionStorage.getItem(LOCAL_STORAGE_KEY);
       return savedState ? JSON.parse(savedState) : devicesFilterInitialState;
-  });
+    });
   // console.log("State", state)
     useEffect(() => {
       console.warn = () => {};
@@ -85,8 +85,6 @@ const DevicesFilter = () => {
         selectedOption: selected
       }
     }
-
-    console.log("STATE", state)
 
     const getSelectMultipleData = (
         name: keyof DevicesFilterStateI,
@@ -148,7 +146,7 @@ const DevicesFilter = () => {
           } as OptionItemI
         }) || []
       return getSelectMultipleData('algorithm', options)
-    }, [area, state.algorithm])
+    }, [algorithms, state.algorithm])
 
     const ownerProps = useMemo(() => {
       const options: OptionItemI[] =

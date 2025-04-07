@@ -13,6 +13,8 @@ import { useAtom } from "jotai"
 import { useSnackbar } from "notistack"
 import { useMemo, useState } from "react"
 import styles from "./Table.module.scss"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
 
 const PoolMockTable = ({rows, onDeleteDevie, setAreas}: any) => {
     const [currentRow, setCurrentRow] = useState(rows)
@@ -62,18 +64,36 @@ const PoolMockTable = ({rows, onDeleteDevie, setAreas}: any) => {
     }
     
     const tableDropDownItems: DropdownItemI[] = [
-        {
+        // {
+        //     text: 'Редактировать',
+        //     icon: <IconEdit2 width={20} height={20} />,
+        //     onClick: handleEditClick
+        // },
+        // {
+        //     text: 'Удалить',
+        //     icon: <IconTrash width={20} height={20} />,
+        //     onClick: handleAlertClick,
+        //     mod: 'red'
+        // }
+    ]
+
+    if(hasAccess(requestsAccessMap.updateOnePoolMock)) {
+        tableDropDownItems.push({
             text: 'Редактировать',
             icon: <IconEdit2 width={20} height={20} />,
             onClick: handleEditClick
-        },
-        {
+        })
+    }
+
+    if(hasAccess(requestsAccessMap.deletePoolMockById)) {
+        tableDropDownItems.push({
             text: 'Удалить',
             icon: <IconTrash width={20} height={20} />,
             onClick: handleAlertClick,
             mod: 'red'
-        }
-      ]
+        })
+    }
+
     return <div>
     {modalUpdateRanges && currentRange && <PoolMockEditModal setAreas={setAreas} state={currentRange.id} onClose={() => setModelUpdateRanges(false)} /> }
     {alertMessage && <Alert title={"Удаление шаблона пулов"} content={"Вы уверены что хотите удалить шаблон?"} open={alertMessage} setOpen={setAlertMessage} handleDeleteClick={handleDeleteClick} />}

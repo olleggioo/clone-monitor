@@ -1,0 +1,26 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.text {
+    font-family: var(--main-font);
+    font-weight: 500;
+    font-size: rem(16) !important;
+}
+
+.checkbox {
+    min-width: auto;
+}
+
+.checkboxRam {
+    // min-width: 85px;
+    width: auto;
+    min-width: auto;
+}

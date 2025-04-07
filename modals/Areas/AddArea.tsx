@@ -255,14 +255,14 @@ const AddArea = ({onClose}: any) => {
                 placeholder="Название площадки"
                 type="text"
                 wrapClassname={styles.field_small}
-                onChange={(e) => setAreaName(e.target.value)}
+                onChange={(e: any) => setAreaName(e.target.value)}
                 value={areaName}
             />
             <Field 
                 placeholder="Пароль"
                 type="password"
                 wrapClassname={styles.field_small}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: any) => setPassword(e.target.value)}
                 value={password}
             />
             {/* <Field

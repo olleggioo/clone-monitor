@@ -28,8 +28,6 @@ const CurrentRoleAccessContainer = () => {
         };
     });
 
-    console.log("result", result)
-
     return <Layout header={<ProfileUser title='Текущий role-access' />}>
         <div className={styles.el}>
             {/* {result && result.map((item: any) => {

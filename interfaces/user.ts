@@ -9,6 +9,7 @@ export interface UserI {
   role: {
     id: string
     name: string
+    isTeam: boolean
   }
   createdAt?: Date
   userDevices: UserDevicesI[] | []
@@ -68,6 +69,7 @@ export interface LoginUserResI {
   role: {
     id: string
     name: string
+    isTeam: boolean
   }
   createdAt?: Date
   userDevices: UserDevicesI[] | []

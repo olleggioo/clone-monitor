@@ -138,7 +138,7 @@ const StatsChart: FC<{ className?: string }> = ({ className }) => {
       order: {
         createdAt: 'ASC'
       },
-      limit: 96,
+      limit: 500,
       relations: {
         device: true,
         deviceUser: true

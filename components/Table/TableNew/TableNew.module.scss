@@ -32,6 +32,7 @@
         minmax(150px, 1.67fr)
         minmax(150px, 1.67fr)
         minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr)
         minmax(120px, 1.67fr)
         minmax(120px, 1.67fr)
         minmax(150px, 1.67fr)
@@ -80,6 +81,12 @@
     text-overflow: ellipsis;
     // white-space: nowrap;
     
+  }
+
+  .tdEmpty {
+    padding: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .th {

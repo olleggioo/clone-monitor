@@ -6,7 +6,7 @@ import { IconDevice, IconEdit2, IconInfo, IconRefresh, IconTrash } from '@/icons
 import { useRouter } from 'next/router'
 import { DeviceI } from '@/interfaces'
 import { useAtom } from 'jotai'
-import { deviceUpdateManyPool, devicesDataAtom, devicesUpdatesMany, devicesUserIdFilterAtom, isReservedAtom, modalInfoAtom, modalMinStateActionAtom, modalReserveDevice, modalUpdateDisperseManyAtom, modalUpdateOwnerManyAtom, modalUpdateUserManyAtom } from '@/atoms/appDataAtom'
+import { deviceUpdateManyPool, devicesDataAtom, devicesUpdatesMany, devicesUserIdFilterAtom, isReservedAtom, modalInfoAtom, modalMinStateActionAtom, modalReserveDevice, modalUpdateDisperseManyAtom, modalUpdateOwnerManyAtom, modalUpdateUserManyAtom, sortFilterAtom } from '@/atoms/appDataAtom'
 import { sidebarStatus } from '@/atoms'
 import { deviceAPI } from '@/api'
 import { useSnackbar } from 'notistack'

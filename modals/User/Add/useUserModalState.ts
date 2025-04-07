@@ -5,7 +5,7 @@ import { OptionItemI } from '@/ui/CustomSelect/CustomSelect'
 
 const useClientModalState = (initialState: AddUserModalStateI) => {
   const [state, setState] = useState<AddUserModalStateI>(initialState)
-  const { login, password, fullname = '', email, roleId, phone } = state
+  const { login, password, fullname = '', email, roleId, phone, contract = '' } = state
   
   const canSubmit =
     login.length > 2 &&
@@ -19,7 +19,9 @@ const useClientModalState = (initialState: AddUserModalStateI) => {
     fullname.length > 2 &&
     regExpPatterns.email.test(email) &&
     roleId !== 'default'
-    phone.length >= 12
+    phone.length >= 12 &&
+    contract.length >= 2 &&
+    contract.length <= 16
 
   const handleChange = (field: UserModalFieldType, value: string | null | boolean) => {
     setState((prevState) => {
@@ -62,6 +64,10 @@ const useClientModalState = (initialState: AddUserModalStateI) => {
     handleChange('roleId', option.value)
   }
 
+  const handleContractChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    handleChange('contract', evt.target.value.trim())
+  }
+
   return {
     state,
     canSubmit,
@@ -71,7 +77,8 @@ const useClientModalState = (initialState: AddUserModalStateI) => {
     handleEmailChange,
     handleRoleChange,
     hanldePhoneChange,
-    handleSetGeneratePassword
+    handleSetGeneratePassword,
+    handleContractChange
   }
 }
 

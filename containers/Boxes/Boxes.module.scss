@@ -1,0 +1,25 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.combineBlock {
+    display: grid;
+    grid-template-columns: 1fr 2px 1fr;
+    gap: 20px;
+    position: relative;
+    border-bottom: 1px solid var(--color-stroke);
+
+    @media (max-width: 1079px) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.divider {
+    // position: absolute;
+    // top: 0;
+    // left: 49%;
+    width: 2px;
+    background: var(--color-stroke);
+    height: 100%;
+}

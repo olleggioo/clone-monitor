@@ -493,7 +493,6 @@ const StatsDashboardClients: FC<{periodType: ChartPeriodType}> = ({ periodType }
     fetchEnergyAndUptime(params, periodType)
   }, [periodType, filterState])
 
-  console.log("count", count)
 
   return (
     <div className={styles.list}>

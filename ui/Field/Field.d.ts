@@ -14,3 +14,16 @@ export interface FieldI extends InputHTMLAttributes<T> {
   closeIcon?: ReactNode
   closeIconButton?: any
 }
+
+export interface FieldFileI extends InputHTMLAttributes<T> {
+  label?: string
+  error?: boolean
+  type?: FieldType
+  disabled?: boolean
+  icon?: ReactNode
+  onChange?: any
+  className?: string
+  wrapClassname?: string
+  closeIcon?: ReactNode
+  closeIconButton?: any
+}

@@ -22,6 +22,9 @@ import IconPower from "@/icons/Power"
 import Cell from "./Cell"
 import classNames from "classnames"
 import IconSave3 from "@/icons/Save3"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
+import IconOff from "@/icons/Off"
 
 interface TableRowNewI extends TableRowI {
   index: number
@@ -91,6 +94,8 @@ const Row: FC<TableRowNewI> = ({
   const [modalReserve, setModalReserve] = useState(false)
   const [modalRestore, setModalRestore] = useState(false)
   const [modalArchive, setModalArchive] = useState(false)
+  const [modalBlinkOn, setModalBlinkOn] = useState(false)
+  const [modalBlinkOff, setModalBlinkOff] = useState(false)
   const [modalRemoveFromRepair, setModalFromRepair] = useState(false)
   const [modalRepairNotOnline, setMOdalRepiarNotOnline] = useState(false)
   const [modalRemoveFromArchive, setModalRemoveFromArchive] = useState(false)
@@ -215,6 +220,20 @@ const Row: FC<TableRowNewI> = ({
     }
   }
 
+  const enableBlinkModal = (id?: string) => {
+    if(id) {
+      setDeviceId(id)
+      setModalBlinkOn(true)
+    }
+  }
+
+  const disableBlinkModal = (id?: string) => {
+    if(id) {
+      setDeviceId(id)
+      setModalBlinkOff(true)
+    }
+  }
+
   const removeFromRepair = (id?: string) => {
     if(id) {
       setDeviceId(id)
@@ -263,53 +282,78 @@ const Row: FC<TableRowNewI> = ({
     let index = dropdownItems.filter((item: any) => item.text !== "Состояние")
     let lastArray = index[index.length - 1]
     index.pop()
-    if(status && status === "Not online") {
+    if(columns && columns[0] && columns[0].title && columns[0].title.includes("Antminer") ) {
       index.push({
-        text: "В расторжение",
-        icon: <IconArchive width={20} height={20} />,
-        onClick: archiveDeviceModal
+        text: "Включить блинк",
+        icon: <IconOff width={20} height={20} />,
+        onClick: enableBlinkModal
       })
       index.push({
-        text: "В ремонт",
-        icon: <IconTool width={20} height={20} />,
-        onClick: repairDeviceModal
+        text: "Выключить блинк",
+        icon: <IconOff width={20} height={20} />,
+        onClick: disableBlinkModal
       })
     }
+    if(status && status === "Not online") {
+      if(hasAccess(requestsAccessMap.archiveDevice)) {
+        index.push({
+          text: "В расторжение",
+          icon: <IconArchive width={20} height={20} />,
+          onClick: archiveDeviceModal
+        })
+      }
+      if(hasAccess(requestsAccessMap.updateDevice)) {
+        index.push({
+          text: "В ремонт", 
+          icon: <IconTool width={20} height={20} />,
+          onClick: repairDeviceModal
+        })
+      }
+    }
     if(status && status === "In repair") {
-      index.push({
-        text: "В расторжение",
-        icon: <IconArchive width={20} height={20} />,
-        onClick: archiveDeviceModal
-      })
+      if(hasAccess(requestsAccessMap.archiveDevice)) {
+        index.push({
+          text: "В расторжение",
+          icon: <IconArchive width={20} height={20} />,
+          onClick: archiveDeviceModal
+        })
+      }
       if(diffInMinutes <= 5) {
-        console.log("diffInMinutes", diffInMinutes)
-        index.push({
-          text: "Вывести из ремонта",
-          icon: <IconArchive width={20} height={20} />,
-          onClick: removeFromRepair
-        })
+        if(hasAccess(requestsAccessMap.updateDevice)) {
+          index.push({
+            text: "Вывести из ремонта",
+            icon: <IconArchive width={20} height={20} />,
+            onClick: removeFromRepair
+          })
+        }
       } else {
-        index.push({
-          text: "Вывести из ремонта",
-          icon: <IconArchive width={20} height={20} />,
-          onClick: removeFromRepairNotOnline
-        })
+        if(hasAccess(requestsAccessMap.updateDevice)) {
+          index.push({
+            text: "Вывести из ремонта",
+            icon: <IconArchive width={20} height={20} />,
+            onClick: removeFromRepairNotOnline
+          })
+        }
       }
     }
     if(miningState === "Включено") {
-      index.push({
-        text: "Выключить",
-        icon: <IconPower width={20} height={20} />,
-        onClick: disableDeviceModal
-      })
-      if(isReserved) {
-        index.unshift({
-          text: 'Восстановить',
-          icon: <IconRollBrush width={20} height={20} />,
-          onClick: restoreDeviceModal
+      if(hasAccess(requestsAccessMap.disableDevice) || hasAccess(requestsAccessMap.disableDeviceAuthedAreaId)) {
+        index.push({
+          text: "Выключить",
+          icon: <IconPower width={20} height={20} />,
+          onClick: disableDeviceModal
         })
       }
-      if(roleId === process.env.ROLE_ROOT_ID) {
+      if(isReserved) {
+        if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+          index.unshift({
+            text: 'Восстановить',
+            icon: <IconRollBrush width={20} height={20} />,
+            onClick: restoreDeviceModal
+          })
+        }
+      }
+      if(hasAccess(requestsAccessMap.reserveDeviceById) || hasAccess(requestsAccessMap.reserveDeviceByIdAuthedAreaId)) {
         index.unshift({
           text: 'Зарезервировать',
           icon: <IconSave2 width={20} height={20} />,
@@ -318,11 +362,13 @@ const Row: FC<TableRowNewI> = ({
       }
 
     } else if (miningState === "Выключено") {
-      index.push({
-        text: "Включить",
-        icon: <IconPlay width={20} height={20} />,
-        onClick: enableDeviceModal
-      })
+      if(hasAccess(requestsAccessMap.enableDevice) || hasAccess(requestsAccessMap.enableDeviceAuthedAreaId)) {
+        index.push({
+          text: "Включить",
+          icon: <IconPlay width={20} height={20} />,
+          onClick: enableDeviceModal
+        })
+      }
     }
     index.push(lastArray)
     someItems = index
@@ -332,11 +378,13 @@ const Row: FC<TableRowNewI> = ({
       let lastArray = index[index.length - 1]
       index.pop()
       if((miningState === "Включен" || miningState === "Частично выключен")) {
-      index.unshift({
-          text: 'Восстановить',
-          icon: <IconRollBrush width={20} height={20} />,
-          onClick: restoreDeviceUserModal
-      })
+        if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+          index.unshift({
+              text: 'Восстановить',
+              icon: <IconRollBrush width={20} height={20} />,
+              onClick: restoreDeviceUserModal
+          })
+        }
       if(roleId === process.env.ROLE_ROOT_ID) {
         index.unshift({
           text: 'Зарезервировать',
@@ -354,7 +402,6 @@ const Row: FC<TableRowNewI> = ({
       index.pop()
       if(status === "In archive") {
         
-        console.log("diffInMinutes", diffInMinutes)
         if(diffInMinutes <= 5) {
           index.unshift({
             text: 'Вывести из расторжения',
@@ -475,10 +522,10 @@ const Row: FC<TableRowNewI> = ({
   ];
 
   const updateStatusDeviceNormal = () => {
-    console.log("id", id)
     const data: any = {
       accessToken: localStorage.getItem(`${process.env.API_URL}_accessToken`),
-      statusId: "82cddea0-861f-11ee-932b-300505de684f"
+      // statusId: "82cddea0-861f-11ee-932b-300505de684f" // В норме
+      statusId: "9a8471f1-861f-11ee-932b-300505de684f" // Не в сети
     }
     deviceAPI.updateDevice(id, data)
       .then((res) => {
@@ -540,7 +587,6 @@ const Row: FC<TableRowNewI> = ({
   }
 
   const updateStatusDeviceInArchiveNormal = () => {
-    console.log("id", id)
     const data: any = {
       accessToken: localStorage.getItem(`${process.env.API_URL}_accessToken`),
       statusId: "82cddea0-861f-11ee-932b-300505de684f"
@@ -572,7 +618,6 @@ const Row: FC<TableRowNewI> = ({
   }
 
   const updateStatusDeviceInArchiveNotOnline = () => {
-    console.log("id", id)
     const data: any = {
       accessToken: localStorage.getItem(`${process.env.API_URL}_accessToken`),
       statusId: "9a8471f1-861f-11ee-932b-300505de684f"
@@ -603,6 +648,66 @@ const Row: FC<TableRowNewI> = ({
       })
   }
 
+  const enableBlinkOn = () => {
+    deviceAPI.updateDeviceBlinkOn({
+      where: {
+        id
+      }
+    }).then((res) => {
+      setModalBlinkOn(false)
+      setDeviceId(null)
+      setModalInfo({
+        open: true,
+          action: "Включение блинка",
+          status: "Успешно. Страница перезагрузится через 3 секунды",
+          textInAction: "Запрос на включение блинка в очереди."
+      })
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
+    })
+    .catch(err => {
+      setModalBlinkOn(false)
+      setDeviceId(null)
+      setModalInfo({
+        open: true,
+        action: "Включение блинка",
+        status: "Ошибка",
+        textInAction: "Произошла ошибка при включении блинка."
+      });
+    })
+  }
+
+  const disableBlinkOff = () => {
+    deviceAPI.updateDeviceBlinkOff({
+      where: {
+        id
+      }
+    }).then((res) => {
+      setModalBlinkOff(false)
+      setDeviceId(null)
+      setModalInfo({
+        open: true,
+          action: "Выключение блинка",
+          status: "Успешно. Страница перезагрузится через 3 секунды",
+          textInAction: "Запрос на выключение блинка в очереди."
+      })
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
+    })
+    .catch(err => {
+      setModalBlinkOn(false)
+      setDeviceId(null)
+      setModalInfo({
+        open: true,
+        action: "Выключение блинка",
+        status: "Ошибка",
+        textInAction: "Произошла ошибка при выключении блинка."
+      });
+    })
+  }
+
   const AlertModal: FC<any> = ({ title, content, open, setOpen, handleAction }) => {
     return open && 
       <Alert
@@ -625,6 +730,20 @@ const Row: FC<TableRowNewI> = ({
         handleAction={modal.handleAction}
       />
     ))}
+    {modalBlinkOn && <Alert 
+      title={"Включение блинка на устройстве"} 
+      content={"Вы уверены, что хотите включить блинк на устройстве?"} 
+      open={modalBlinkOn} 
+      setOpen={setModalBlinkOn} 
+      handleDeleteClick={enableBlinkOn} 
+    />}
+    {modalBlinkOff && <Alert 
+      title={"Выключение блинка на устройстве"} 
+      content={"Вы уверены, что хотите выключить блинк на устройстве?"} 
+      open={modalBlinkOff} 
+      setOpen={setModalBlinkOff} 
+      handleDeleteClick={disableBlinkOff} 
+    />}
     {modalRemoveFromRepair && <Alert 
       title={"Вывод устройства из ремонта"} 
       content={"Вы уверены, что хотите вывести устройство из ремонта?"} 
@@ -674,9 +793,14 @@ const Row: FC<TableRowNewI> = ({
         />
       </td>
     }
-    <td className={classNames(styles.td, styles.isReserved)} onClick={isReserved ? () => setIsReservedSingleDevice({id, flag: true}) : () => {}}>
+    {hasAccess(requestsAccessMap.getDevicesPoolReserve) 
+      ? <td className={classNames(styles.td, styles.isReserved)} onClick={isReserved ? () => setIsReservedSingleDevice({id, flag: true}) : () => {}}>
       {isReserved && <IconSave3 width={35} height={35} />}
-    </td>
+      </td>
+      : <td  className={classNames(styles.tdEmpty, styles.isReserved)}>
+
+      </td>
+    }
     {columns && 
       columns[0] && 
       columns[0].title && 

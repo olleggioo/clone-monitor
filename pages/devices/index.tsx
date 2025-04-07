@@ -16,7 +16,7 @@ const Devices: NextPage = () => {
         <title>Устройства</title>
       </Head>
       {/* <DevicesContainer /> */}
-      {hasAccess(requestsAccessMap.getDevices)
+      {hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId)
         ? roleId === process.env.ROLE_ROOT_ID 
           ? <DevicesContainer />
           : roleId === process.env.ROLE_MANAGER_ID 

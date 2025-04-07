@@ -10,7 +10,7 @@ import {
   StatusType,
   UserI
 } from '@/interfaces'
-import { devicesTableHead, boardsTableHead, logTableHead, poolTableHead, areasTableHead, devicesRolledTableHead, poolMockTableHead, logErrorTableHead, logAntminerTableHead, logUserTableHead, coolersTableHead, commentsTableHead, modelsTableHead, logByUserTableHead, devicesArchiveRolledTableHead, poolReserveTableHead, accessesTableHead, accessTableHead } from './data'
+import { devicesTableHead, boardsTableHead, logTableHead, poolTableHead, areasTableHead, devicesRolledTableHead, poolMockTableHead, logErrorTableHead, logAntminerTableHead, logUserTableHead, coolersTableHead, commentsTableHead, modelsTableHead, logByUserTableHead, devicesArchiveRolledTableHead, poolReserveTableHead, accessesTableHead, accessTableHead, loggingPollTableHead, authedSyncBoxTableHead, filesystemSyncBoxTableHead } from './data'
 // import { devicesTableHead, boardsTableHead, logTableHead, poolTableHead, areasTableHead, devicesRolledTableHead, poolMockTableHead, logErrorTableHead, logAntminerTableHead, logUserTableHead, coolersTableHead, commentsTableHead, modelsTableHead, logByUserTableHead, devicesArchiveRolledTableHead, accessTableHead, accessesTableHead } from './data'
 import getHashRateUnit from '../../helpers/getHashRateUnit'
 
@@ -24,6 +24,8 @@ import { ModelI } from '@/containers/Models'
 import { devicesDataAtom, RoleAccessesStateI } from '@/atoms/appDataAtom'
 import { hasAccess } from '@/helpers/AccessControl'
 import { requestsAccessMap, requestsAccessTranslation } from '@/helpers/componentAccessMap'
+import { AuthedSyncBoxI, FilesystemSyncBoxI, LoggingPollI } from '@/containers/Area'
+import { INITIAL_PAGE_LIMIT_AREA } from '../Areas/WrapperLogging/WrapperLoggingMap'
 
 const translations: any = {
   "id": "ID",
@@ -60,7 +62,8 @@ const translations: any = {
   "index": "Индекс",
   "poolId": "ID пула",
   "deviceId": "ID устройства",
-  "pass": "Пароль"
+  "pass": "Пароль",
+  "archive": "В расторжение"
 };
 
 const dataProfiles = [
@@ -92,8 +95,11 @@ export const getDevicesArchiveTableData = (
           case 'model':
             title = device?.model?.name
             description = `SN: ${device.sn}`
-            // additionalDescription = `${device.ipaddr}`
+            additionalDescription = `${device.ipaddr}`
             place = `${device.place}`
+            break
+          case 'partNumber':
+            title = device.partNumber
             break
           case 'owner':
             title = users ? users?.filter((item: any) => item.id === device.ownerId)[0]?.fullname || users?.filter((item: any) => item.id === device.ownerId)[0]?.login : ""
@@ -238,6 +244,9 @@ export const getDevicesTableData = (
             description = `SN: ${device.sn}`
             additionalDescription = `${device.ipaddr}`
             place = `${device.place}`
+            break
+          case 'isBlinking':
+            title = device.isBlinking ? "Включен" : "Выключен"
             break
           case 'partNumber':
             title = device?.partNumber
@@ -466,7 +475,6 @@ export const getCollersTableData = (coolers: any[]) => {
 
 export const getPoolReserveTableData = (pools: any[]) => {
   return pools.map((pool, index) => {
-    console.log("pool", pool)
     const columns: any = []
     for (const cell of poolReserveTableHead) {
       const col: any = {
@@ -485,6 +493,10 @@ export const getPoolReserveTableData = (pools: any[]) => {
           col.title = pool.pool.user
           break
         }
+        case 'password': {
+          col.title = pool.pool.password
+          break
+        }
         default: {}
       }
       columns.push(col)
@@ -498,7 +510,6 @@ export const getPoolReserveTableData = (pools: any[]) => {
 
 export const getPoolTableData = (pools: any[]) => {
   return pools.map((pool, index) => {
-    console.log("pool", pool)
     const columns: any = []
     for (const cell of poolTableHead) {
       const col: any = {
@@ -610,7 +621,7 @@ export const getRoleAccessTableData = (accesses: RoleAccessesStateI[]) => {
         }
         case 'description': {
           const key = Object.keys(requestsAccessMap).find(key => requestsAccessMap[key] === item.access.id);
-          col.title = key ? requestsAccessTranslation[key] : undefined;
+          col.title = item.access.description;
           break;
         }
         default: {
@@ -623,6 +634,118 @@ export const getRoleAccessTableData = (accesses: RoleAccessesStateI[]) => {
     }
     return {
       id: item.id,
+      accessId: item.accessId,
+      columns
+    } as TableRowI
+  })
+}
+
+export const getAuthedSyncBoxTableData = (data: AuthedSyncBoxI[]) => {
+  return data.map((item, index) => {
+    const columns: any = []
+    for (const cell of authedSyncBoxTableHead) {
+      const col: any = {
+        ...cell
+      }
+      switch (cell.accessor) {
+        case 'user': {
+          col.title = item.user
+          break
+        }
+        case 'time': {
+          col.title = item.time
+          break
+        }
+        case 'host': {
+          col.title = item.host
+          break
+        }
+        default: {
+            col.title = cell.accessor
+            break
+        }
+      }
+      columns.push(col)
+    }
+    return {
+      id: `${item.user} + ${index}`,
+      columns
+    } as TableRowI
+  })
+}
+
+export const getFilesystemSyncBoxTableData = (data: FilesystemSyncBoxI[]) => {
+  return data.map((item: FilesystemSyncBoxI, index) => {
+    const columns: any = []
+    for (const cell of filesystemSyncBoxTableHead) {
+      const col: any = {
+        ...cell
+      }
+      switch (cell.accessor) {
+        case 'filesystem': {
+          col.title = item.filesystem
+          break
+        }
+        default: {
+          col.title = cell.accessor
+          ? item[cell.accessor as keyof FilesystemSyncBoxI].toString()
+          : ' '
+        }
+      }
+      columns.push(col)
+    }
+    return {
+      id: `${item.filesystem} + ${index}`,
+      columns
+    } as TableRowI
+  })
+}
+
+function formatMessage(message: string) {
+  return message.replace(/([.;])(?!\d)/g, '$1\n\n');
+}
+
+export const getLoggingTableData = (data: LoggingPollI[], page: number) => {
+  console.log("dta", data)
+  // const startIndex = (page - 1) * INITIAL_PAGE_LIMIT_AREA;
+  // const endIndex = startIndex + INITIAL_PAGE_LIMIT_AREA;
+  // const sortedData = data.slice(startIndex, endIndex);
+  return data.map((item, index) => {
+    const columns: any = []
+    for (const cell of loggingPollTableHead) {
+      const col: any = {
+        ...cell
+      }
+      switch (cell.accessor) {
+        case 'createdAt': {
+          col.title = item.createdAt
+          break
+        }
+        case 'message': {
+          col.title = formatMessage(item.message)
+          break
+        }
+        case 'type': {
+          col.title = item.type
+          break
+        }
+        case 'argv': {
+          col.title = item.argv
+          break
+        }
+        case 'options': {
+          col.title = item.options
+          break
+        }
+        default: {
+            col.title = cell.accessor
+            break
+        }
+      }
+      columns.push(col)
+    }
+    return {
+      id: `${item.appId}${new Date(item.createdAt).getTime()}`,
       columns
     } as TableRowI
   })
@@ -704,6 +827,18 @@ export const getPoolMockTableData = (pools: any) => {
   })
 }
 
+const actionTranslations: { [key: string]: string } = {
+  repair: "В ремонт",
+  reboot: "Перезагрузка",
+  restorePools: "Восстановление пулов",
+  disableBlink: "Блинк off",
+  enableBlink: "Блинк on",
+  updateManyPools: "Смена пулов",
+  disableMining: "Отключение майнинга",
+  enableMining: "Включение майнинга",
+  archive: "В расторжение"
+};
+
 export const getLogTableData = (
   page: number, 
   users: UserI[] | [],
@@ -729,9 +864,9 @@ export const getLogTableData = (
       }
       switch (cell.accessor) {
         case 'action': {
-          col.title = log.action
+          col.title = actionTranslations[log.action] || log.action;
+          break;
           // col.description = log.options
-          break
         }
         case 'message': {
           
@@ -818,37 +953,40 @@ export const getLogTableData = (
         case 'after': {
           col.title = "";
           if (log.after) {
-            const parsedData = log.after && JSON.parse(log.after);
-            parsedData.sort((a: any, b: any) => a.index - b.index);
-            const processItem: any = (item: any, indent = 0) => {
-                delete item.index;
-                const indentation = '\t'.repeat(indent);
-                return Object.entries(item)
-                    .map(([key, value]) => {
-                        if (typeof value === 'object' && value !== null) {
-                            return `<b>${translations[key] || key}</b>: ${processItem(value, indent + 1)}`;
-                        } else {
-                            return `<div style="display: flex; gap: 5px;align-items: center;">
-                            <i>${translations[key] || key}:</i>
-                            <i>${value}</i>
-                            </div>`;
-                        }
-                    })
-                    .join('');
-            };
-        
-            if (Array.isArray(parsedData)) {
-                const data = parsedData
-                    .map((item) => {
-                        return `<div style="margin-bottom: 20px;">${processItem(item)}</div>`;
-                    });
-                col.title = data.join('');
-            } else {
-                col.title = processItem(parsedData);
-            }
-        }
+              const parsedData = log.after && JSON.parse(log.after);
+              console.log("parsedData", parsedData);
+      
+              const processItem: any = (item: any, indent = 0) => {
+                  if (typeof item !== 'object' || item === null) return '';
+      
+                  delete item.index;
+                  const indentation = '\t'.repeat(indent);
+                  return Object.entries(item)
+                      .map(([key, value]) => {
+                          if (typeof value === 'object' && value !== null) {
+                              return `<b>${translations[key] || key}</b>: ${processItem(value, indent + 1)}`;
+                          } else {
+                              return `<div style="display: flex; gap: 5px;align-items: center;">
+                                  <i>${translations[key] || key}:</i>
+                                  <i>${value}</i>
+                                  </div>`;
+                          }
+                      })
+                      .join('');
+              };
+      
+              if (Array.isArray(parsedData)) {
+                  parsedData.sort((a: any, b: any) => a.index - b.index);
+                  col.title = parsedData
+                      .map((item) => `<div style="margin-bottom: 20px;">${processItem(item)}</div>`)
+                      .join('');
+              } else if (typeof parsedData === 'object' && parsedData !== null) {
+                  // Если это объект, просто обрабатываем его
+                  col.title = `<div style="margin-bottom: 20px;">${processItem(parsedData)}</div>`;
+              }
+          }
           break;
-        }
+      }
         case 'source': {
           // col.title = log.source.replace(/^::ffff:/, "")
           col.title = log.userAgent;
@@ -898,9 +1036,10 @@ export const getLogByUserTableData = (
       }
       switch (cell.accessor) {
         case 'action': {
-          col.title = log.action
+          col.title = actionTranslations[log.action] || log.action;
+          break;
           // col.description = log.options
-          break
+          // break
         }
         case 'info': {
           col.title = `<div style="display: flex; gap: 5px;align-items: center;">
@@ -1031,7 +1170,6 @@ export const getLogByUserTableData = (
                   col.title = processItem(parsedData);
               }
             } else {
-              console.log("PARSEDDATA", parsedAfter)
               col.title = processItem(parsedAfter)
             }
         }
@@ -1216,7 +1354,6 @@ export const getLogAntminerData = (page: number, logs: any[]) => {
 }
 
 export const getAccessTableData = (logs: any[]) => {
-  console.log("LOG", logs)
   return logs.map((log, index) => {
 
     const columns: any = []
@@ -1319,7 +1456,7 @@ export const getDevicesReq = async (
 
   const promises = [];
 
-  if (hasAccess(requestsAccessMap.getDevices)) {
+  if (hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDeviceDataAuthedUserId)) {
     promises.push(
       deviceAPI.getDevices({
         page: page - 1,
@@ -1362,7 +1499,8 @@ export const getDevicesReq = async (
           rangeip: true,
           rejectedPollsProcents: true,
           userDevices: true,
-          notOnlinedAt: true
+          notOnlinedAt: true,
+          isBlinking: true,
         },
       })
     );
@@ -1380,7 +1518,7 @@ export const getDevicesReq = async (
 
   const results = await Promise.all(promises);
 
-  const devicesRes = hasAccess(requestsAccessMap.getDevices) ? results.shift() : null;
+  const devicesRes = hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId) ? results.shift() : null;
   const statusesRes = hasAccess(requestsAccessMap.getDevicesStatus) ? results.shift() : null;
 
   return { devicesRes, statusesRes };

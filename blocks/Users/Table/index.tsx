@@ -65,7 +65,6 @@ const UsersTable: FC<UsersTableI> = ({ view, currentViewUsers, isLoading }) => {
   const handleUserClick = (id: string) => {
     router.push(`/users/${id}`)
   }
-
   const tableData = useMemo(() => {
     const head = view === RoleGroup.Clients ? clientsTableHead : teamTableHead
     return {

@@ -1,0 +1,38 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+    margin-top: rem(20);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: rem(20);
+}
+
+.dashboardAuthed {
+    grid-column: span 2;
+}
+
+
+.combineBlock {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-column: span 2;
+    gap: 20px;
+    position: relative;
+    border-bottom: 1px solid var(--color-stroke);
+
+    @media (max-width: 1079px) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.divider {
+    // position: absolute;
+    // top: 0;
+    // left: 49%;
+    width: 2px;
+    background: var(--color-stroke);
+    height: 100%;
+}

@@ -108,7 +108,7 @@ const generateWhereClause = (filter: any, currentTabTest?: any): any => {
 };
 
 const generateWhereArchiveClause = (filter: any, currentTabTest?: any): any => {
-  const { model, sn, client } = filter;
+  const { model, sn, client, partNumber } = filter;
   
   const models = model !== null && model.length === 0 ? [null] : model;
   const clients = client !== null && client.length === 0 ? [null] : client;
@@ -122,7 +122,12 @@ const generateWhereArchiveClause = (filter: any, currentTabTest?: any): any => {
         if (clientItem) someWhere.userDevices = {
           userId: clientItem.value
         };
-        if (sn) someWhere.sn = `$Like("%${sn}%")`;
+        if(partNumber) someWhere.partNumber = partNumber;
+        if (Array.isArray(sn)) {
+          someWhere.sn = `$In([${sn.map(s => `"${s.value}"`).join(",")}])`;
+        } else if (sn) {
+          someWhere.sn = `$Like("%${sn}%")`;
+        }
         testWhere.push(someWhere);
       });
     });
@@ -145,7 +150,7 @@ const fetchDevicesData = async (
         const where = generateWhereClause(filter, currentTabTest);
         const { devicesRes, statusesRes } = await getDevicesReq(filter.page, selectedCount, where, sortFilter);
         if(statusesRes && Array.isArray(statusesRes.rows)) {
-          console.log("statusesRes", statusesRes, statusesRes.rows)
+          console.log("statusesRes", devicesRes, statusesRes)
           const updatedStatuses: any = statusesRes?.rows
           const promises = updatedStatuses.map((row: any) => {
             const updatedTestWhere = generateWhereClause(filter, { id: row.id });
@@ -192,7 +197,7 @@ const fetchDevicesArchiveData = async (
   filter: any,
   // currentTabTest: any,
   selectedCount: number,
-  // sortFilter: any,
+  sortFilter: any,
   setData: React.Dispatch<React.SetStateAction<any>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   // setCheckboxFilter: any,
@@ -200,8 +205,9 @@ const fetchDevicesArchiveData = async (
   // setSelected: any
 ) => {
   try {
+    console.log("SORTFITLER,", sortFilter)
       const where = generateWhereArchiveClause(filter);
-      const { devicesRes, statusesRes } = await getDevicesReq(filter.page, selectedCount, where);
+      const { devicesRes, statusesRes } = await getDevicesReq(filter.page, selectedCount, where, sortFilter);
       if(statusesRes) {
         const updatedStatuses: any = statusesRes.rows;
         const promises = updatedStatuses.map((row: any) => {

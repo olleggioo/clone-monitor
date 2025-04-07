@@ -10,9 +10,11 @@ const SendData = () => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const [isSuccess, setIsSucess] = useState(false)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const onSubmit = async (e: any) => {
         e.preventDefault()
-        const selectedFile = e.target.elements.file.files[0];
+        console.log("e.target.elements", selectedFile)
+        // const selectedFile = e.target.elements.file.files[0];
         if(!selectedFile) {
             setError('Выберите файл формата .csv')
             return;
@@ -25,6 +27,9 @@ const SendData = () => {
         })
         .then(res => {
             setIsSucess(true)
+            setTimeout(() => {
+                window.location.reload()
+            }, 3000)
         })
         .catch(err => setError(err.message))
         .finally(() => {
@@ -33,24 +38,29 @@ const SendData = () => {
         })   
     }
 
+
+    const handleFileChange = (file: File) => {
+        setSelectedFile(file);
+        setError(''); // Убираем ошибку, если файл выбран
+    };
+
     return <Dashboard title="Импорт данных" description="Файл формата .csv" style={{width: "100%"}}>
-         <form onSubmit={onSubmit} className={styles.fields}>
+        <form onSubmit={onSubmit} className={styles.fields}>
             <div className={styles.field}>
-                <FieldFile 
-                    type="file"
-                    id="file"
-                    name="uploadFile"
-                    accept=".csv"
-                />
+            <FieldFile
+                label="Загрузите файл формата .csv"
+                name="uploadFile"
+                accept=".csv"
+                onChange={handleFileChange} // Передаем обработчик
+            />
             </div>
             <div>
-                <Button    
-                    // icon={<IconUpload width={22} height={22} /> }
-                    loading={loading}
-                    type="submit"
-                    title="Импорт"
-                    className={styles.btn}
-                />
+            <Button
+                loading={loading}
+                type="submit"
+                title="Импорт"
+                className={styles.btn}
+            />
             </div>
         </form>
         {error && <ErrorPopup text={error} />}

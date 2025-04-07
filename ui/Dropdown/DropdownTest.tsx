@@ -12,9 +12,10 @@ interface DropdownNewI extends DropdownI {
   style?: any
   title?: any
   whichTable?: string
+  accessId?: string
 }
 
-const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whichTable }) => {
+const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title, whichTable, accessId }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const onToggleClick = (e: any) => {
@@ -34,6 +35,7 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
 
   const itemOn = items?.filter((item: any) => item?.text === "Включить")
   const itemOff = items?.filter((item: any) => item?.text === "Выключить")
+
   return (
     <div
       style={{
@@ -73,8 +75,13 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
             },
           }}
         >
-          <div className={styles.flexMenu}>
-            <IconButton 
+          {items.length === 0 
+            ? <MenuItem disabled className={styles.item}>
+            Нет доступных действий
+        </MenuItem>
+            : <div>
+              <div className={styles.flexMenu}>
+            {items.length !== 0 && <IconButton 
               icon={<IconPlay height={20} width={20} />}
               className={classNames(styles.itemFlex, itemOn.length !== 0 ? styles.itemFlexActiveOn : styles.itemFlexBlock)}
               disabled={itemOn.length !== 0 ? false : true}
@@ -82,8 +89,8 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
                 itemOn[0].onClick(id)
                 setIsOpen(false)
               } : () => {}}
-            />
-            {flexItems.map((item: any, key: any) => {
+            />}
+            {items.length !== 0 && flexItems.map((item: any, key: any) => {
               return <IconButton 
                 icon={<IconRefresh width={20} height={20} />} 
                 className={styles.itemFlex} 
@@ -94,7 +101,7 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
                 }}
               />
             })}
-            <IconButton 
+            {items.length !== 0 && <IconButton 
               icon={<IconPower height={20} width={20} />}
               className={classNames(styles.itemFlex, itemOff.length !== 0 ? styles.itemFlexActiveOff : styles.itemFlexBlock)}
               disabled={itemOff.length !== 0 ? false : true}
@@ -102,13 +109,36 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
                 itemOff[0].onClick(id)
                 setIsOpen(false)
               } : () => {}}
-            />
+            />}
           </div>
           <div className={styles.divider} />
           {items
-          .filter((item: any) => item?.text !== "Перезагрузить" && item?.text !== "Выключить" && item?.text !== "Включить")
+            .filter((item: any) => item?.text === "Редактировать доступ")
+            .map((item: any, key) => {
+              const handleClick = () => {
+  
+                item.onClick(accessId)
+                setIsOpen(false)
+              }
+              return (
+                <MenuItem
+                  onClick={handleClick}
+                  key={key}
+                  className={classNames(styles.item, {
+                    [styles.item_red]: item?.mod === 'red'
+                  })}
+                >
+                  {item?.icon}
+                  <span>{item?.text}</span>
+                </MenuItem>
+              )
+            })  
+          }
+          {items
+          .filter((item: any) => item?.text !== "Перезагрузить" && item?.text !== "Выключить" && item?.text !== "Включить" && item?.text !== "Редактировать доступ")
           .map((item: any, key) => {
             const handleClick = () => {
+
               item.onClick(id)
               setIsOpen(false)
             }
@@ -125,6 +155,8 @@ const DropdownTest: FC<DropdownNewI> = ({ id, items, className, style, title,whi
               </MenuItem>
             )
           })}
+          </div> 
+          }
         </Menu>
     </div>
   )

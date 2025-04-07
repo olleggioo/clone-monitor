@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useId } from 'react'
 import { TechInfoI } from './TechInfo'
 import Dashboard from '../Dashboard'
 import styles from './TechInfo.module.scss'

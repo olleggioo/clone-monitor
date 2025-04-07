@@ -27,6 +27,7 @@ import IconTool from '@/icons/Tool'
 import { hasAccess } from '@/helpers/AccessControl'
 import { requestsAccessMap } from '@/helpers/componentAccessMap'
 import { useSnackbar } from 'notistack'
+import IconOff from '@/icons/Off'
 
 const COUNT_OPTIONS: OptionItemI[] = [
   { label: '15', value: '15' },
@@ -87,6 +88,8 @@ const DevicesTabs: FC<DevicesTabsI> = ({
   const [modalArchiveManyDevices, setModalArchiveManyDevices] = useState(false)
   const [modalRepairManyDevices, setModalRepairManyDevices] = useState(false)
   const [modalDeviceOutput, setModalDeviceOutput] = useState(false)
+  const [modalEnableBlink, setModalEnableBlink] = useState(false)
+  const [modalDisableBlink, setModalDisableBlink] = useState(false)
  
   const tabControls: any[] = useMemo(() => {
     const statusList = statuses && statuses.map((status) => {
@@ -267,6 +270,56 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     }
   }
 
+  const enableBlinkSubmit = () => {
+    if(state.length > 0) {
+      deviceAPI.updateDeviceBlinkOn({
+        where: state.map(item => ({ id: item.id }))
+      }).then(() => {
+        setModalEnableBlink(false)
+        setModalInfo({
+          open: true,
+          action: "Включение блинка",
+          status: "Успешно",
+          textInAction: "Запрос на включение блинка в очереди"
+        })
+      })
+      .catch(err => {
+        setModalEnableBlink(false)
+        setModalInfo({
+          open: true,
+          action: "Включение блинка",
+          status: "Ошибка",
+          textInAction: "Произошла ошибка на включение блинка."
+        })
+      })
+    }
+  }
+
+  const disableBlinkSubmit = () => {
+    if(state.length > 0) {
+      deviceAPI.updateDeviceBlinkOff({
+        where: state.map(item => ({ id: item.id }))
+      }).then(() => {
+        setModalDisableBlink(false)
+        setModalInfo({
+          open: true,
+          action: "Выключение блинка",
+          status: "Успешно",
+          textInAction: "Запрос на выключение блинка в очереди"
+        })
+      })
+      .catch(err => {
+        setModalDisableBlink(false)
+        setModalInfo({
+          open: true,
+          action: "Выключение блинка",
+          status: "Ошибка",
+          textInAction: "Произошла ошибка на выключение блинка."
+        })
+      })
+    }
+  }
+
   const reserveDevicesSubmit = () => {
     if(state.length > 0) {
       deviceAPI.reserveDeviceById({
@@ -405,7 +458,20 @@ const DevicesTabs: FC<DevicesTabsI> = ({
 
   const tableDropDownItems: DropdownItemI[] = []
 
-  if(hasAccess(requestsAccessMap.enableDevice)) {
+  tableDropDownItems.unshift({
+    text: 'Выключить блинк',
+    icon: <IconOff width={20} height={20} />,
+    onClick: () => setModalDisableBlink(true)
+  })
+
+  tableDropDownItems.unshift({
+    text: 'Включить блинк',
+    icon: <IconPlay width={20} height={20} />,
+    onClick: () => setModalEnableBlink(true)
+  })
+
+
+  if(hasAccess(requestsAccessMap.enableDevice) || hasAccess(requestsAccessMap.enableDeviceAuthedAreaId)) {
     tableDropDownItems.unshift({
       text: 'Включить',
       icon: <IconPlay width={20} height={20} />,
@@ -413,7 +479,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.disableDevice)) {
+  if(hasAccess(requestsAccessMap.disableDevice) || hasAccess(requestsAccessMap.disableDeviceAuthedAreaId)) {
     tableDropDownItems.unshift({
       text: 'Выключить',
       icon: <IconPower width={20} height={20} />,
@@ -421,7 +487,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+  if(hasAccess(requestsAccessMap.updateDeviceMany) || hasAccess(requestsAccessMap.updateDeviceManyAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Восстановить',
       icon: <IconRollBrush width={20} height={20} />,
@@ -429,7 +495,8 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.createUserDevice) && hasAccess(requestsAccessMap.deleteUserDevicesMany)) {
+  if(hasAccess(requestsAccessMap.createUserDevice) && 
+    (hasAccess(requestsAccessMap.deleteUserDevicesMany) || hasAccess(requestsAccessMap.deleteUserDevicesManyAuthedUserId))) {
     tableDropDownItems.unshift({
       text: 'Обновить клиентов',
       icon: <IconRefresh width={20} height={20} />,
@@ -437,7 +504,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+  if(hasAccess(requestsAccessMap.updateDeviceMany) || hasAccess(requestsAccessMap.updateDeviceManyAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Обновить владельцев',
       icon: <IconUser width={20} height={20} />,
@@ -445,7 +512,9 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateManyDevicesPools)) {
+  if(hasAccess(requestsAccessMap.updateManyDevicesPools) ||
+    hasAccess(requestsAccessMap.updateManyDevicesPoolsAuthedAreaId) || 
+    hasAccess(requestsAccessMap.updateManyDevicesPoolsAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Обновить пулы',
       icon: <IconSliders width={20} height={20} />,
@@ -453,7 +522,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+  if(hasAccess(requestsAccessMap.updateDeviceMany) || hasAccess(requestsAccessMap.updateDeviceManyAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Обновить устройства',
       icon: <IconEdit2 width={20} height={20} />,
@@ -461,7 +530,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.reloadManyDevices)) {
+  if(hasAccess(requestsAccessMap.reloadManyDevices) || hasAccess(requestsAccessMap.reloadManyDevicesAuthedUserId)) {
     tableDropDownItems.unshift({
       text: 'Перезагрузить',
       icon: <IconRefresh width={20} height={20} />,
@@ -469,14 +538,14 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.updateManyOverclock)) {
+  if(hasAccess(requestsAccessMap.updateManyOverclock) || hasAccess(requestsAccessMap.updateManyOverclockAuthedAreaId)) {
     tableDropDownItems.unshift({
       text: 'Разогнать',
       icon: <IconDashboardPerfomance width={20} height={20} />,
       onClick: () => setModalDisperseMany(true)
     })
   }
-  if(hasAccess(requestsAccessMap.deleteManyDevices)) {
+  if(hasAccess(requestsAccessMap.deleteManyDevices) || hasAccess(requestsAccessMap.deleteManyDevicesAuthedUserId)) {
     tableDropDownItems.push({
       text: "Удалить",
       icon: <IconTrash width={20} height={20} />,
@@ -485,7 +554,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
     })
   }
 
-  if(hasAccess(requestsAccessMap.reserveDeviceById)) {
+  if(hasAccess(requestsAccessMap.reserveDeviceById) || hasAccess(requestsAccessMap.reserveDeviceByIdAuthedAreaId)) {
     tableDropDownItems.unshift({
         text: 'Зарезервировать',
         icon: <IconSave2 width={20} height={20} />,
@@ -494,14 +563,14 @@ const DevicesTabs: FC<DevicesTabsI> = ({
   }
 
   if(currentTabTest.value === "Не в сети") {
-    if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+    if(hasAccess(requestsAccessMap.updateDeviceMany) || hasAccess(requestsAccessMap.updateDeviceManyAuthedUserId)) {
       tableDropDownItems.unshift({
         text: "В ремонт",
         icon: <IconTool width={20} height={20} />,
         onClick: () => setModalRepairManyDevices(true)
       })
     }
-    if(hasAccess(requestsAccessMap.archiveMassDevice)) {
+    if(hasAccess(requestsAccessMap.archiveMassDevice) || hasAccess(requestsAccessMap.archiveMassDeviceAuthedAreaId)) {
       tableDropDownItems.unshift({
         text: "В расторжение",
         icon: <IconArchive width={20} height={20} />,
@@ -511,20 +580,20 @@ const DevicesTabs: FC<DevicesTabsI> = ({
   }
 
   if(currentTabTest.value === "В ремонте") {
-    if(hasAccess(requestsAccessMap.archiveMassDevice)) {
+    if(hasAccess(requestsAccessMap.archiveMassDevice) || hasAccess(requestsAccessMap.archiveMassDeviceAuthedAreaId)) {
       tableDropDownItems.unshift({
         text: "В расторжение",
         icon: <IconArchive width={20} height={20} />,
         onClick: () => setModalArchiveManyDevices(true)
       })
     }
-    // if(hasAccess(requestsAccessMap.updateDeviceMany)) {
-    //   tableDropDownItems.unshift({
-    //     text: "Вывести из ремонта",
-    //     icon: <IconBack width={20} height={20} />,
-    //     onClick: () => setModalDeviceOutput(true)
-    //   })
-    // }
+    if(hasAccess(requestsAccessMap.updateDeviceMany)) {
+      tableDropDownItems.unshift({
+        text: "Вывести из ремонта",
+        icon: <IconBack width={20} height={20} />,
+        onClick: () => setModalDeviceOutput(true)
+      })
+    }
   }
 
   const handleDeleteManyDevices = () => {
@@ -559,14 +628,17 @@ const DevicesTabs: FC<DevicesTabsI> = ({
       deviceAPI.updateDeviceMany({
         where: state.map(item => ({ id: item.id }))
       }, {
-        statusId: "82cddea0-861f-11ee-932b-300505de684f"
+        statusId: "9a8471f1-861f-11ee-932b-300505de684f"
       }).then(res => {
         enqueueSnackbar("Устройства выведены из ремонта. Страница перезагрузится через 3 секунды.", {
           variant: "info",
           autoHideDuration: 3000
         })
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
       }).catch(err => {
-        enqueueSnackbar("Произошла ошибка при вывове устройств из ремонта.")
+        enqueueSnackbar("Произошла ошибка при выводе устройств из ремонта.")
       })
     }
   }
@@ -675,6 +747,28 @@ const DevicesTabs: FC<DevicesTabsI> = ({
         />
       }
 
+      {modalEnableBlink &&
+        state.length > 0 &&
+        <Alert 
+          title={"Включение блинка на выделенных устройствах"} 
+          content={"Вы уверены что хотите включить блинк на выделенных устройствах?"} 
+          open={modalEnableBlink} 
+          setOpen={setModalEnableBlink} 
+          handleDeleteClick={enableBlinkSubmit} 
+        />
+      }
+
+      {modalDisableBlink &&
+        state.length > 0 &&
+        <Alert 
+          title={"Выключение блинка на выделенных устройствах"} 
+          content={"Вы уверены что хотите выключить блинк на выделенных устройствах?"} 
+          open={modalDisableBlink} 
+          setOpen={setModalDisableBlink} 
+          handleDeleteClick={disableBlinkSubmit} 
+        />
+      }
+
       {modalEnableManyDevices &&
         state.length > 0 &&
         <Alert 
@@ -743,7 +837,7 @@ const DevicesTabs: FC<DevicesTabsI> = ({
         handleDeleteClick={handleDeleteManyDevices} 
       />}
       <div className={styles.pagAndAction}>
-        {state.length > 0 && roleId !== process.env.ROLE_CLIENT_ID && <DropdownActions 
+        {state.length > 0 && <DropdownActions 
             items={tableDropDownItems}
             className={styles.buttonMoreActions}
         />}

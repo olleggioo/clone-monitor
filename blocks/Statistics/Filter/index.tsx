@@ -2,6 +2,7 @@ import {
   FC,
   useEffect,
   useMemo,
+  useState,
 } from 'react'
 import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
@@ -28,6 +29,7 @@ import { getStatusName } from '@/helpers'
 import ru from 'date-fns/locale/ru';
 import { hasAccess } from '@/helpers/AccessControl'
 import { requestsAccessMap } from '@/helpers/componentAccessMap'
+import { devicesFilterInitialState, DevicesFilterStateI } from '@/atoms/appDataAtom'
 
 const StatsFilter: FC<{ 
   className?: string, 
@@ -35,6 +37,33 @@ const StatsFilter: FC<{
   setPeriodType: (type: ChartPeriodType) => void 
 }> = ({ className, periodType, setPeriodType }) => {
   const router = useRouter()
+  
+  const [sessionFilter, setSessionFilter] = useState<DevicesFilterStateI>(() => {
+    const savedState = sessionStorage.getItem("devicesFilterState");
+    return savedState ? JSON.parse(savedState) : devicesFilterInitialState;
+  });
+  
+  console.log("sessionFilter", sessionFilter)
+
+  const handleSelectChangeSession = (
+    name: keyof DevicesFilterStateI,
+    value: string | null | boolean | any
+  ) => {
+    setSessionFilter((prevState) => {
+      const newState = {
+        ...devicesFilterInitialState,
+        client: prevState.client,
+        area: prevState.area,
+        model: prevState.model,
+        algorithm: prevState.algorithm,
+        [name]: value,
+        page: 1
+      }
+      sessionStorage.setItem("devicesFilterState", JSON.stringify(newState));
+      window.dispatchEvent(new Event("storage"));
+      return newState;
+    })
+  }
 
   const [{ users, area, algorithms, model, status, ranges}] = useAtom(statsDataAtom)
   const [state, setState] = useAtom(statsFilterAtom)
@@ -108,8 +137,6 @@ const StatsFilter: FC<{
   }, [model, state.model])
   
 
-  console.log('status', status
-    .filter((item: any) => item.name !== "In archive" && item.name !== "Not online" && item.name !== "In repair"))
   const statusProps = useMemo(() => {
     const options: OptionItemI[] = status
     .filter((item: any) => item.name !== "In archive" && item.name !== "Not online" && item.name !== "In repair")
@@ -137,18 +164,39 @@ const StatsFilter: FC<{
 
   const handleClientChange = (e: any, option: any) => {
     handleSelectChange('client', option?.value)
+    if(option) {
+      handleSelectChangeSession('client', [option])
+    } else {
+      handleSelectChangeSession('client', [])
+    }
   }
 
   const handleAreaChange = (e: any, option: any) => {
     handleSelectChange('area', option?.value)
+    if(option) {
+      handleSelectChangeSession('area', [option])
+    }
+    else {
+      handleSelectChangeSession('area', [])
+    }
   }
 
   const handleAlgorithmChange = (e: any, option: any) => {
     handleSelectChange('algorithm', option?.value)
+    if(option) {
+      handleSelectChangeSession('algorithm', [option])
+    } else {
+      handleSelectChangeSession('algorithm', [])
+    }
   }
 
   const handleModelChange = (e: any, option: any) => {
     handleSelectChange('model', option?.value)
+    if(option) {
+      handleSelectChangeSession('model', [option])
+    } else {
+      handleSelectChangeSession('model', [])
+    }
   }
 
   
@@ -175,6 +223,8 @@ const StatsFilter: FC<{
 
   const handleReset = () => {
     setState(statsFilterInitialState)
+    setSessionFilter(devicesFilterInitialState)
+    sessionStorage.setItem("devicesFilterState", JSON.stringify(devicesFilterInitialState));
     setDateRange([null, null])
   }
 
@@ -192,11 +242,20 @@ const StatsFilter: FC<{
       setPeriodType("day")
     }
     else if(diffDays > 1 && diffDays < 8) {
-      setPeriodType("month")
+      setPeriodType("week")
     } else if(diffDays > 8) {
       setPeriodType("month")
     }
   }, [startDate, endDate])
+
+  const activeFilters = [
+    hasAccess(requestsAccessMap.getDeviceModel),
+    hasAccess(requestsAccessMap.getDevicesArea),
+    hasAccess(requestsAccessMap.getDevicesAlgorithm),
+    hasAccess(requestsAccessMap.getUsers)
+  ].filter(Boolean).length; // Подсчитываем количество активных фильтров
+  
+  const gridColumns = activeFilters + 1;
 
   return (
     <Dashboard 
@@ -209,7 +268,7 @@ const StatsFilter: FC<{
     />} 
     title="Фильтр" 
     className={filterClass}>
-      <div className={styles.list}>
+      <div className={styles.list} style={{ gridTemplateColumns: `repeat(${gridColumns}, 1fr)` }}>
         {hasAccess(requestsAccessMap.getDeviceModel) && <MultiSelectUser 
           {...modelProps}
           type='base'
@@ -217,13 +276,13 @@ const StatsFilter: FC<{
           onChange={handleModelChange}
           className={styles.field}
         />}
-        {hasAccess(requestsAccessMap.getDevicesStatus) && <MultiSelectUser 
+        {/* {hasAccess(requestsAccessMap.getDevicesStatus) && <MultiSelectUser 
           {...statusProps}
           type='base'
           label='Статус'  
           onChange={handleStatusChange}
           className={styles.field}
-        />}
+        />} */}
         {hasAccess(requestsAccessMap.getDevicesArea) && <MultiSelectUser 
           {...areaProps}
           type='base'

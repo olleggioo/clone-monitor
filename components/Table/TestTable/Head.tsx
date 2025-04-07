@@ -70,32 +70,20 @@ const Head: FC<{
     handleSelectAll,
     checked
   }) => {
-    const [selected] = useAtom(selectedInputAtom)
-    const roleId = localStorage.getItem(`${process.env.API_URL}_role`)
     const [isSort, setIsSort] = useState(false)
     const [flashed, setFlashed] = useState(false)
     const [filter, setFilter] = useAtom(devicesFilterAtom)
-    const [device] = useAtom(deviceAtom)
-    const onClickFlashed = () => {
-      setFlashed(prevState => !prevState)
-      setFilter((prevState: any) => {
-        return {
-            ...prevState,
-            isFlashed: flashed === true ? true : "false"
-        }
-    })
-    }
+
     return <>
-    
      {required &&
-      <div className={styles["checkbox-column"]}>
-          <Checkbox 
-            // value={userId}
-            checked={checked}
-            onChange={setSelected}
-            keys={"head"}
-        /> 
-      </div>
+        <div className={styles["checkbox-column"]}>
+            <Checkbox 
+              // value={userId}
+              checked={checked}
+              onChange={setSelected}
+              keys={"head"}
+          /> 
+        </div>
       }
       
       {items.map((item: any, i) => {

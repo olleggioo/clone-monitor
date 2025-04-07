@@ -74,7 +74,6 @@ import ProfileUser from '@/components/ProfileUser'
           rangeipId: filterState.ranges || null,
         }
       }).then((res) => {
-        console.log("res", res)
         setData((prevState: any) => {
           return {
             ...prevState,
@@ -174,7 +173,6 @@ import ProfileUser from '@/components/ProfileUser'
           })
         })
         .catch((error) => {
-          console.log("GOVNO")
           setData({
             ...data,
   

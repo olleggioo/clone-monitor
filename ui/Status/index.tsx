@@ -47,7 +47,10 @@ const Status: FC<StatusUpdateI> = ({
   return (
     <Tag className={statusClass}>
       <div>
-        {id ? <Link href={`/devices/${id}`} className={styles.text} style={style}>{correctTitle || title}</Link> : <p className={styles.text} style={style}>{correctTitle || title}</p>} 
+        {id 
+          ? <Link href={`/devices/${id}`} className={styles.text} style={style}>{correctTitle || title}</Link> 
+          : <p className={styles.text} onClick={onClick} style={style}>{correctTitle || title}</p>
+        }
         {description && <div className={styles.description}>
           <p onClick={() => {
               navigator.clipboard.writeText(description.substring(4))

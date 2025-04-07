@@ -100,6 +100,10 @@ export const devicesArchiveRolledTableHead: TableHeadCellI[] = [
 
   },
   {
+    title: 'Номер поставки',
+    accessor: 'partNumber'
+  },
+  {
     title: 'Пул',
     accessor: 'devicePool',
     width: 10,
@@ -188,6 +192,10 @@ export const devicesRolledTableHead: TableHeadCellI[] = [
     accessor: 'partNumber',
     width: 10,
     flagCopy: true,
+  },
+  {
+    title: 'Блинк',
+    accessor: 'isBlinking',
   },
   {
     title: 'Дата-центр',
@@ -282,12 +290,19 @@ export const poolReserveTableHead: TableHeadCellI[] = [
   {
     title: 'Url',
     accessor: 'url',
+    flagCopy: true
   },
   {
     title: 'Воркер',
     accessor: 'user',
-    align: 'center'
+    align: 'center',
+    flagCopy: true
   },
+  {
+    title: 'Пароль',
+    accessor: 'password',
+    flagCopy: true
+  }
 ]
 
 export const poolTableHead: TableHeadCellI[] = [
@@ -536,6 +551,71 @@ export const areasTableHead: TableHeadCellI[] = [
     title: "Имя",
     accessor: "name"
   }
+]
+
+export const authedSyncBoxTableHead: TableHeadCellI[] = [
+  {
+    title: "Пользователь",
+    accessor: "user"
+  },
+  {
+    title: "Время",
+    accessor: "time"
+  },
+  {
+    title: "Хост",
+    accessor: "host"
+  },
+]
+
+export const filesystemSyncBoxTableHead: TableHeadCellI[] = [
+  {
+    title: "Файловая система",
+    accessor: "filesystem"
+  },
+  {
+    title: "Размер",
+    accessor: "size"
+  },
+  {
+    title: "Использовано",
+    accessor: "used"
+  },
+  {
+    title: "Свободно",
+    accessor: "avail"
+  },
+  {
+    title: "Использовано в %",
+    accessor: "use"
+  },
+  {
+    title: "Смониторован",
+    accessor: "mounted"
+  },
+]
+
+export const loggingPollTableHead: TableHeadCellI[] = [
+  {
+    title: "Дата",
+    accessor: "createdAt"
+  },
+  {
+    title: "Тип",
+    accessor: "type"
+  },
+  {
+    title: "Argv",
+    accessor: "argv"
+  },
+  {
+    title: "Options",
+    accessor: "options"
+  },
+  {
+    title: "Сообщение",
+    accessor: "message"
+  },
 ]
 
 export const accessesTableHead: TableHeadCellI[] = [

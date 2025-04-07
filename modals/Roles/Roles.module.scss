@@ -12,24 +12,24 @@
   box-shadow: 0 rem(4) rem(10) rgba(0, 0, 0, 0.1);
 }
 
-.fieldset {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-gap: rem(20);
-}
+// .fieldset {
+//   display: grid;
+//   grid-template-columns: 100%;
+//   grid-gap: rem(20);
+// }
 
-.buttons {
-  display: flex;
-  justify-content: flex-start;
+// .buttons {
+//   display: flex;
+//   justify-content: flex-start;
 
-  > * {
-      margin-right: rem(24);
+//   > * {
+//       margin-right: rem(24);
 
-      &:last-child {
-          margin-right: 0;
-      }
-  }
-}
+//       &:last-child {
+//           margin-right: 0;
+//       }
+//   }
+// }
 
 .checkboxList {
   display: grid;
@@ -37,42 +37,288 @@
   gap: 1.5rem;
 }
 
-.category {
-  border: 1px solid #DFDFDF;
-  border-radius: rem(8);
-  padding: rem(16);
-}
+// .category {
+//   border: 1px solid #DFDFDF;
+//   border-radius: rem(8);
+//   padding: rem(16);
+// }
 
-.category h3 {
-  text-align: center;
-  line-height: 25px;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--color-text-primary);
-}
+// .category h3 {
+//   text-align: center;
+//   line-height: 25px;
+//   font-size: 20px;
+//   font-weight: 600;
+//   margin-bottom: 12px;
+//   color: var(--color-text-primary);
+// }
 
+// .checkboxItem {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.75rem; /* Увеличен разрыв между чекбоксом и текстом */
+//   cursor: pointer; /* Добавлен указатель для интерактивности */
+// }
+
+// .checkboxItem:hover {
+//   background-color: var(--color-background-hover); /* Подсветка при наведении */
+//   border-radius: rem(4);
+//   // padding: rem(4); /* Небольшой внутренний отступ для эффекта */
+// }
+
+// .text {
+//   font-weight: 500;
+//   font-size: rem(16);
+//   line-height: 25px;
+//   color: var(--color-text-muted);
+//   transition: color 0.3s ease;
+// }
+
+// .checkboxItem:hover .text {
+//   color: var(--color-text-primary);
+// }
+
+// .titles {
+//   display: flex;
+//   flex-direction: column;
+// }
+
+
+.test {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  gap: 5px;
+
+}
 .checkboxItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* Увеличен разрыв между чекбоксом и текстом */
-  cursor: pointer; /* Добавлен указатель для интерактивности */
+  gap: 20px;
+  &_small {
+    .label {
+      &::after {
+        width: rem(14);
+        height: rem(14);
+      }
+
+      &::before {
+        width: rem(16);
+        height: rem(16);
+        background-size: rem(12);
+      }
+    }
+  }
+
+  &_reverse {
+    flex-direction: row-reverse;
+    width: 100%;
+
+    .input:checked {
+      + .label {
+        color: var(--color-text-dark);
+      }
+    }
+
+    .label {
+      padding-left: 0;
+      font-style: normal;
+      font-weight: 500;
+      font-size: rem(15);
+      line-height: rem(24);
+      color: var(--color-text-dark);
+
+      @include tablet-small {
+        font-size: rem(16);
+      }
+
+      &::before {
+        left: auto;
+        right: 0;
+      }
+
+      &::after {
+        right: 0;
+        left: auto;
+      }
+    }
+  }
 }
 
-.checkboxItem:hover {
-  background-color: var(--color-background-hover); /* Подсветка при наведении */
-  border-radius: rem(4);
-  // padding: rem(4); /* Небольшой внутренний отступ для эффекта */
-}
+.label {
+  position: relative;
+  width: 100%;
+  padding-left: rem(30);
+  font-size: rem(14);
+  text-align: left;
 
-.text {
-  font-weight: 500;
-  font-size: rem(16);
-  line-height: 25px;
+  display: inline-flex;
+  align-items: center;
+
   color: var(--color-text-muted);
-  transition: color 0.3s ease;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: color $transition, background-color $transition, border-color $transition;
+
+  -webkit-tap-highlight-color: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: rem(18);
+    height: rem(18);
+    border: 1px solid transparent;
+    border-color: var(--color-text-muted);
+    border-radius: rem(4);
+
+    transition: background-color $transition;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    width: rem(20);
+    height: rem(20);
+    background-image: url('/images/icons/check.svg');
+    background-size: rem(16);
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+
+    transition: opacity $transition;
+  }
+
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      color: var(--color-brand);
+
+      &::after {
+        border-color: var(--color-brand);
+      }
+    }
+  }
 }
 
-.checkboxItem:hover .text {
-  color: var(--color-text-primary);
+.tst {
+  @include visually-hidden;
+
+  &:checked {
+    + .lbl {
+      color: var(--color-text-muted);
+      // background: red;
+
+      &::after {
+        background-color: var(--color-brand);
+        border-color: var(--color-brand);
+      }
+
+      &:before {
+        opacity: 1;
+      }
+
+      @include desktop-only {
+        &:hover,
+        &:focus {
+          color: var(--color-brand);
+        }
+      }
+    }
+  }
+}
+
+.lbl {
+  position: relative;
+  width: 100%;
+  padding-left: rem(30);
+  font-size: rem(14);
+  text-align: left;
+
+  display: inline-flex;
+  align-items: center;
+
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  user-select: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: rem(18);
+    height: rem(18);
+    border: 1px solid transparent;
+    border-color: var(--color-text-muted);
+    border-radius: rem(4);
+
+    transition: background-color $transition;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    width: rem(20);
+    height: rem(20);
+    background-image: url('/images/icons/check.svg');
+    background-size: rem(16);
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+
+    transition: all 0.3s ease;
+  }
+  
+}
+
+.input {
+  @include visually-hidden;
+
+  &:checked {
+    + .label {
+      color: var(--color-text-muted);
+      // background: red;
+
+      &::after {
+        background-color: var(--color-brand);
+        border-color: var(--color-brand);
+      }
+
+      &:before {
+        opacity: 1;
+      }
+
+      @include desktop-only {
+        &:hover,
+        &:focus {
+          color: var(--color-brand);
+        }
+      }
+    }
+  }
+}
+
+.description {
+  // padding-left: rem(30);
+  font-size: rem(14);
+  color: var(--color-text-muted);
+  // font-weight: 500;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.categoryTitle {
+  font-weight: 500;
+  font-size: rem(18);
 }

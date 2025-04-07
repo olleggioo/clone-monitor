@@ -71,7 +71,6 @@ const AddClientModal: FC<ClientModalI> = ({ onClose }) => {
         }
       })
   }
-  console.log("roles", roles)
   const handleSubmit = () => {
     userAPI
       .createUser({

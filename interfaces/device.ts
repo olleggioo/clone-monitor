@@ -168,6 +168,7 @@ export interface DeviceI {
   userRoleId: string
   userContract: string
   uptimeElapsed: number
+  isBlinking?: boolean
   listLog: any
   notOnlinedAt: any
   sumEnergyMonth?: {
@@ -182,6 +183,7 @@ export interface DeviceI {
     userId: string
     user: UserI
   }[]
+  energyDay?: any
 }
 
 export interface DeviceModelI {

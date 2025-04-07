@@ -12,7 +12,7 @@ const coloredDigits = (str: string) => {
 };
 
 const getColorForIndex = (index: number) => {
-  const colors = ['#63B283', '#FFA800', '#DFDFDF', '#878787', '#FF5353'];
+  const colors = ['#B5BEC6', '#63B283', '#FFA800', '#DFDFDF', '#878787', '#FF5353'];
   return colors[index] || 'black';
 };
 

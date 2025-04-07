@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import ArrowDown from "@/icons/ArrowDown";
 import { Menu, MenuItem } from "@mui/material";
 import ProfileUser from "@/components/ProfileUser";
+import { requestsAccessMap } from "@/helpers/componentAccessMap";
+import { hasAccess } from "@/helpers/AccessControl";
 
 const PoolsContainer = () => {
   const roleId = localStorage.getItem(`${process.env.API_URL}_role`)
@@ -120,12 +122,12 @@ const PoolsContainer = () => {
     // )
     return device !== "mobile" ? <Layout header={header}>
         <div className={styles.actions}>
-          <Button
+          {hasAccess(requestsAccessMap.createOnePoolMock) && <Button
             title="Добавить шаблон"
             icon={<IconPlus width={22} height={22} />}
             className={styles.btn}
             onClick={() => setAddMock(true)}
-            />
+          />}
           {state.length > 0 && <DropdownActions 
             items={tableDropDownItems}
             className={styles.buttonMoreActions}
@@ -167,12 +169,12 @@ const PoolsContainer = () => {
     </Layout> : <Layout pageTitle="Шаблоны пулов" header={<ProfileUser title='Шаблоны пулов' />}>
       <Dashboard>
       <div className={styles.actions}>
-        <Button
+        {hasAccess(requestsAccessMap.createOnePoolMock) && <Button
           title="Добавить шаблон"
           icon={<IconPlus width={22} height={22} />}
           className={styles.btn_phone}
           onClick={() => setAddMock(true)}
-          />
+        />}
         {state.length > 0 && <DropdownActions 
           items={tableDropDownItems}
           className={styles.buttonMoreActions}

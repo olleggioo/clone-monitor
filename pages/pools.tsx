@@ -12,11 +12,11 @@ const Pools: NextPage = () => {
     
     const roleId = localStorage.getItem(`${process.env.API_URL}_role`)
     const router = useRouter();
-    useEffect(() => {
-        if(roleId !== process.env.ROLE_ROOT_ID && roleId !== process.env.ROLE_MANAGER_ID) {
-            router.push("/statistics")
-        }
-    }, [roleId])
+    // useEffect(() => {
+    //     if(roleId !== process.env.ROLE_ROOT_ID && roleId !== process.env.ROLE_MANAGER_ID) {
+    //         router.push("/statistics")
+    //     }
+    // }, [roleId])
     return (
         <> 
             <Head>

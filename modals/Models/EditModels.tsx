@@ -8,15 +8,19 @@ import { useSnackbar } from "notistack"
 import { ModelReqI } from "@/containers/Models"
 import { useAtom } from "jotai"
 import { modelInfoAtom } from "@/atoms/appDataAtom"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
 
 const EditModels = ({id, onClose}: any) => {
     const [models, setModels] = useAtom(modelInfoAtom)
     const [editState, setEditState] = useState({nominalEnergy: ""})
 
     useEffect(() => {
-        deviceAPI.getDeviceModelId(id).then((res: any) => {
-            setEditState({nominalEnergy: res.nominalEnergy})
-        }).catch(err => console.error(err))
+        if(hasAccess(requestsAccessMap.getDeviceModelId)) {
+            deviceAPI.getDeviceModelId(id).then((res: any) => {
+                setEditState({nominalEnergy: res.nominalEnergy})
+            }).catch(err => console.error(err))
+        }
     }, [id, setEditState])
 
     const {enqueueSnackbar} = useSnackbar()
@@ -57,24 +61,26 @@ const EditModels = ({id, onClose}: any) => {
           closeBtn
           className={styles.el}
         >
-            <Field 
-              label="Энергоэффективность" 
-              type="number"
-              value={editState.nominalEnergy}
-              onChange={(evt: any) => setEditState((prevState: any) => {
-                return {
-                  ...prevState,
-                  nominalEnergy: evt.target.value
-                }
-              })} 
-            />
-          <Button
-            title="Сохранить"
-            icon={<IconSave width={22} height={22} />}
-            onClick={handleSubmit}
-            // disabled={state.value === editState.name}
-            className={styles.submit}
-          />
+            {hasAccess(requestsAccessMap.getDeviceModelId) && <>   
+                <Field 
+                    label="Энергоэффективность" 
+                    type="number"
+                    value={editState.nominalEnergy}
+                    onChange={(evt: any) => setEditState((prevState: any) => {
+                        return {
+                        ...prevState,
+                        nominalEnergy: evt.target.value
+                        }
+                    })} 
+                />
+                <Button
+                    title="Сохранить"
+                    icon={<IconSave width={22} height={22} />}
+                    onClick={handleSubmit}
+                    // disabled={state.value === editState.name}
+                    className={styles.submit}
+                />
+            </>}
         </Dialog>
       )
 }

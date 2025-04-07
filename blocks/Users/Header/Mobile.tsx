@@ -4,8 +4,9 @@ import { Button } from '@/ui'
 import { IconUserPlus } from '@/icons'
 import { Header } from '@/components'
 import { AddClientModal, AddUserModal } from '@/modals'
+import AddUsersModal from '@/modals/User/Add/AddUsersModal'
 
-type ModalStateType = 'add-user' | 'add-client' | null
+type ModalStateType = 'add-user' | 'add-client' | 'add-users' | null
 
 const UsersHeaderMobile: FC = () => {
   const [modal, setModal] = useState<ModalStateType>(null)
@@ -17,6 +18,11 @@ const UsersHeaderMobile: FC = () => {
   const buttons = (
     <div className={styles.buttons}>
       <Button
+        title="Добавить пользователя"
+        icon={<IconUserPlus width={22} height={22} />}
+        onClick={() => setModal('add-users')}
+      />
+      {/* <Button
         title="Добавить клиента"
         icon={<IconUserPlus width={22} height={22} />}
         onClick={() => setModal('add-client')}
@@ -25,15 +31,16 @@ const UsersHeaderMobile: FC = () => {
         title="Добавить администратора"
         icon={<IconUserPlus width={22} height={22} />}
         onClick={() => setModal('add-user')}
-      />
+      /> */}
     </div>
   )
 
   return (
     <>
       {buttons}
-      {modal === 'add-client' && <AddClientModal onClose={handleCloseModal} />}
-      {modal === 'add-user' && <AddUserModal onClose={handleCloseModal} />}
+      {/* {modal === 'add-client' && <AddClientModal onClose={handleCloseModal} />}
+      {modal === 'add-user' && <AddUserModal onClose={handleCloseModal} />} */}
+      {modal === 'add-users' && <AddUsersModal onClose={handleCloseModal} />}
     </>
   )
 }

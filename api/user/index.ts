@@ -2,7 +2,8 @@ import {
   axiosAuthPostInstance,
   axiosAuthPatchInstance,
   axiosAuthDeleteInstance,
-  createAuthInstance
+  createAuthInstance,
+  axiosPatchInstanceJSON
 } from '@/api'
 import {
   CreateUserReqParamsI,
@@ -173,7 +174,10 @@ export const getUsersRole = async (params?: ReqQueryParamsI) => {
   return res.data
 }
 
-export const createRole = async (data: {name: string}) => {
+export const createRole = async (data: {
+  name: string,
+  isTeam: any
+}) => {
   const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
   const formData = new FormData()
   formData.append('accessToken', accessToken || '')
@@ -203,8 +207,25 @@ export const deleteRoleById = async (id: string) => {
   return res.data
 }
 
-export const updateRoleById = async () => {
+export const updateRoleById = async (id: string, data: {
+  name?: string,
+  isTeam?: boolean
+}) => {
+  const accessToken = localStorage.getItem(`${process.env.API_URL}_accessToken`)
+  const formData = new FormData()
+  // formData.append('accessToken', accessToken || '')
+  // Object.entries(data).forEach(([key, value]) => {
+  //   formData.append(key, value)
+  // })
 
+  const res = await axiosPatchInstanceJSON({
+    url: `/role/${id}`,
+    params: {
+      accessToken: accessToken || ''
+    },
+    data
+  })
+  return res.data
 }
 
 export const getUserDeviceId = async (params?: ReqQueryParamsI) => {

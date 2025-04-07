@@ -1,57 +1,79 @@
-import { FC, useId, useRef, useState } from 'react'
-import styles from './Field.module.scss'
-import { FieldI } from '@/ui/Field/Field'
-import classNames from 'classnames'
-import { IconEye, IconEyeOff } from '@/icons'
-import { FileUploader } from 'react-drag-drop-files'
+import { FC, useEffect, useId, useState } from 'react';
+import classNames from 'classnames';
+import styles from './Field.module.scss';
+import { FieldFileI, FieldI } from '@/ui/Field/Field';
+import { FileUploader } from 'react-drag-drop-files';
 
-const FieldFile: FC<FieldI> = ({
+const FieldFile: FC<FieldFileI> = ({
   label,
-  type = 'file',
-  icon,
-  error,
-  disabled = false,
-  autoComplete,
   onChange,
   className,
   wrapClassname,
-  id: propId,
+  error,
   ...props
 }) => {
-    const id = useId()
-    const isPasswordField = type === 'password'
-    const [fieldType, setFieldType] = useState(type)
-    const inputRef = useRef<HTMLInputElement | null>(null)
+  const [fileName, setFileName] = useState('');
+  const id = useId();
 
-    const modifierClass =
-    isPasswordField && icon
-    ? styles.input_pass
-    : !!icon
-    ? styles.input_icon
-    : isPasswordField && !icon
-    ? styles.input_passNoIcon
-    : null
-
-    const innerClass = classNames(styles.inner, { [styles.error]: error })
-    const inputClass = classNames(styles.input, modifierClass, className)
-    const wrapClass = classNames(styles.el, wrapClassname)
-
-    const handleFieldTypeToggle = () => {
-        setFieldType((prevState) =>
-        prevState === 'password' ? 'text' : 'password'
-        )
+  const handleFileChange = (file: File) => {
+    setFileName(file.name); // Устанавливаем имя файла
+    if (onChange) {
+      onChange(file); // Вызываем родительский обработчик, если он передан
     }
+  };
 
-    return (
-        <FileUploader
-            label="Загрузите файл формата .csv"
-            multiple={false}
-            handleChange={onChange}
-            name="file"
-            types={["csv"]}
-        >
-        </FileUploader>
-    )
-}
+  const wrapClass = classNames(styles.el, wrapClassname);
 
-export default FieldFile
+  useEffect(() => {
+    const updateSuccessMessage = () => {
+      const messageElement = document.querySelector(
+        '#__next > div.Layout_container__pAjB_ > div.Layout_flexBox__dLPvo > main > div > div.Devices_actionsUser__oungP > div:nth-child(1) > form > div:nth-child(1) > div > label > div > span > span'
+      );
+      const parentElement = document.querySelector(
+        '#__next > div.Layout_container__pAjB_ > div.Layout_flexBox__dLPvo > main > div > div.Devices_actionsUser__oungP > div:nth-child(1) > form > div:nth-child(1) > div > label > div > span'
+      );
+
+      if (parentElement) {
+        // Ищем текстовую ноду, которая содержит "Upload another?"
+        parentElement.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() === "Upload another?") {
+            node.textContent = " "; // Заменяем текст
+          }
+        });
+      }
+
+      if (messageElement && messageElement.textContent === 'Uploaded Successfully!') {
+        messageElement.textContent = `Выбран файл: ${fileName}`;
+      }
+    };
+
+    // Наблюдаем изменения в DOM
+    const observer = new MutationObserver(() => {
+      updateSuccessMessage();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Первоначальная проверка
+    updateSuccessMessage();
+
+    return () => observer.disconnect();
+  }, [fileName]);
+
+  return (
+    <div className={wrapClass}>
+      <FileUploader
+        label={label || 'Загрузите файл формата .csv'}
+        multiple={false}
+        handleChange={handleFileChange}
+        name="file"
+        types={['csv']}
+        {...props}
+      />
+      {fileName && <div className={styles.fileName}>Выбран файл: {fileName}</div>}
+      {error && <div className={styles.error}>{error}</div>}
+    </div>
+  );
+};
+
+export default FieldFile;

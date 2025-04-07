@@ -7,4 +7,8 @@ export interface ChartWithControlsI {
   toggles?: TogglesItemI[]
   algorithm?: string
   modelId?: string
+  filterAlgorithm?: {
+    name: string
+    id: string
+  }
 }

@@ -161,7 +161,43 @@ const Cell: FC<TableCellNewI> = ({
                     </pre>
                   </>
                   
-                  : <div style={{
+                  : accessor === "type" 
+                    ? <div style={{
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '10px'
+                    }}>
+                      {icon && renderIcon(icon)}
+                      <p 
+                        className={styles.text} 
+                        style={title === "FAIL"
+                          ? {color: "#FF5353"}
+                          : title === "OK"
+                            ? {color: "#63B283"}
+                            : {}
+                        } 
+                        onClick={flagCopy 
+                          ? () => {
+                            navigator.clipboard.writeText(title)
+                            .then(() => {
+                              setCopied(true)
+                              setTimeout(() => setCopied(false), 1000)
+                            })
+                            .catch(err => {
+                              console.error('Ошибка копирования в буфер обмена:', err)
+                            });
+                          }
+                          : () => {}}
+                        >
+                        {bold 
+                          ? <b className={styles.title} style={{cursor: "pointer"}}>{title}</b>
+                          : <span className={styles.title} style={{cursor: "pointer"}}>{title}</span>
+                        }
+                        {description && <span className={styles.desc}>{description}</span>}
+                        {copied && <div className={styles.copyStatus}>Скопировано</div>}
+                      </p>
+                    </div>
+                    : <div style={{
                       display: 'flex', 
                       alignItems: 'center', 
                       gap: '10px'

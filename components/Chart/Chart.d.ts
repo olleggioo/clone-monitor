@@ -20,4 +20,5 @@ export interface ChartI {
   chartRef?: any
   date?: any
   setDate?: any
+  filterAlgorithm?: any
 }

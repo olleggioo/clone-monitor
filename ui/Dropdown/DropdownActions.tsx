@@ -23,41 +23,36 @@ const DropdownActions: FC<{items?: any, className?: any}> = ({ items, className 
     const itemOn = items.filter((item: any) => item.text === "Включить")
     const itemOff = items.filter((item: any) => item.text === "Выключить")
 
-    console.log(flexItems, itemOn, itemOff)
-
-    return <div 
-        // style={{
-        //     position: 'sticky',
-        //     width: 'auto',
-        //     right: '0',
-        //     zIndex: 1,
-        //     height: '100%',
-        //     background: 'white',
-        // }}
-        className={classNames(styles.el, className, {
-            [styles.el_open]: isOpen
-        })}
-        ref={blockRef}
+    return <div
+      className={classNames(styles.el, className, {
+        [styles.el_open]: isOpen
+      })}
+      ref={blockRef}
+    >
+      <Button 
+        onClick={onToggleClick}
+        icon={<IconMoreVertical width={20} height={20} />}
+        title="Действия"
+      />
+      <Menu
+        open={isOpen}
+        anchorEl={anchorEl}
+        onClose={() => setIsOpen(false)}
+        MenuListProps={{ sx: { py: 0 } }}
+        slotProps={{
+          paper: {
+            style: {
+              maxHeight: 250,
+              borderRadius: 9,
+            },
+          }
+        }}
       >
-        <Button 
-          onClick={onToggleClick}
-          icon={<IconMoreVertical width={20} height={20} />}
-          title="Действия"
-        />
-        <Menu
-          open={isOpen}
-          anchorEl={anchorEl}
-          onClose={() => setIsOpen(false)}
-          MenuListProps={{ sx: { py: 0 } }}
-          slotProps={{
-            paper: {
-              style: {
-                maxHeight: 250,
-                borderRadius: 9,
-              },
-            }
-          }}
-        >
+        {items.length === 0 ? (
+          <MenuItem disabled className={styles.item}>
+            Нет доступных действий
+        </MenuItem>
+        ) : <>
           <div className={styles.flexMenu}>
             <IconButton 
               icon={<IconPlay height={20} width={20} />}
@@ -109,30 +104,10 @@ const DropdownActions: FC<{items?: any, className?: any}> = ({ items, className 
               </MenuItem>
             )
           })}
-        </Menu>
-        {/* {isOpen && (
-        <div className={styles.menuTest} style={{right: "150px"}}>
-          {items.map((item: any) => {
-            const handleClick = () => {
-              item.onClick()
-              setIsOpen(false)
-            }
-            return (
-              <button
-                onClick={handleClick}
-                key={item.text}
-                className={classNames(styles.item, {
-                  [styles.item_red]: item.mod === 'red'
-                })}
-              >
-                {item.icon}
-                <span>{item.text}</span>
-              </button>
-            )
-          })}
-        </div>
-      )} */}
-    </div>
+        </>
+        }
+      </Menu>
+  </div>
 }
 
 export default DropdownActions;

@@ -71,7 +71,7 @@ const UptimeChart: FC<{
       order: {
         createdAt: "ASC"
       },
-      limit: 96
+      limit: 500
     }
 
     if(startDate !== null && endDate !== null) {

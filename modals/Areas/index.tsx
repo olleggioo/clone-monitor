@@ -9,6 +9,9 @@ import { deviceAPI } from "@/api"
 import { useSnackbar } from "notistack"
 import getEnergyUnit from "@/helpers/getEnergyUnit"
 import moment from "moment"
+import { hasAccess } from "@/helpers/AccessControl"
+import { requestsAccessMap } from "@/helpers/componentAccessMap"
+import { emptyValues } from "@/containers/Areas"
 
 const initialFieldsetState = {
   from: '',
@@ -66,23 +69,21 @@ const RangesEditModal = ({state, onClose}: any) => {
     month: moment().subtract(1, 'month').format('YYYY-MM-DD HH:mm')
 }
 
+
 const dateNow = moment().format('YYYY-MM-DD HH:mm')
 
   const {enqueueSnackbar} = useSnackbar()
   const updateRangesIp = () => {
       if(state) {
-        const data: {
-          name?: string
-          from?: string
-          to?: string
-        } = {}
-        if(rangesState.name) {
+        const data: any = {}
+        console.log("rangesState", rangesState.name !== initialRanges.name, rangesState.from !== initialRanges.from)
+        if(rangesState.name && rangesState.name !== initialRanges.name) {
           data.name = rangesState.name
         }
-        if(rangesState.from) {
+        if(rangesState.from && rangesState.from !== initialRanges.from) {
           data.from = rangesState.from
         }
-        if(rangesState.to) {
+        if(rangesState.to && rangesState.to !== initialRanges.to) {
           data.to = rangesState.to
         }
         deviceAPI.updateOneRangesIp(state, data)
@@ -96,75 +97,116 @@ const dateNow = moment().format('YYYY-MM-DD HH:mm')
                   rangeips: true
               }
             })
+              .then((anRes) => {
+                const emptyUpdates = anRes.rows.map((area, index) => {
+                  return {
+                    ...area,
+                    ...emptyValues
+                  };
+                })
+                setAreas(emptyUpdates)
+                return anRes;
+              })
               .then(res => {
-                deviceAPI.getDevicesStatus()
-                .then((statuses) => {
-                    const promisesUptime = res.rows.map((item: any) => {
-                        return deviceAPI.getDevicesUptimeCacheDayAvg({
-                            where: {
-                                createdAt: `$Between([\"${dateFrom.day}\",\"${dateNow}\"])`,
-                                areaId: item.id
-                            },
-                        })
-                    })
-
-                    const promisesEnergy = res.rows.map((item: any) => {
-                        return deviceAPI.getDevicesEnergyCacheDaySum({
-                            where: {
-                                createdAt: `$Between([\"${dateFrom.day}\",\"${dateNow}\"])`,
-                                areaId: item.id
-                            },
-                        })
-                    })
-
-                    const promises = res.rows.map((item: any) => {
-                        return Promise.all(statuses.rows.map((row: any) => {
-                            return deviceAPI.getDevicesStatusCount({
-                                where: { statusId: row.id, areaId: item.id }
-                            })
-                        }))
-                    })
-
-                    Promise.all([...promises, ...promisesUptime, ...promisesEnergy]) // Объединяем все массивы промисов
-                      .then((resPromise: any) => {
-                          const statuses = resPromise.slice(0, res.rows.length);
-                          const uptime = resPromise.slice(res.rows.length, res.rows.length * 2);
-                          const energy = resPromise.slice(res.rows.length * 2); // Последний сегмент относится к promisesEnergy
-
-                          const updatedAreas = res.rows.map((area: any, index: number) => {
-                              const [isNormal, isWarning, isNotConfigured, isNotOnline, isError] = statuses[index].map((count: any) => count.total);
-                              return {
-                                  ...area,
-                                  isNormal,
-                                  isWarning,
-                                  isNotConfigured,
-                                  isNotOnline,
-                                  isError,
-                                  uptime: uptime[index], // добавляем uptime в объект area
-                                  energy: getEnergyUnit(energy[index] / 4) // добавляем energy в объект area
-                              };
-                          });
-                          setAreas(updatedAreas);
-                          onClose()
-                        })
-                      .catch(err => console.error(err))
+                if(hasAccess(requestsAccessMap.getDevicesStatus)) {
+                  deviceAPI.getDevicesStatus({
+                      where: {
+                          id: `$Not($In(["1eda7201-913e-11ef-8367-bc2411b3fd76"]))`
+                      }
                   })
-                  .catch(err => console.error(err))
-              }).catch(err => console.error(err))
-              }).catch(error => {
-            if (error && error.response && error.response.data) {
-              const errors = error.response.data.message;
-              console.log(errors)
-              // errors.forEach((item: string) => {  
-                  enqueueSnackbar(errors, {
-                      variant: 'error',
-                      autoHideDuration: 3000,
-                  });
-              // });
-          }
-          })
+                    .then((statusess) => {
+        
+                      const promisesEnergy = res.rows.map((item: any) => {
+                          return deviceAPI.getDevicesEnergySumDay({
+                              where: {
+                                  createdAt: `$Between([\"${dateFrom.day}\",\"${dateNow}\"])`,
+                                  areaId: item.id
+                              },
+                          })
+                      })
+      
+                      const promises = res.rows.map((item: any) => {
+                          return Promise.all(statusess.rows.map((row: any) => {
+                              return deviceAPI.getDevicesStatusCount({
+                                  where: { statusId: row.id, areaId: item.id }
+                              }).then(count => ({ statusId: row.id, count: count.total }))
+                          }))
+                      })
+        
+                      Promise.all([...promises, ...promisesEnergy]) // Объединяем все массивы промисов
+                        .then((resPromise: any) => {
+                          const statuses = resPromise.slice(0, res.rows.length);
+                          console.log("statuses", statuses, resPromise)
+                          const oldStatuses = {
+                              ...statusess.rows,
+                              statuses
+                          }
+                          const energy = resPromise.slice(res.rows.length, res.rows.length * 2);
+                          // const energy = resPromise.slice(res.rows.length * 2); // Последний сегмент относится к promisesEnergy
+                          const updatedAreas = res.rows.map((area: any, index: number) => {
+                            const statusOrder = {
+                                isNormal: 0,
+                                isWarning: 0,
+                                isRepair: 0,
+                                isNotOnline: 0,
+                                isError: 0,
+                                // isArchived: 0
+                            };
+                            statuses[index].forEach((status: any) => {
+                              switch (status.statusId) {
+                                case '82cddea0-861f-11ee-932b-300505de684f':
+                                  statusOrder.isNormal = status.count;
+                                  break;
+                                case '82cde049-861f-11ee-932b-300505de684f':
+                                  statusOrder.isWarning = status.count;
+                                  break;
+                                case '9a8471f1-861f-11ee-932b-300505de684f':
+                                  statusOrder.isNotOnline = status.count;
+                                  break;
+                                case '9a847375-861f-11ee-932b-300505de684f':
+                                  statusOrder.isError = status.count;
+                                  break;
+                                // case '1eda7201-913e-11ef-8367-bc2411b3fd76':
+                                //     statusOrder.isArchived = status.count;
+                                //     break;
+                                case 'dc434af8-8f45-11ef-8367-bc2411b3fd76':
+                                  statusOrder.isRepair = status.count;
+                                  break;
+                                default:
+                                  break;
+                                }
+                          })
+        
+                          const sumEnergy = energy[index].reduce((prev: any, curr: any) => prev + Number(curr.value), 0) || 0
+                            return {
+                                ...area,
+                                ...statusOrder,
+                                uptime: "0",
+                                energy: getEnergyUnit(sumEnergy)
+                            };
+                          });
+                            setAreas(updatedAreas);
+                          })
+                        .catch(err => {
+                          onClose()
+                          console.error(err)
+                        })
+                      })
+                  .catch(err => {
+                    onClose()
+                    console.error(err)
+                  })
+                }
+              })
+              .catch(err => {
+                onClose()
+              })
+            })
+            .catch(err => {
+              onClose()
+            })
         }
-  }
+    }
 
   return (
       <Dialog

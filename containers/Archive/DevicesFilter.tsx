@@ -28,6 +28,7 @@ import {
   import { OptionItemI } from '@/ui/CustomSelect/CustomSelect'
   import { useDebounce } from '@/hooks'
   import styles from './../../blocks/Devices/Filter/Filter.module.scss'
+import MassField from '@/ui/MassField'
   
   const LOCAL_STORAGE_KEY = 'devicesFilterState';
   
@@ -209,12 +210,18 @@ const DevicesFilterArchive = () => {
             [styles.fields]: true,
             [styles.slideIn]: isFull
           })}>
-            <Field
+            {/* <Field
               value={state.sn}
               placeholder="SN"
               type="text"
               onChange={handleSnChange}
               wrapClassname={styles.field}
+            /> */}
+            <MassField 
+              label="SN"
+              onChange={handleSnChange}
+              value={state.sn}
+              onMassSearchChange={handleSnChange}
             />
             <Field
               value={state.partNumber}

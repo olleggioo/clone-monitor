@@ -1,5 +1,142 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
 .container {
     grid-template-columns: 30px 1fr 1fr 1fr 1fr;
     height: auto;
     overflow-y: hidden;
 }
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-family: var(--main-font);
+}
+
+.block {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 12px;
+}
+
+.boards-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+
+
+    
+    .board-card {
+    //   width: 200px;
+      border-radius: 10px;
+      font-size: rem(12);
+      border: 1px solid #DFDFDF;
+      width: 100%;
+      padding: 15px;
+    //   text-align: center;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      background: white;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .board {
+        margin-top: rem(5);
+        display: flex;
+        flex-direction: column;
+        gap: rem(5);
+        font-weight: 500;
+        
+        span {
+            font-weight: bold;
+        }
+
+      }
+
+      .flex {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        // align-items: center;
+      }
+
+      .errorSn {
+        svg {
+            stroke: var(--color-error);
+        }
+      }
+
+      .errorNA {
+        span {
+            color: var(--color-warning-dark);
+        }
+      }
+
+      .sn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: rem(13);
+        font-weight: 500;
+        // margin-top: 10px;
+        // margin-bottom: 10px;
+      }
+    
+      .board-title {
+        font-weight: bold;
+        font-size: rem(16);
+        // margin-bottom: 10px;
+      }
+    
+      .board-info {
+        // display: grid;
+        // grid-template-columns: 1fr 1fr 1fr;
+        // gap: 8px;
+        font-size: rem(14);
+        // border: 1px solid black;
+        display: flex;
+        // align-items: center;
+        justify-content: space-between;
+
+        .board-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-weight: 500;
+            // min-width: 50px;
+
+            span {
+                font-weight: bold;
+            }
+        }
+      }
+    
+      .board-temp {
+        display: flex;
+        // grid-template-columns: 1fr 1fr;
+        align-items: center;
+        justify-content: space-between;
+        // gap: 5px;
+        font-size: rem(14);
+        font-weight: 500;
+
+        span {
+            font-weight: bold;
+        }
+      }
+
+      .temp {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+      }
+    
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+  

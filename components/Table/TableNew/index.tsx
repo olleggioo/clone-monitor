@@ -120,6 +120,9 @@ const TableNew:FC<TableNewI> = ({
                     name: direction
                 }
                 break
+            case 'isBlinking':
+                orders.isBlinking = direction
+                break
             case 'miningState':
                 orders.isDisabled = direction
                 break

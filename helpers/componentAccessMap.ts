@@ -1,5 +1,8 @@
 // import { getUsersRole } from "@/api/user";
 
+import { deleteManyDevices, updateDeviceMany } from "@/api/device";
+import { getUserId } from "@/api/user";
+
 export const componentAccessMap = {
     DisableManyDeviceByQuery: "72eccb1c-ee2b-4b8b-b461-e9de0a092daf",
     DropPoolManyByQuery: "01a7e51d-9fac-413f-b2e1-061020efa634",
@@ -72,7 +75,52 @@ export const requestsAccessMap: any = {
     getDevicesPool: "f53bd274-6c4c-4728-a611-e2743ec5c9e6",
     getUserDevice: "fa12ca74-5ea4-40e1-a60b-d7f85d3e2723",
     createUser: "fb9e0075-0b8e-4944-a028-abd0f6fcb819",
-    getAccess: "feeb0321-1f14-4f82-989f-60b4dda56703",
+    getAccess: "feeb0321-1f14-4f82-989f-60b4dda56703", 
+    getDevicesPoolReserve: "f4e17672-4ec4-4bfd-a532-e3948412dff7",
+    /// Служебный
+    getRangeIpByIdAuthedAreaId: "3aabec7d-c424-4c06-8db0-e9ff48dae109",
+    getRangesIpAuthedAreaId: "91548662-81ba-4f80-a8ab-ded10ba86896",
+    getDevicesAuthedAreaId: "9f44b1a5-9fc2-4631-9f58-e4c31dc2945a",
+    deleteDeviceAuthedUserId: "062c8abe-b209-48f1-a9ac-a8db9b3dd5de",
+    deleteManyDevicesAuthedUserId: "0c74dc32-5239-4b31-b005-d88bbb4cdaa6",
+    updateDevicePoolAuthedUserId: "0f4077ed-4bb9-4b17-974f-ff9f0ace9c6b",
+    getUsersAuthedUserId: "13ae2b08-d03e-4983-8801-65e0da15cfb9",
+    getDevicesLogFanLogAuthedUserId: "1415eac1-7303-4ab4-ad5d-eedfe11b0058",
+    // getUserIdAuthedUserId: "1ee29415-520e-48fe-976b-7461fd77af5d", // GET /user-device/id
+    updateDeviceManyAuthedUserId: "2a40a544-6253-4ec2-88d6-2e1663bd5bce",
+    updateManyOverclockAuthedAreaId: "2a461711-c4d9-4152-9c62-73f47b8d6134",
+    getDevicesPoolAuthedUserId: "326df788-374e-4884-8fcb-448b58a8034f",
+    updateManyDevicesPoolsAuthedAreaId: "35ff5e48-59f2-49cd-9936-3f45d9a96414",
+    getUserDeviceAuthedUserId: "3ee88ecb-c304-411a-a33e-30941b8a461a",
+    deleteRangeIpByIdAuthedAreaId: "47a3141c-e9a8-45dd-8bed-93aafda038e9",
+    deleteCommentAuthedUserId: "4b8d66d1-d619-4bd3-9ebe-b951f9a00b20",
+    reloadManyDevicesAuthedUserId: "54fb1b08-96be-4ce7-be9e-ad17b1107428",
+    reserveDeviceByIdAuthedAreaId: "57e4d01f-d5be-4948-a224-43ceba2311b5",
+    getCommentsAuthedUserId: "628d0191-14b0-44a9-ada8-13bcdd4d3e04",
+    archiveDeviceAuthedAreaId: "64945a09-020c-41e4-a884-64a2b7a3e500", //
+    archiveMassDeviceAuthedAreaId: "6e866c1f-d8ef-45c5-89ad-d75a0e9c17df", //
+    deleteManyUsersAuthedUserId: "74d2ae0f-2274-4725-a39a-50332de6ae28",
+    getDevicesPoolReserveAuthedUserId: "75b3b6f8-9692-4582-8a80-b17bdbe1dc8d",
+    getUserIdAuthedUserId: "7c99b540-9318-41bd-bb85-2ce4abff8bd9",
+    updateDeviceAuthedUserId: "7ccc45c2-a605-48c9-8669-4db56e33f004",
+    updateManyDevicesPoolsAuthedUserId: "8bb72777-3bbd-4721-bd2e-4a2595998521",
+    // getRangesIpAuthedAreaId: "91548662-81ba-4f80-a8ab-ded10ba86896",
+    getDevicesHashRateLogAuthedUserId: "96b2ffb9-8a54-47cf-9dde-1826e1b3e820",
+    // getDevicesAuthedAreaId: "9f44b1a5-9fc2-4631-9f58-e4c31dc2945a",
+    getDevicesLogTemperatureLogAuthedUserId: "a5fff110-8fe0-45c1-b0fc-c75fd3e7c63e",
+    disableDeviceAuthedAreaId: "a83512c5-09bc-4b9a-85aa-f5bebb3f0365",
+    updateOneRangesIpAuthedAreaId: "ac2e3040-65ae-4697-bd70-250e90be6f3c",
+    getDevicesAuthedUserId: "b78d0670-d2c9-4dee-84a6-47f175e7ac5c",
+    getDevicesLogEnergyLogAuthedUserId: "cd9ff8bf-c231-497e-8c0a-76c74c764c05",
+    deleteUserDeviceByIdAuthedUserId: "d3931b61-e9fd-4133-95fe-5fd2ada7dabe",
+    updateUserAuthedUserId: "e61cf93d-ac7f-43c9-bd2c-64c63a7816e2",
+    enableDeviceAuthedAreaId: "e65b8bd3-2b3b-414b-97a7-802db1dc89a8",
+    deleteUserDevicesManyAuthedUserId: "eabaebdb-0ade-4141-9e3c-ab999fbe4669",
+    getDeviceDataAuthedUserId: "ee615386-2296-477f-a5ea-c1386418e840",
+    deleteUserAuthedUserId: "f0684165-b6a7-48fc-99ac-b8b70f167974",
+
+    
+
 }
 
 export const requestsAccessTranslation: any = {

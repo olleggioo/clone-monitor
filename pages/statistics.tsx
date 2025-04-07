@@ -43,7 +43,7 @@ const Statistics: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Статистика</title>
+        <title>Сттатистика</title>
       </Head>
       <StatisticsContainer />
       {/* {roleId === process.env.ROLE_ROOT_ID

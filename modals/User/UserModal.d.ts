@@ -8,6 +8,7 @@ export type UserModalFieldType =
   | 'roleId'
   | 'phone'
   | 'role'
+  | 'contract'
 
 export interface UserModalStateI {
   id?: string
@@ -15,6 +16,7 @@ export interface UserModalStateI {
   email: string
   roleId?: string
   phone: string
+  contract?: string
 }
 
 export interface UserModalI {

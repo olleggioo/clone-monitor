@@ -162,8 +162,6 @@ const DevicesContainer: FC = () => {
       .catch(console.error)
   }, [])
 
-  console.log("loading", !loading ? "ДА" : "НЕТ")
-
   const isEmpty = useMemo(() => {
     return filter.status && filter.status.length !== 0 
       ? filter.status.every((filterStatus: any) => filterStatus.value !== statusTab) && statusTab !== null

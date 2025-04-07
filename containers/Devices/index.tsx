@@ -114,13 +114,43 @@ const DevicesContainer: FC = () => {
   }
 
   useEffect(() => {
-    Promise.all([
+    if(hasAccess(requestsAccessMap.getDevicesStatus)) {
       deviceAPI.getDevicesStatus({
         where: {
           id: `$Not($In(["1eda7201-913e-11ef-8367-bc2411b3fd76"]))`
         }
-      }),
-      deviceAPI.getDevicesArea(),
+      })
+        .then((res) => {
+          setData((prevState: any) => {
+            return {
+              ...prevState,
+              statuses: res.rows,
+            }
+          })
+          setCheckboxFilter([])
+        })
+        .catch(err => console.error(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(hasAccess(requestsAccessMap.getDevicesArea)) {
+      deviceAPI.getDevicesArea()
+        .then((res) => {
+          setData((prevState: any) => {
+            return {
+              ...prevState,
+              area: res.rows,
+            }
+          })
+          setCheckboxFilter([])
+        })
+        .catch(err => console.error(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(hasAccess(requestsAccessMap.getUsers)) {
       userAPI.getUsers({
         limit: 999,
         select: {
@@ -132,36 +162,119 @@ const DevicesContainer: FC = () => {
         where: {
           roleId: "b3c5ce0e-884d-11ee-932b-300505de684f"
         }
-      }),
-      deviceAPI.getDevicesAlgorithm(),
+      })
+        .then((res) => {
+          setData((prevState: any) => {
+            return {
+              ...prevState,
+              users: res.rows,
+            }
+          })
+          setCheckboxFilter([])
+        })
+        .catch(err => console.error(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(hasAccess(requestsAccessMap.getDevicesAlgorithm)) {
+      deviceAPI.getDevicesAlgorithm()
+        .then((res) => {
+          setData((prevState: any) => {
+            return {
+              ...prevState,
+              algorithms: res.rows,
+            }
+          })
+          setCheckboxFilter([])
+        })
+        .catch(err => console.error(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(hasAccess(requestsAccessMap.getDeviceModel)) {
       deviceAPI.getDeviceModel({
         limit: 999
-      }),
+      })
+        .then((res) => {
+          setData((prevState: any) => {
+            return {
+              ...prevState,
+              models: res.rows,
+            }
+          })
+          setCheckboxFilter([])
+        })
+        .catch(err => console.error(err))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(hasAccess(requestsAccessMap.getRangesIp)) {
       deviceAPI.getRangesIp({
         limit: 999
       })
-    ])
       .then((res) => {
-        const [statuses, area, users, algorithm, model, ranges] = res
         setData((prevState: any) => {
           return {
             ...prevState,
-            statuses: statuses.rows,
-            area: area.rows,
-            users: users.rows,
-            algorithms: algorithm.rows,
-            models: model.rows,
-            names: ranges.rows
+            names: res.rows,
           }
         })
         setCheckboxFilter([])
-        // setChecked
       })
-      .catch(console.error)
-      .catch(console.error)
+      .catch(err => console.error(err))
+    }
   }, [])
-
-  console.log("loading", !loading ? "ДА" : "НЕТ")
+ 
+  // useEffect(() => {
+  //   Promise.all([
+  //     deviceAPI.getDevicesStatus({
+  //       where: {
+  //         id: `$Not($In(["1eda7201-913e-11ef-8367-bc2411b3fd76"]))`
+  //       }
+  //     }),
+  //     deviceAPI.getDevicesArea(),
+  //     userAPI.getUsers({
+  //       limit: 999,
+  //       select: {
+  //         id: true,
+  //         fullname: true,
+  //         login: true,
+  //         contract: true
+  //       },
+  //       where: {
+  //         roleId: "b3c5ce0e-884d-11ee-932b-300505de684f"
+  //       }
+  //     }),
+  //     deviceAPI.getDevicesAlgorithm(),
+  //     deviceAPI.getDeviceModel({
+  //       limit: 999
+  //     }),
+  //     deviceAPI.getRangesIp({
+  //       limit: 999
+  //     })
+  //   ])
+  //     .then((res) => {
+  //       const [statuses, area, users, algorithm, model, ranges] = res
+  //       setData((prevState: any) => {
+  //         return {
+  //           ...prevState,
+  //           statuses: statuses.rows,
+  //           area: area.rows,
+  //           users: users.rows,
+  //           algorithms: algorithm.rows,
+  //           models: model.rows,
+  //           names: ranges.rows
+  //         }
+  //       })
+  //       setCheckboxFilter([])
+  //       // setChecked
+  //     })
+  //     .catch(console.error)
+  //     .catch(console.error)
+  // }, [])
 
   const isEmpty = useMemo(() => {
     return filter.status && filter.status.length !== 0 
@@ -179,7 +292,7 @@ const DevicesContainer: FC = () => {
         devices: { rows: [], total: 0 },
       }));
     } else {
-        if(hasAccess(requestsAccessMap.getDevices)) {
+        if(hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId)) {
           setLoading(true);
           fetchDevicesData(filter, memoizedTabTest, selectedCount, memoizedSortFilter, setData, setLoading, setCheckboxFilter, setChecked, setSelected);
         }
@@ -199,8 +312,6 @@ const DevicesContainer: FC = () => {
   const router = useRouter()
   const [device] = useAtom(deviceAtom)
 
-  console.log("data.devices.total",data.devices.total)
-
   return device !== "mobile" ? <Layout 
       pageTitle="Устройства" 
       header={<ProfileUser title='Устройства' />}
@@ -208,7 +319,7 @@ const DevicesContainer: FC = () => {
       <div className={styles.el}>
         <DevicesFilter />
         <div className={styles.actionsUser}>
-          <SendData />
+          {hasAccess(requestsAccessMap.updateDeviceMany) && <SendData />}
           <UploadData />
           {/* <UploadUsers /> */}
         </div>
@@ -220,7 +331,7 @@ const DevicesContainer: FC = () => {
             onCountChange={handleCountChange}
           />
           <p className={styles.selectedTitle}>Выбрано {countSuffix}</p>
-          {hasAccess(requestsAccessMap.getDevices) && (!!data.devices.total ?
+          {(hasAccess(requestsAccessMap.getDevices) || hasAccess(requestsAccessMap.getDevicesAuthedUserId)) && (!!data.devices.total ?
             !loading 
               ? (
                 <DevicesTable
@@ -250,7 +361,7 @@ const DevicesContainer: FC = () => {
     <div className={styles.el}>
       <DevicesFilter />
       <div className={styles.actionsUser}>
-        <SendData />
+        {hasAccess(requestsAccessMap.updateDeviceMany) && <SendData />}
         <UploadData />
         {/* <UploadUsers /> */}
       </div>

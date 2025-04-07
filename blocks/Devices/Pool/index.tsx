@@ -11,7 +11,6 @@ const Pools: FC<{ data: DevicePoolI[]}> = ({
     data
 }) => {
     const tableData = getPoolTableData(data)
-    console.log("data", tableData, data)
 
     return <Dashboard title="Пулы устройства">
         {/* <Table

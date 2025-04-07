@@ -34,6 +34,11 @@ const DevicePage: NextPage = () => {
   const roleId = localStorage.getItem(`${process.env.API_URL}_role`)
   const id = router.query.id as string | undefined;
 
+  const [energyDay, setEnergyDay] = useState<any>({
+    sum: 0,
+    length: 0
+  })
+
   const dateFrom = {
     day: moment().startOf('day').subtract(3, 'hour').format('YYYY-MM-DD HH:mm:ss'),
     week: moment().subtract(1, 'week').format('YYYY-MM-DD HH:mm:ss'),
@@ -153,9 +158,37 @@ const DevicePage: NextPage = () => {
 
   useEffect(() => {
     fetchDeviceData();
-    fetchHistoryData();
+    if(hasAccess(requestsAccessMap.getDeviceDataHistory)) {
+      fetchHistoryData();
+    }
     fetchUsers();
   }, [fetchDeviceData, fetchUsers, fetchHistoryData]);
+
+  useEffect(() => {
+    deviceAPI.getDevicesHashRateLog({
+      where: {
+        deviceId: id,
+        createdAt: `$Between(["${dateFrom["day"]}", "${dateNow}"])`,
+      },
+      limit: 300,
+      order: {
+        createdAt: "DESC"
+      },
+      select: {
+        value: true,
+        createdAt: true
+      }
+    })
+      .then((res: any) => {
+        const sumEnergyDay = res.reduce((prev: any, curr: any) => prev + Number(curr.value), 0) || 0
+        console.log("RES ENERGY SUM", sumEnergyDay)
+        setEnergyDay({
+          sum: sumEnergyDay,
+          length: res.length
+        })
+      })
+      .catch(err => console.error(err))
+  }, [id])
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -186,12 +219,13 @@ const DevicePage: NextPage = () => {
       <Head>
         <title>{data?.modelId || 'Устройство'}</title>
       </Head>
-      {data &&  hasAccess(requestsAccessMap.getDeviceData) ? (
+      {data && (hasAccess(requestsAccessMap.getDeviceData) || hasAccess(requestsAccessMap.getDeviceDataAuthedUserId))  ? (
         <DeviceContainer
           {...data}
           listLog={log}
           sumEnergyMonth={sumEnergyMonth}
           uptimeTotal={uptimeTotal}
+          energyDay={energyDay}
         />
       ) : (
         <div>

@@ -313,10 +313,10 @@ export const getDevicesAlgorithmsList = async (devices: DeviceI[], periodType: C
       Promise.all(algorithms.map((item: any) => {
         return deviceAPI.getDevicesEnergySumDay({
           where: {
-              // areaId: filterState.area || "",
+              areaId: filterState.area || null,
               // modelId: filterState.model || "",
               // statusId: filterState.status || "",
-              // userId: filterState.client || "",
+              userId: filterState.client || null,
               // rangeipId: "",
               algorithmId: item.id,
               // createdAt: "$Between([\"2024-09-09 14:00:00\",\"2024-09-09 14:05:00\"])",

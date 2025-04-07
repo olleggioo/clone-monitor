@@ -66,7 +66,7 @@ const EnergyChart: FC<{
   const chartClass = classNames(styles.el, className)
 
   useEffect(() => {
-    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog)) {
+    if(hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId)) {
 
       setChartData([])
   
@@ -82,7 +82,7 @@ const EnergyChart: FC<{
           createdAt: true,
           value: true
         },
-        limit: 96
+        limit: 500
       }
       if(startDate !== null && endDate !== null) {
         params.where = {
@@ -239,7 +239,8 @@ const EnergyChart: FC<{
           downloadData={downloadData}
         />
       </div>
-      {isFetchingData && hasAccess(requestsAccessMap.getDevicesLogEnergyLog)
+      {isFetchingData && 
+      (hasAccess(requestsAccessMap.getDevicesLogEnergyLog) || hasAccess(requestsAccessMap.getDevicesLogEnergyLogAuthedUserId))
         ? <p>Loading...</p>
         : <Chart
             filterParams={filterState}
