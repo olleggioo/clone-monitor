@@ -1,0 +1,61 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+  font-family: var(--main-font), sans-serif;
+
+  background: var(--color-brand) ;
+  position: relative;
+  z-index: 1;
+
+  padding: rem(50);
+  padding-bottom: rem(138);
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url("/login-bg.png");
+    mix-blend-mode: multiply;
+  }
+
+  @media (max-width: 480px) {
+    padding: rem(20);
+  }
+}
+
+.logo {
+  width: rem(199);
+  height: rem(40);
+  margin-bottom: rem(48);
+  
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.form {
+  background: var(--color-white);
+  box-shadow: 0 rem(4) rem(28) rgba(77, 70, 98, 0.06);
+  border-radius: rem(16);
+  padding: rem(32);
+
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(32);
+
+  width: 100%;
+  max-width: rem(420);
+}

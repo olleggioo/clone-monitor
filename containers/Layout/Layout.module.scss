@@ -1,0 +1,57 @@
+@import "@/styles/functions.scss";
+@import "@/styles/mixins.scss";
+
+.container {
+  display: flex;
+  // flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--main-font), sans-serif;
+  // overflow: hidden;
+  padding-right: rem(20);
+
+  @media (max-width: 1001px) {
+    padding-right: 5px;
+  }
+
+  // @include tablet {
+  //   display: none;
+
+  //   padding-left: 0;
+  //   padding-right: 0;
+  // }
+    @media (max-width: 480px) {
+      padding-right: rem(0);
+    }
+  
+}
+
+.flexBox {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+
+
+.wrapper {
+  flex-grow: 1;
+
+  @include tablet {
+    padding: rem(30);
+  }
+
+  @include tablet-small {
+    padding: rem(20) rem(12);
+  }
+
+  // @media (min-width: 2100px) {
+  //   padding-left: rem(50);
+  //  }
+  // @media (min-width: 2400px) {
+  //   padding-left: rem(160);
+  // }
+}
+
+.wrapperBox {
+  width: 100%;
+}

@@ -1,0 +1,42 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.fields {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: rem(20);
+}
+
+// .field {
+//     // grid-column: span 4;
+// }
+
+.btn {
+    width: 100%;
+}
+
+.dataPicker {
+    div {
+      input {
+        height: 50px;
+        padding: 0px 12px;
+        font-family: var(--main-font);
+        font-weight: bold;
+        border: 1px solid var(--color-stroke);
+        font-size: 0.875rem;
+      }
+    }
+}
+
+// .dataPicker {
+//   div {
+//     input {
+//       width: 280px;
+//       padding: 5px 10px;
+//       font-family: var(--main-font);
+//       font-weight: bold;
+//       font-size: 18px;
+//     }
+//   }
+// }

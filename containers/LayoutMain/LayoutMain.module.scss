@@ -1,0 +1,37 @@
+@import "@/styles/functions.scss";
+@import "@/styles/mixins.scss";
+
+.container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--main-font), sans-serif;
+  overflow: hidden;
+
+  // padding-left: rem(340);
+  padding-right: rem(40);
+
+  @include tablet {
+    display: none;
+
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.wrapper {
+  flex-grow: 1;
+
+  @include tablet {
+    padding: rem(30);
+  }
+
+  @include tablet-small {
+    padding: rem(20) rem(12);
+  }
+}

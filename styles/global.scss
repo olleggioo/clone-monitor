@@ -1,0 +1,195 @@
+@import 'mixins';
+
+body::-webkit-scrollbar {
+  width: 8px;              
+}
+
+body::-webkit-scrollbar-track {
+    background: #DFDFDF;        
+    border-radius: 13px;
+}
+  
+body::-webkit-scrollbar-thumb {
+    background-color: #676767;
+    border-radius: 13px;       
+    // border: 3px solid (--color-off);
+}
+
+:root {
+  // colors
+  --color-white: #FFF;
+  --color-black: #000;
+
+  --color-text-dark: #24292F;
+  --color-text-muted: #6C747B;
+  --color-text-light: #B5BEC6;
+  --color-text-warning: #A98426;
+
+  --color-success: #63B283;
+  --color-warning: #EEC867;
+  --color-warning-dark: #FFA800;
+  --color-error: #B27163;
+  --color-disabled: #CFCFCF;
+  --color-error: #FF5353;
+  --color-off: #878787;
+  --color-disabled: #DFDFDF;
+
+  --color-brand: #582DEC;
+  // --color-brand: #dcff00;
+  --color-brand-hover: #794DF8;
+  // --color-brand-hover: #dcff00;
+  --color-brand-light: #FAF8FF;
+  --color-stroke: #F5F5F5;
+  --color-stroke-dark: #F0EFEF;
+  --color-link: #5F98ED;
+
+  --color-red: #D24E3C;
+  --color-red-light: #FE5E54;
+  --color-warning-bg: #FDEBBD;
+  --color-light-gray: #F3F5F7;
+  --color-sort: #F7F7F7;
+  --color-gray: #F9F9F9;
+  --color-purple-light: #D3C6F7;
+  --color-skeleton-bg: #F8F8F8;
+  --color-skeleton-purple: #D5C6FF;
+  --color-pink: #FFF8F6;
+  --color-light: #E3DEF0;
+  --color-super-light: #FAFAFA;
+
+  --color-transparent: rgba(255, 255, 255, 0);
+  --color-disabled-2: #CFCFCF;
+
+  // fonts
+  --main-font: 'Gilroy';
+  --roboto-font: 'Roboto Mono';
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  max-width: 100vw;
+  // overflow-x: hidden;
+}
+
+body {
+  color: var(--color-text-dark);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+#modal-root {
+  z-index: 10;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-family: var(--main-font);
+}
+
+.sitemap {
+  padding: rem(20);
+  font-family: var(--main-font);
+
+  h1 {
+    margin-bottom: rem(30);
+  }
+
+  ol {
+    list-style: decimal;
+    list-style-position: inside;
+    display: grid;
+    grid-template-columns: 100%;
+    gap: rem(10);
+  }
+}
+
+.box {
+  box-sizing:border-box; 
+  -webkit-box-sizing:border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 800px;
+  margin:60px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;  
+  -moz-user-select: none;   
+  -ms-user-select: none;     
+  user-select: none; 
+  table {
+    width: 100%;
+  }
+  table thead td {
+    width: 150px;
+  }
+  table td,
+  table th {
+    padding: 5px;
+  }
+}
+
+.react-datepicker__current-month {
+  text-transform: capitalize;
+}
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+  .react-datepicker {
+    font-family: var(--main-font);
+  }
+
+  .react-datepicker__day:hover {
+    background-color: var(--color-brand-hover);
+  }
+  .react-datepicker__day--in-range {
+    background-color: var(--color-brand);
+  }
+
+  .react-datepicker__day--in-selecting-range {
+    background-color: var(--color-brand);
+  }
+  
+
+}
+
+#combo-box-demo-label {
+  @media (min-width: 2400px) {
+    font-size: rem(16);
+    // padding: rem(5) 0 0 rem(5);
+  }
+}
+
+#combo-box-demo {
+  @media (min-width: 2400px) {
+    // height: 55px !important;
+    font-size: rem(16) !important;
+  }
+}
+
+#coinTest {
+  .MuiPopper-root {
+    background: red !important;
+  }
+}

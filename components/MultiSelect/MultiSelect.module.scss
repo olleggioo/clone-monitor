@@ -1,0 +1,29 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+
+.inputs {
+    // @media (min-width: 2400px) {
+    //     height: 82px !important;
+    // }
+}
+
+.customScrollbar {
+    font-family: var(--main-font);
+}
+
+.customScrollbar::-webkit-scrollbar {
+    width: 8px;              
+  }
+  
+.customScrollbar::-webkit-scrollbar-track {
+      background: #DFDFDF;        
+      border-radius: 13px;
+}
+    
+.customScrollbar::-webkit-scrollbar-thumb {
+      background-color: var(--color-off);
+      border-radius: 13px;       
+      // border: 3px solid (--color-off);
+}

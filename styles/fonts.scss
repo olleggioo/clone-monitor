@@ -1,0 +1,49 @@
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+  font-family: 'Gilroy';
+
+  font-display: swap;
+  src: url('/fonts/gilroy_regular.woff') format('woff'),
+  url('/fonts/gilroy_regular.woff2') format('woff2')
+}
+
+@font-face {
+  font-style: normal;
+  font-weight: 500;
+  font-family: 'Gilroy';
+
+  font-display: swap;
+  src: url('/fonts/gilroy_medium.woff') format('woff'),
+  url('/fonts/gilroy_medium.woff2') format('woff2')
+}
+
+@font-face {
+  font-style: normal;
+  font-weight: 600;
+  font-family: 'Gilroy';
+
+  font-display: swap;
+  src: url('/fonts/gilroy_semibold.woff') format('woff'),
+  url('/fonts/gilroy_semibold.woff2') format('woff2')
+}
+
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+  font-family: 'Roboto Mono';
+
+  font-display: swap;
+  src: url('/fonts/roboto-mono-regular.woff') format('woff'),
+  url('/fonts/roboto-mono-regular.woff2') format('woff2')
+}
+
+@font-face {
+  font-style: normal;
+  font-weight: 800;
+  font-family: 'Gilroy';
+
+  font-display: swap;
+  src: url('/fonts/Gilroy-Bold.woff') format('woff'),
+  url('/fonts/Gilroy-Bold.woff2') format('woff2')
+}

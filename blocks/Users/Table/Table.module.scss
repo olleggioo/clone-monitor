@@ -1,0 +1,41 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.containerClients {
+    grid-template-columns: 15px 120px 190px 350px 150px 150px 250px 150px 100px 100px auto;
+
+    // height: auto;
+    // overflow-y: auto;
+    @media (min-width: 2400px) {
+        grid-template-columns: 15px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 145px 1fr;
+        grid-row-gap: rem(80);
+        max-height: 1400px;
+    }
+}
+
+.containerClients .action-column {
+    width: 80px;
+}
+
+.containerUsers {
+    grid-template-columns: 15px 250px 190px 250px 300px 160px 145px;
+    // height: auto;
+    // overflow-y: auto;
+    @media (min-width: 2400px) {
+        grid-template-columns: 15px 1fr 1fr 1fr 1fr 1fr auto;
+        grid-row-gap: rem(80);
+        max-height: 1400px;
+    }
+}
+
+.containerManagerUsers {
+    grid-template-columns: 15px 250px 190px 250px 300px 160px;
+    // height: auto;
+    // overflow-y: auto;
+    @media (min-width: 2400px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-row-gap: rem(80);
+        max-height: 1400px;
+    }
+}

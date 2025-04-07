@@ -1,0 +1,31 @@
+.container {
+    grid-template-columns: 1fr 1fr 1fr 0.5fr;
+    height: auto;
+    overflow-y: auto;
+    align-items: center;
+    max-height: 280px;
+    overflow: auto;
+}
+
+.dashboard {
+    box-shadow: none;
+}
+
+.headingTable {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 50px;
+
+    @media (max-width: 484px) {
+        width: 100%;
+    }
+}
+
+.headingColum {
+    cursor: pointer;
+}
+
+.flexHead {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

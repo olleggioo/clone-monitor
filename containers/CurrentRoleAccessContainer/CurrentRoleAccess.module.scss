@@ -1,0 +1,21 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+}
+
+.translation {
+}
+
+.key {
+}

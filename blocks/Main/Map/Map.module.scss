@@ -1,0 +1,42 @@
+@import "../../../styles/functions.scss";
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+.map {
+    background-image: url("./../../../public/map.png");
+    width: 100%;
+    background-size: 90% auto;
+    background-repeat: no-repeat;
+    // height: 750px;
+    padding-bottom: 68%;
+    overflow: hidden;
+    position: relative;
+
+    @media (max-width: 480px) {
+        display: none;
+    }
+}
+
+.group {
+    position: absolute;
+    top: 420px;
+    left: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.point {    
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: #8F00FF;
+    border: 2px solid white;
+}
+
+.town {
+    color: white;
+    font-size: rem(13);
+    letter-spacing: rem(0.5);
+}

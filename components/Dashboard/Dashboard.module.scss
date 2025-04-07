@@ -1,0 +1,61 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  position: relative;
+  display: grid;
+  grid-template-columns: 100%;
+  align-content: start;
+  grid-gap: rem(20);
+  padding: rem(20);
+  background-color: var(--color-white);
+  border-radius: rem(16);
+  @include box-shadow;
+}
+
+.head {
+  // padding-bottom: rem(20);
+  // border-bottom: 1px solid var(--color-stroke);
+  display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.desc {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.side {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-stroke);
+  padding-bottom: rem(20);
+}
+
+.link {
+  padding: rem(5) rem(10);
+  color: var(--color-text-dark);
+  font-size: rem(14);
+  line-height: rem(18);
+  font-weight: 600;
+  background-color: var(--color-stroke);
+  border-radius: rem(6);
+  transition: background-color $transition;
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      background-color: var(--color-stroke-dark);
+    }
+  }
+}
+
+.headingTable {
+  padding-bottom: rem(30);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-stroke);
+}

@@ -1,0 +1,54 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: flex;
+  width: 100%;
+  flex-shrink: 0;
+  background-color: transparent;
+  // @media (min-width: 2400px) {
+  //   padding-left: rem(200);
+  // }
+}
+
+.inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: rem(40) 0;
+
+  background-color: transparent;
+
+  @include tablet {
+    padding: rem(30);
+  }
+
+  @include tablet-small {
+    padding: rem(30) rem(12);
+  }
+}
+
+.text {
+  font-size: rem(14);
+  line-height: rem(16);
+  color: var(--color-text-muted);
+
+  @include tablet-small {
+    font-size: rem(12);
+    line-height: rem(14);
+  }
+}
+
+.link {
+  font-weight: 400;
+  font-size: rem(14);
+  line-height: rem(16);
+  font-family: var(--main-font);
+
+  @include tablet-small {
+    font-size: rem(12);
+    line-height: rem(14);
+  }
+}

@@ -1,0 +1,33 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.block {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: rem(30);
+
+  @include mobile-large {
+    grid-gap: rem(24);
+  }
+
+  p {
+    @include text;
+    margin-bottom: rem(24);
+
+    @include mobile-large {
+      margin-bottom: rem(22);
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.content {
+  h3 {
+    @include h3;
+    margin-bottom: rem(16);
+  }
+}

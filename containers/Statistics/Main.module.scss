@@ -1,0 +1,147 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: rem(20);
+
+  @media (max-width: 1080px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(20);
+    
+  }
+}
+
+.heightDashboard {
+  height: 333px;
+
+  @media (max-width: 1080px) {
+    grid-column: span 4;
+  }
+}
+
+.filter_col {
+  &_2 {
+    grid-column: span 2;
+  }
+
+  &_3 {
+    grid-column: span 3;
+    height: 450px;
+    overflow-y: scroll;
+  }
+
+  &_4 {
+    grid-column: span 4;
+  }
+
+  @media (max-width: 767px) {
+    
+  }
+}
+
+.algorithmsTable {
+  grid-column: span 3;
+  height: 333px;
+  // overflow-y: scroll;
+
+  @media (max-width: 1080px) {
+    grid-column: span 4;
+  }
+}
+
+.algorithmsTable::-webkit-scrollbar {
+  width: 8px;              
+}
+
+.algorithmsTable::-webkit-scrollbar-track {
+    background: #DFDFDF;        
+    border-radius: 13px;
+}
+  
+.algorithmsTable::-webkit-scrollbar-thumb {
+    background-color: var(--color-off);
+    border-radius: 13px;       
+    // border: 3px solid (--color-off);
+}
+
+.earnStats {
+  display: grid;
+  gap: rem(20);
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: rem(20);
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+
+  @include tablet-small {
+    gap: rem(12);
+    margin-top: rem(12);
+  }
+}
+
+.chart {
+  margin-top: rem(20);
+
+  @include tablet-small {
+    margin-top: rem(12);
+  }
+}
+
+.info {
+  display: grid;
+  gap: rem(20);
+  grid-template-columns: minmax(min-content, 40.5%) 1fr;
+
+  margin-top: rem(20);
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.payouts {
+  display: grid;
+  gap: rem(20);
+  grid-template-columns: 1fr minmax(20%, rem(430));
+
+  margin-top: rem(20);
+
+  @media (max-width: 1400px) {
+    grid-template-columns: 1fr 30%;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.table {
+  @include box-shadow;
+  padding: rem(20);
+}
+
+.tableList {
+  box-shadow: none;
+  padding: 0;
+}
+
+.tableHeader {
+  width: 100%;
+  padding-bottom: rem(20);
+  margin-bottom: rem(20);
+  border-bottom: 1px solid var(--color-stroke);
+
+  @include tablet-small {
+    padding-bottom: rem(17);
+    margin-bottom: rem(17);
+  }
+}

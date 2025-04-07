@@ -1,0 +1,276 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.back {
+  margin-left: 0px !important;
+}
+
+.algorithm {
+  font-weight: bold;
+}
+
+.statusEl {
+  line-height: unset;
+}
+
+.el {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  
+//  @media (min-width: 2100px) {
+//   padding-left: rem(50);
+//  }
+
+//   @media (min-width: 2400px) {
+//     padding-left: rem(160);
+//   }
+  padding: rem(30) 0;
+
+  // @include tablet {
+  //   padding: rem(20) rem(30);
+  //   border-bottom: 1px solid var(--color-stroke-dark);
+  // }
+
+  // @include tablet-small {
+  //   padding: rem(10);
+  // }
+
+  &_open {
+    position: fixed;
+    align-items: flex-start;
+    z-index: 10;
+    top: 0;
+    background-color: var(--color-white);
+
+    @include tablet {
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      bottom: 0;
+
+    }
+
+    .toggleIn {
+      &:before,
+      &:after {
+        opacity: 1;
+        transition-delay: 0.2s;
+      }
+
+      &:after {
+        transform: rotate(45deg);
+        top: rem(2);
+      }
+
+      &:before {
+        transform: rotate(-45deg);
+        top: rem(2);
+      }
+    }
+
+    .toggleIc {
+      opacity: 0;
+      transition-delay: 0s;
+
+      &:nth-child(n) {
+        top: rem(8);
+      }
+    }
+  }
+}
+
+.iconTitle {
+  display: flex;
+  align-items: center;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width:  100%;
+
+  @media (max-width: 1079px) {
+    display: block;
+  }
+  // justify-content: space-between;
+  & > button,
+  & > a {
+    margin-left: auto;
+  }
+}
+
+.statusAlgorithm {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.title {
+  color: var(--color-text-dark);
+  // margin-right: rem(20);
+
+  @include h1;
+  // max-width: 45%;
+}
+
+.logo {
+  width: rem(147);
+  height: rem(30);
+}
+
+.workerName {
+  @include h1;
+  margin-right: rem(30);
+
+
+  &:before {
+    width: rem(12);
+    height: rem(12);
+    margin-right: rem(20);
+    position: relative;
+    top: rem(2);
+  }
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  text-align: center;
+
+  p {
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    font-size: rem(15);
+    line-height: rem(20);
+    text-transform: uppercase;
+  }
+
+  @include tablet {
+    padding: rem(12);
+    background-color: var(--color-brand-light);
+    border-radius: rem(8);
+    margin-left: auto;
+    margin-right: rem(10);
+
+    letter-spacing: 0.05em;
+  }
+
+  svg {
+    width: rem(20);
+    height: rem(20);
+    flex-shrink: 0;
+    margin-right: rem(16);
+    color: var(--color-brand);
+
+    @include tablet-small {
+      width: rem(18);
+      height: rem(18);
+      margin-right: rem(10);
+    }
+  }
+}
+
+.balanceUsd {
+  font-weight: 500;
+
+  @include tablet-small {
+    font-size: rem(15);
+    line-height: rem(18);
+    letter-spacing: 0.05em;
+  }
+}
+
+.toggle {
+  position: relative;
+  width: rem(42);
+  height: rem(42);
+
+  background-color: var(--color-brand-light);
+  border-radius: rem(8);
+
+  border: none;
+  cursor: pointer;
+}
+
+.toggleIn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: rem(18);
+  height: rem(18);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: rem(9);
+
+    opacity: 0;
+
+    display: block;
+    width: 1px;
+    height: rem(13.5);
+
+    background-color: var(--color-brand);
+    transform-origin: center center;
+
+    transition: all 0.2s linear;
+    transition-delay: 0s;
+  }
+  &::before {
+    transform: rotate(-90deg);
+    top: 0;
+  }
+
+  &::after {
+    transform: rotate(90deg);
+    top: rem(4);
+  }
+}
+
+.toggleIc {
+  position: absolute;
+  left: rem(2);
+  width: rem(13.5);
+  height: 1px;
+
+  border-radius: 1px;
+
+  background-color: var(--color-brand);
+
+  transition: all 0.2s linear;
+  transition-delay: 0.2s;
+
+  &:nth-child(1) {
+    top: rem(4);
+  }
+  &:nth-child(2) {
+    top: rem(8);
+  }
+  &:nth-child(3) {
+    top: rem(12);
+  }
+}
+
+.is_loading {
+  position: relative;
+
+  @include skeleton
+}
+
+.icon {
+  margin-right: rem(14);
+
+  svg {
+    display: block;
+    width: rem(22);
+    height: rem(22);
+    flex-shrink: 0;
+  }
+}

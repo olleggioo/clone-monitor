@@ -1,0 +1,64 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.main {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+
+  @media (max-width: 924px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 1080px) {
+    margin-left: 0px;
+  }
+
+  @media (max-width: 628px) {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    row-gap: 1rem;
+  }
+}
+
+.el {
+  display: flex;
+  gap: 10px;
+  border: 1px solid var(--color-stroke-dark);
+  border-radius: 9px;
+  padding: rem(6);
+}
+
+.toggle {
+  padding: rem(10) rem(16);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-dark);
+  border-radius: 9px;
+  width: rem(80);
+  font-size: rem(15);
+  line-height: rem(15);
+  font-weight: 500;
+
+  transition: $transition;
+  transition-property: background-color, color;
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      color: var(--color-white);
+      background-color: var(--color-brand);
+    }
+  }
+
+  &_active {
+    color: var(--color-text-dark);
+    border: 2px solid var(--color-brand);
+    // background-color: var(--color-brand);
+    cursor: auto;
+  }
+}

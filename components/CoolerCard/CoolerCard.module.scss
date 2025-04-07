@@ -1,0 +1,54 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  background: var(--color-brand-light);
+  border-radius: rem(10);
+
+  padding: rem(20);
+
+  font-size: rem(15);
+  line-height: rem(20);
+  font-weight: 500;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  margin-bottom: rem(24);;
+
+  svg {
+    width: rem(20);
+    height: rem(20);
+    margin-right: rem(16);
+    flex-shrink: 0;
+  }
+}
+
+.rpm {
+  font-size: rem(20);
+  line-height: rem(24);
+
+  margin-top: auto;
+  margin-bottom: rem(12);
+}
+
+.progress,
+.progressInner {
+  background: var(--color-light);
+  border-radius: rem(9);
+  height: rem(4);
+}
+
+.progress {
+  margin-bottom: rem(4);;
+}
+
+.progressInner {
+  background: var(--color-brand);
+  transition: width $transition;
+}

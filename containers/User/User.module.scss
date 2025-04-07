@@ -1,0 +1,63 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+
+.el {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: rem(20);
+}
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: rem(10);
+}
+
+.elGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: rem(20);
+}
+  
+.actions {
+  width: 100%;
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+                        
+.createReport {
+  width: 100%;
+}
+
+.dataPicker {
+  width: 100%;
+  div:nth-child(1) {
+    input {
+      width: 100%;
+      height: 50px;
+      padding: 0px 12px;
+      font-family: inherit;
+      font-weight: bold;
+      border-radius: 9px;
+      border: 1px solid #DFDFDF;
+      font-size: 0.875rem;
+    }
+  }
+
+  button::after {
+    background-color: white;
+    color: #000;
+    height: 29px;
+    width: 29px;
+    font-size: 29px;
+  }
+
+  div:nth-child(2) {
+    div:nth-child(2) {
+      z-index: 10000;
+    }
+  }
+}

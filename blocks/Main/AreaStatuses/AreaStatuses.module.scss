@@ -1,0 +1,26 @@
+@import "../../../styles/functions.scss";
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+.moreDetails {
+    margin-right: auto;
+}
+
+.dashboard {
+    width: 25%;
+}
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: rem(20);
+    grid-column: span 4;
+    margin-bottom: rem(20);
+
+    @media (max-width: 480px) {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: rem(20);
+    }
+}

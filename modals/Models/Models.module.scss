@@ -1,0 +1,49 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: rem(30);
+  }
+
+.submit {
+  span {
+    svg {
+      path {
+        stroke: black;
+      }
+    }
+  }
+}
+
+.submit:hover {
+  span {
+    svg {
+      path {
+        stroke: white;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}
+  
+  .fieldset {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: rem(20);
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: flex-start;
+  
+    > * {
+      margin-right: rem(24);
+  
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }

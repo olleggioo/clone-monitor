@@ -1,0 +1,12 @@
+.containerUser {
+    grid-template-columns: 30px 1fr 1fr 1fr 1fr 0.1fr;
+    height: auto;
+    overflow-y: auto;
+    align-items: center;
+}
+
+.containerManager {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    height: auto;
+    overflow-y: auto;
+}

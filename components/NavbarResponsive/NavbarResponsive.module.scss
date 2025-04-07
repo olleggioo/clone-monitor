@@ -1,0 +1,80 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.nav {
+    height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    // align-items: center;
+}
+
+.nav_link {
+    margin-left: 2rem;
+    font-size: 2rem;
+    height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    // align-items: center;
+}
+
+.nav_side {
+    background: white;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    transition: 350ms;
+    z-index: 999;
+}
+
+.inner {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+  
+    border-right: 1px solid var(--color-stroke-dark);
+    &_small {
+      display: flex;
+      flex-shrink: 0;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100%;
+      overflow-y: auto;
+  
+      padding-bottom: rem(30);
+      padding-top: rem(30);
+  
+      border-right: 1px solid var(--color-stroke-dark);
+    }
+    @include tablet-small {
+      padding-top: rem(12);
+    }
+  }
+
+.logout {
+    font-size: rem(16);
+    line-height: 100%;
+    margin-left: rem(24);
+    margin-top: auto;
+    font-weight: 600;
+    font-family: var(--main-font);
+  
+    @include tablet-small {
+        margin: auto;
+    }
+}
+
+.logo {
+    width: rem(199);
+    height: auto;
+    &_small {
+      padding-left: 16px;
+      margin-bottom: 4.5rem;
+    }
+}
+  

@@ -1,0 +1,27 @@
+.container {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    max-height: 215px;
+    height: 215px;
+    grid-row-gap: 1.2rem;
+    
+    overflow: auto;
+
+}
+.headCol {
+    padding: 10px 0px;
+}
+
+.container::-webkit-scrollbar {
+    width: 8px;              
+  }
+  
+.container::-webkit-scrollbar-track {
+      background: #DFDFDF;        
+      border-radius: 13px;
+}
+    
+.container::-webkit-scrollbar-thumb {
+      background-color: var(--color-off);
+      border-radius: 13px;       
+      // border: 3px solid (--color-off);
+}

@@ -1,0 +1,57 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: rem(15);
+
+    // margin-left: auto;
+}
+  
+.btn {
+    // margin-left: rem(20);
+    span {
+        svg {
+            path {
+                stroke: black;
+            }
+        }
+    }
+}
+
+.btn:hover {
+    span {
+        svg {
+            path {
+                stroke: white;
+                transition: all 0.3s;
+            }
+        }
+    }
+}
+
+.btn_phone {
+    margin-bottom: 20px;
+
+    span {
+        svg {
+            path {
+                stroke: black;
+            }
+        }
+    }
+}
+
+.btn_phone:hover {
+    span {
+        svg {
+            path {
+                stroke: white;
+                transition: all 0.3s;
+            }
+        }
+    }
+}

@@ -1,0 +1,7 @@
+.container {
+    grid-template-columns: auto auto;
+    // height: auto;
+    grid-row-gap: 1.2rem;
+    max-height: 215px;
+    overflow: auto;
+}

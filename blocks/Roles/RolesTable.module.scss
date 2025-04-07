@@ -1,0 +1,8 @@
+.container {
+    grid-template-columns: 1fr 1fr 50px;
+    height: auto;
+    overflow-y: auto;
+    align-items: center;
+    max-height: 460px;
+    overflow: auto;
+}

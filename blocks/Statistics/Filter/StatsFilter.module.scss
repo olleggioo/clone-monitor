@@ -1,0 +1,70 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.el {
+  grid-gap: rem(20);
+}
+
+.additionAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.field {
+  border-radius: 9px;
+}
+
+.list {
+  display: grid;
+  gap: rem(20);
+  grid-template-columns: repeat(6, 1fr);
+
+  @media (max-width: 1729px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1079px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 950px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toggles {
+  margin-left: auto;
+  gap: 10px;
+}
+
+.dataPicker {
+  div {
+    input {
+      font-family: var(--main-font);
+      // font-weight: bold;
+      width: 100%;
+      height: 3rem;
+      padding: 0px 12px;
+      border: 1px solid #DFDFDF;
+      font-size: 16px;
+      border-radius: 9px;
+    }
+    button::after {
+      background-color: white;
+      color: #000;
+      height: 29px;
+      width: 29px;
+      font-size: 29px;
+    }
+  }
+}
+
+.dataPicker {
+  div {
+    input:focus-visible {
+      outline: 1px solid #DFDFDF;
+      padding-block: 0px;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+@import "../../../../styles/functions";
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.el {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin-right: 15px;
+  @media (max-width: 767px) {
+    width: auto;
+    height: auto;
+  }
+
+  svg {
+    width: rem(20);
+    height: rem(20);
+    color: var(--color-brand);
+    margin-right: rem(16);
+  }
+}
+
+.align {
+  &_center {
+    justify-content: center;
+  }
+
+  &_right {
+    justify-content: flex-end;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 100%;
+  font-weight: 500;
+  font-size: rem(13);
+  line-height: rem(20);
+
+  b {
+    font-weight: 700;
+  }
+}
+
+.title,
+.desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  color: var(--color-text-dark);
+}
+
+.desc {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.is_loading {
+  @include tablet-small {
+    .desc {
+      position: relative;
+      min-width: rem(140);
+      min-height: rem(20);
+      @include skeleton;
+
+      &:before {
+        left: 0;
+        min-width: rem(140);
+        min-height: rem(20);
+      }
+    }
+  }
+}

@@ -1,0 +1,160 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  width: 100%;
+  // overflow-x: auto;
+  &_workers {
+    .row {
+      align-items: center;
+      grid-template-columns: minmax(17.5%, 1fr) 8% 13.5% minmax(13.6%, 1fr) minmax(13.7%, 1fr) minmax(10%, 1fr) minmax(8%, rem(138));
+
+      @include desktop-small {
+        grid-template-columns: minmax(rem(180), 1fr) 1fr 1fr 1fr 1fr 1fr rem(100);
+      }
+
+      @include tablet {
+        grid-template-columns: minmax(rem(100), 1fr) 1fr 1fr 1fr 1fr 1fr 10%;
+      }
+
+      @include tablet-small {
+        gap: rem(13);
+        grid-template-columns: 1fr;
+        padding-bottom: rem(20);
+        margin-bottom: rem(20);
+        padding-top: 0;
+        border-bottom: 1px solid var(--color-stroke);
+      }
+
+
+      @include desktop-only {
+        &:hover {
+          .cell {
+            color: var(--color-brand);
+          }
+        }
+      }
+    }
+  }
+
+  &_short_workers {
+    .row {
+      grid-template-columns: minmax(rem(170), 32%) minmax(rem(50),1fr) minmax(rem(140),1fr) rem(100);
+
+      @include tablet-small {
+        grid-template-columns: 1fr;
+      }
+
+      @include desktop-only {
+        &:hover {
+          .cell {
+            color: var(--color-brand);
+          }
+        }
+      }
+    }
+  }
+
+  &_all {
+    .row {
+      grid-template-columns: rem(90) minmax(5%, 1fr) minmax(10%, 1fr) rem(92);
+      padding-top: rem(8);
+
+      @include tablet-small {
+        grid-template-columns: 4fr;
+      }
+    }
+  }
+
+  &_reward {
+    .row {
+      grid-template-columns: rem(90) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) rem(92);
+
+      @include tablet-small {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  &_payout {
+    .row {
+      grid-template-columns: rem(90) minmax(5%, 1fr) minmax(5%, 1fr) rem(92);
+
+      @include tablet-small {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+    }
+  }
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto;
+  column-gap: rem(24);
+  align-items: center;
+  padding: rem(13) 0;
+  min-height: rem(20);
+  color: var(--color-text-dark);
+  border-bottom: 1px solid var(--color-stroke);
+}
+
+.select {
+  margin-bottom: rem(20);
+}
+
+.rowHead {
+  padding-top: rem(9);
+  padding-bottom: rem(8);
+  border-bottom: none;
+}
+
+.mobileLink {
+  @include tablet-small {
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-text-dark);
+
+    background-color: transparent;
+    border: none;
+
+    font-size: rem(16);
+    line-height: rem(20);
+    cursor: pointer;
+
+    svg {
+      width: rem(20);
+      height: rem(20);
+    }
+  }
+}
+
+.is_loading {
+  .row:not(.rowHead) {
+    position: relative;
+
+    @include skeleton;
+
+    &:before,
+    &:after {
+      top: rem(10);
+      max-height: calc(100% - #{rem(20)});
+      min-height: rem(20);
+
+      @include tablet-small {
+        display: none;
+      }
+    }
+  }
+}
+
+.elClientUser {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}

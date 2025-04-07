@@ -1,0 +1,72 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: rem(20);
+
+  @media (max-width: 1570px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.mobileHeader {
+  padding: 0;
+  align-items: center;
+}
+
+.buttons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  // flex-wrap: wrap;
+  max-width: 50%;
+  margin-bottom: rem(-10);
+  position: relative;
+}
+
+.btn {
+  margin-left: rem(10);
+  margin-bottom: rem(10);
+  border: 1px solid var(--color-brand);
+  color: var(--color-brand);
+  svg {
+    path {
+      stroke: var(--color-brand);
+    }
+  }
+  &:hover {
+    svg {
+      path {
+        stroke: white;
+      }
+    }
+  }
+}
+
+.wrapperLogs {
+  margin-top: 1rem;
+}
+
+.btnUser {
+  background: none;
+  margin-left: rem(10);
+  margin-bottom: rem(10);
+  color: black;
+}
+
+.btnUser:hover {
+  background: #f0f0f0;
+}
+
+.dataPicker {
+  div {
+    input {
+      padding: 20px;
+      font-size: 18px;
+    }
+  }
+}

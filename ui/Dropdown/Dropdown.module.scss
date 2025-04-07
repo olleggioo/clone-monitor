@@ -1,0 +1,174 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  // position: relative;
+  // width: 100%;
+  &_open {
+    .toggle {
+      background-color: var(--color-brand);
+      svg {
+        color: white !important;
+      }
+    }
+  }
+}
+
+.test {
+  .MuiMenu-list {
+    padding-top: 0px !important;
+    // width: calc(100% + 0px) !important;
+    /* Другие изменения стилей */
+  }
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-brand-light);
+  padding: rem(8);
+  border-radius: rem(10);
+  border: 1px solid var(--color-brand);
+
+  color: var(--color-brand);
+
+  transition: color $transition, background-color $transition;
+  cursor: pointer;
+
+  width: rem(36);
+  height: rem(36);
+
+  // @include desktop-only {
+  //   &:hover,
+  //   &:focus-visible {
+  //     // background-color: var(--color-brand);
+  //     // color: var(--color-white);
+  //   }
+  // }
+
+  svg {
+    display: block;
+    width: rem(20);
+    height: rem(20);
+    color: var(--color-brand);
+  }
+}
+
+.menu {
+  position: absolute;
+  z-index: 5;
+  // top: calc(100% + #{rem(10)});
+  right: 0;
+  background: var(--color-white);
+  box-shadow: 0 rem(4) rem(28) rgba(77, 70, 98, 0.06);
+  min-width: rem(176);
+  max-width: rem(320);
+  border-radius: rem(10);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.menuTest {
+  position: absolute;
+  
+  z-index: 999;
+  // top: calc(100% + #{rem(10)});
+  right: 0;
+  bottom: 0;
+  bottom: var(--left-offset, 0);
+  // left: 0;  
+  background: var(--color-white);
+  box-shadow: 0 rem(4) rem(28) rgba(77, 70, 98, 0.06);
+  min-width: rem(176);
+  max-width: rem(320);
+  border-radius: rem(10);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  background: var(--color-white);
+  border: none;
+  padding: rem(12) rem(16);
+  cursor: pointer;
+
+  font-size: rem(15);
+  line-height: rem(20);
+
+  display: flex;
+  align-items: center;
+
+
+  transition: background-color $transition;
+
+  svg {
+    display: block;
+    width: rem(20);
+    height: rem(20);
+    margin-right: rem(16);
+    flex-shrink: 0;
+  }
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      background-color: var(--color-super-light);
+    }
+  }
+
+  span {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  
+    text-align: left;
+  }
+
+  &_red {
+    background: var(--color-pink);
+    color: var(--color-red);
+  }
+}
+
+.flexMenu {
+  display: grid;
+  justify-content: stretch;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  align-items: center;
+  height: 44px;
+}
+
+.itemFlex {
+  display: block;
+  height: 100%;
+}
+
+.itemFlexActiveOff {
+  background: #FFF8F6;
+}
+
+.itemFlexActiveOn {
+  background: #F1FFF3;
+}
+
+.divider {
+  border-bottom: 1px solid #F4F4F4;
+}
+
+.itemFlexBlock {
+  background: none;
+  svg {
+    path {
+      stroke: #D2D2D2;
+    }
+  }
+}

@@ -1,0 +1,5 @@
+export { default as StatsChart } from './Chart'
+export { default as StatsDashboard } from './Dashboard'
+export { default as StatsDevicesAlgorithms } from './DevicesAlgorithms'
+export { default as StatsDevicesStatuses } from './DevicesStatuses'
+export { default as StatsFilter } from './Filter'

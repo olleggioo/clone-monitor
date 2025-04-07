@@ -1,0 +1,78 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  margin-bottom: rem(25);
+
+}
+
+.flexActions {
+  display: grid;
+  // align-items: center;
+  grid-template-columns: 1fr 1fr;
+  @media (max-width: 1080px) {
+    grid-template-columns: 1fr;
+    
+    .buttons {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    // align-items: start;
+  }
+}
+
+.actionUsers {
+  display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  align-items: center;
+}
+
+.infoUsersSelected {
+  display: flex;
+  flex-direction: column;
+  font-size: rem(16);
+  font-family: var(--main-font);
+  font-weight: 500;
+  gap: 15px;
+}
+
+.buttonMoreActions {
+  background: none !important;
+  width: auto;
+  div {
+    @media (max-width: 490px) {
+      right: 0px !important;
+    }
+  }
+  .toggle {
+    background: var(--color-brand) !important;
+    color: white;
+  }
+  button {
+
+    @media (max-width: 854px) {
+      // width: 100%;
+    }
+
+  }
+}
+
+
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: rem(10);
+  height: rem(48);
+  margin-left: auto;
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+  }
+}

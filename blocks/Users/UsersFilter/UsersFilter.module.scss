@@ -1,0 +1,69 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.el {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: rem(20);
+}
+
+.field {
+  grid-column: span 4;
+
+  &_small {
+    grid-column: span 3;
+  }
+
+  &_large {
+    grid-column: span 5;
+  }
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+
+  font-size: rem(15);
+  line-height: rem(20);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+}
+
+.resetBtn {
+  // margin-right: rem(30);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--main-font);
+  font-weight: 500;
+}
+
+.moreBtn {
+  svg {
+    transition: transform $transition;
+  }
+}
+
+.isFull {
+  .moreBtn {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -1,0 +1,28 @@
+@import "../../../../styles/functions";
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.el {
+  position: relative;
+  display: flex;
+  // gap: rem(10);
+  align-items: center;
+  padding: rem(10) 0;
+  min-height: rem(40);
+  color: var(--color-text-dark);
+  border-bottom: 1px solid var(--color-stroke);
+
+  @media (max-width: 767px) {
+    gap: 30px;
+  }
+  // margin-right: rem(20);
+}
+
+// .hover {
+//   cursor: pointer;
+// }
+
+.dropdown {
+  margin-right: rem(10);
+  margin-left: auto;
+}

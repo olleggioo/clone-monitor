@@ -1,0 +1,67 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.el {
+  display: flex;
+  padding: rem(14) rem(24);
+  align-items: center;
+  border-radius: rem(8);
+  font-weight: 600;
+  font-size: rem(16);
+  line-height: 100%;
+  color: var(--color-text-dark);
+
+  transition: background-color $transition;
+
+  img, svg {
+    width: rem(20);
+    height: rem(20);
+    color: var(--color-brand);
+    margin-right: rem(16);
+    flex-shrink: 0;
+
+  }
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      background-color: var(--color-brand-light);
+    }
+  }
+}
+
+.el_small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(14) rem(24);
+
+  border-radius: rem(8);
+  font-weight: 600;
+  font-size: rem(16);
+  line-height: 100%;
+  color: var(--color-text-dark);
+
+  transition: background-color $transition;
+
+  img, svg {
+    width: rem(20);
+    height: rem(20);
+    color: var(--color-brand);
+    // margin-right: rem(16);
+    flex-shrink: 0;
+
+  }
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      background-color: var(--color-brand-light);
+    }
+  }
+}
+
+.selected {
+  background-color: var(--color-brand-light);
+}

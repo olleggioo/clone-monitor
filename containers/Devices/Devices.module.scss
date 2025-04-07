@@ -1,0 +1,53 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(20);
+  padding-bottom: rem(100);
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.svgIcon {
+  gap: 10px;
+  svg {
+    path {
+      stroke: #E2605A;
+    }
+  }
+}
+
+.selectedTitle {
+  font-size: rem(16);
+  font-family: var(--main-font);
+  font-weight: 500;
+}
+
+.actionsUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 1521px) {
+    flex-direction: column;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.btn {
+  margin-left: rem(20);
+}

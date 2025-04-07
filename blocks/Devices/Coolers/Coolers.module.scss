@@ -1,0 +1,39 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.el {
+  padding-bottom: 20px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 rem(-10);
+}
+
+.item {
+  width: rem(144);
+  margin: 0 rem(10) rem(20);
+}
+
+.container {
+  grid-template-columns: 30px 1fr 1fr 1fr;
+  overflow: auto;
+  max-height: 215px;
+}
+
+.container::-webkit-scrollbar {
+  width: 8px;              
+}
+
+.container::-webkit-scrollbar-track {
+  background: #DFDFDF;        
+  border-radius: 13px;
+}
+  
+.container::-webkit-scrollbar-thumb {
+  background-color: var(--color-off);
+  border-radius: 13px;       
+    // border: 3px solid (--color-off);
+}

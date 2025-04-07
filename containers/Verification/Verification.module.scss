@@ -1,0 +1,44 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+
+.head {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(10);
+  text-align: center;
+}
+
+.text {
+  font-size: rem(15);
+  line-height: rem(19);
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(20);
+}
+
+.countdown {
+  justify-self: center;
+  font-size: rem(16);
+  line-height: rem(16);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.resent_btn {
+  justify-self: center;
+  font-size: rem(16);
+  line-height: rem(16);
+  font-weight: 500;
+  color: var(--color-brand);
+  background-color: var(--color-transparent);
+  border: none;
+  cursor: pointer;
+  transition: $transition color;
+
+  &:hover, &:focus-visible {
+    color: var(--color-text-muted);
+  }
+}

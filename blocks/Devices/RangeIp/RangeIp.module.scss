@@ -1,0 +1,45 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.isFull {
+    .moreBtn {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+.changeAction {
+  width: rem(300);
+}
+
+.fields {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    gap: rem(20);
+    margin-bottom: 20px;
+
+    @media (max-width: 767px) {
+      display: flex;
+      flex-direction: column;
+    }
+}
+
+.field {
+    grid-column: span 4;
+    &_very_small {
+      grid-column: span 2;
+    }
+    &_small {
+      grid-column: span 3;
+    }
+  
+    &_large {
+      grid-column: span 4;
+    }
+}
+
+.btn {
+    width: 100%;
+}

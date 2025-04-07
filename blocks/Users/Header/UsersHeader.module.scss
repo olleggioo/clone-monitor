@@ -1,0 +1,17 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: rem(10);
+  height: rem(48);
+  margin-left: auto;
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 70px;
+  }
+}

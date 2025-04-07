@@ -1,0 +1,18 @@
+.box {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 500px;
+    margin:60px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;  
+    -moz-user-select: none;   
+    -ms-user-select: none;     
+    user-select: none; 
+    
+    table {
+        width: 100%;
+        td, th {
+            padding: 5px;
+        }
+    }
+}

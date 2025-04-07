@@ -1,0 +1,105 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+
+.connector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    @media (max-width: 1071px) {
+        flex-direction: column;
+    }
+}
+
+.btnAdd {
+    margin-bottom: 20px;
+    span {
+        svg {
+            g {
+                stroke: var(--color-brand);
+            }
+        }
+    }
+}
+
+.btnAdd:hover {
+    span {
+        svg {
+            g {
+                stroke: white;
+                transition: all 0.1s;
+            }
+        }
+    }
+}
+
+.combineBlock {
+    display: grid;
+    grid-template-columns: 1fr 2px 1fr;
+    gap: 20px;
+    position: relative;
+    border-bottom: 1px solid var(--color-stroke);
+
+    @media (max-width: 1079px) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.divider {
+    // position: absolute;
+    // top: 0;
+    // left: 49%;
+    width: 2px;
+    background: var(--color-stroke);
+    height: 100%;
+}
+
+.btn {
+    background: white;
+    color: var(--color-brand);
+    transition: all 0.3s ease;
+
+    @media (max-width: 1071px) {
+        width: 100%;
+    }
+
+    svg * {
+        stroke: var(--color-brand);
+    }    
+}
+
+.delete {
+    // background: var(--color-red);
+    color: var(--color-red);
+    border: 2px solid var(--color-red);
+    @media (max-width: 1071px) {
+        width: 100%;
+    }
+}
+
+.delete:hover {
+    background: var(--color-red-light);
+    border: 2px solid var(--color-red-light);
+
+}
+
+.buttons {
+    display: grid;
+}
+
+.btn:hover {
+    color: white;
+    svg {
+        g {
+            stroke: white;
+        }
+        path {
+            stroke: white;
+        }
+    }
+}

@@ -1,0 +1,61 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.title {
+    font-family: var(--main-font) !important;
+}
+
+.text {
+    font-family: var(--main-font);
+    font-weight: 500;
+    font-size: rem(16) !important;
+}
+
+.cancel {
+    font-family: var(--main-font);
+    font-weight: bold;
+    letter-spacing: 2px;    
+    background: var(--color-red);
+    border: 1px solid var(--color-red);
+    text-transform: capitalize;
+}
+
+.cancel:hover {
+    background: var(--color-red-light);
+    border: 1px solid var(--color-red-light);
+
+}
+
+.save {
+    font-family: var(--main-font);
+    font-weight: bold;
+    background-color: var(--color-brand);
+    letter-spacing: 2px;
+    text-transform: capitalize;
+}
+
+.save:hover {
+    background-color: var(--color-brand-hover);
+}
+
+.errorBtn {
+    font-family: var(--main-font);
+    font-weight: 500;
+    font-size: rem(16) !important;
+    background: var(--color-pink);
+    color: var(--color-red);
+    border: 2px solid var(--color-red);
+}
+
+.errorBtn:hover {
+    background: var(--color-red-light);
+    border: 2px solid var(--color-red-light);
+
+}
+
+.successBtn {
+    font-family: var(--main-font);
+    font-weight: 500;
+    font-size: rem(16) !important;
+}

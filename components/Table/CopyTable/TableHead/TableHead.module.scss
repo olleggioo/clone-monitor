@@ -1,0 +1,83 @@
+@import "../../../../styles/functions";
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.block {
+  position: relative;
+  display: flex;
+  gap: rem(24);
+  align-items: center;
+  padding: rem(10) 0;
+  min-height: rem(20);
+}
+
+.spacer {
+  flex-shrink: 0;
+  width: rem(36);
+  height: rem(12);
+  margin-right: rem(12);
+  margin-left: auto;
+}
+
+.cell {
+  width: 100%;
+  font-weight: 600;
+  font-size: rem(12);
+  line-height: rem(12);
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-transform: uppercase;
+
+  @media (max-width: 767px) {
+    gap: 40px;
+  }
+}
+
+.align {
+  &_center {
+    justify-content: center;
+  }
+
+  &_right {
+    justify-content: flex-end;
+  }
+}
+
+.notSort {
+  .cellTitle {
+    color: var(--color-text-muted);
+  }
+}
+
+.sortIcon {
+  display: block;
+  margin-left: rem(5);
+
+  min-width: rem(15);
+  height: rem(15);
+
+  transform: rotate(-180deg);
+
+  @include tablet {
+    margin-left: rem(2);
+  }
+
+  svg {
+    width: rem(8);
+    height: rem(15);
+  }
+}
+
+.iconActive {
+  transform: rotate(0);
+}
+
+.isActive {
+  color: var(--color-text-muted);
+  svg {
+    width: rem(14);
+    height: rem(14);
+  }
+}

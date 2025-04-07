@@ -1,0 +1,25 @@
+@import "@/styles/functions.scss";
+@import "@/styles/mixins.scss";
+
+.el {
+  &_xl {
+    @include h1;
+    font-weight: 800;
+  }
+
+  &_lg {
+    @include h2;
+    font-weight: 800;
+  }
+
+  &_md {
+    @include h3;
+    font-weight: 600;
+  }
+
+  &_sm {
+    // @include caption;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}

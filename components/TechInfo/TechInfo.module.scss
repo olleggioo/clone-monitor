@@ -1,0 +1,50 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 2fr;
+  max-width: 100%;
+
+  font-size: rem(16);
+  line-height: rem(24);
+  gap: rem(12);
+  column-gap: rem(20);
+
+  @include tablet {
+    grid-template-columns: repeat(2, max-content);
+  }
+
+  @media (max-width: 873px) {
+    column-gap: rem(10);
+  }
+}
+
+.item {
+
+}
+
+.box {
+  height: 100%;
+
+}
+
+.label {
+  color: var(--color-text-muted);
+}
+
+.value {
+  //&:nth-child(2n) {
+  //  padding-right: rem(70);
+  //}
+  //
+  //&:nth-child(4n) {
+  //  padding-right: 0;
+  //}
+}
+
+.addInfo {
+  color: var(--color-text-muted);
+  margin-left: rem(4);
+}

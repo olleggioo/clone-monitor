@@ -1,0 +1,29 @@
+@import "../../styles/functions.scss";
+@import "../../styles/mixins.scss";
+
+.el {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: rem(5);
+
+  input {
+    @include text;
+    height: rem(56);
+    padding: rem(10);
+    font-weight: 500;
+    text-align: center;
+    color: var(--color-text-dark);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-stroke-dark);
+    border-radius: rem(4);
+    overflow: hidden;
+    outline: none;
+    transition: border-color $transition;
+    -webkit-appearance: none;
+    -moz-appearance:textfield;
+  }
+
+  &_error input {
+    border-color: var(--color-error);
+  }
+}

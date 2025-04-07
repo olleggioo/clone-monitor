@@ -1,0 +1,119 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: rem(30);
+}
+
+.headBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.wrapperPool {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+
+}
+
+.wrapperBack {
+  background-color: var(--color-stroke);
+  padding: 15px 15px;
+}
+
+.customScrollbar {
+  font-family: var(--main-font);
+}
+
+.chooseCoin {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.testBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  // padding-top: 24px;
+  // width: 40%;
+}
+
+.comment {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: rem(30);
+}
+
+.commentBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.submit {
+  span {
+    svg {
+      path {
+        stroke: black;
+      }
+    }
+  }
+  &:hover {
+    color: white;
+    svg {
+      path {
+        stroke: white;
+      }
+    }
+  }
+}
+
+.headingItem {
+  border-bottom: 1px solid var(--color-stroke);
+}
+
+.fieldset {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: rem(20);
+}
+
+.fieldSetMini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.field_large {
+  padding-top: 4px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-start;
+
+  > * {
+    margin-right: rem(24);
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.founding {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-error);
+}

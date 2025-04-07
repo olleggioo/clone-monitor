@@ -1,0 +1,15 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: rem(-10);
+}
+
+.btn {
+  margin-right: rem(20);
+  margin-bottom: rem(10);
+}

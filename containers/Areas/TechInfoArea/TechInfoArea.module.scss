@@ -1,0 +1,31 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.el {
+    box-shadow: none;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 30px;
+    @media (max-width: 548px) {
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 100px;
+        
+    }
+    font-size: rem(16);
+    line-height: rem(24);
+    row-gap: 20px;
+}
+
+.title {
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.data {
+    font-weight: 600;
+    font-size: rem(16);
+}

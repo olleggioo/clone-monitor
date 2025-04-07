@@ -1,0 +1,242 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.label {
+  @include caption;
+  color: var(--color-text-muted);
+  margin-bottom: rem(10);
+}
+
+.closeIcon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.testC {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+
+  & > svg {
+    position: absolute;
+    top: 50%;
+    left: rem(24);
+    width: rem(24);
+    height: rem(24);
+    color: var(--color-brand);
+    object-position: center;
+    object-fit: contain;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: color $transition;
+  }
+}
+
+.input {
+  @include text;
+  width: 100%;
+  height: rem(48);
+  padding: rem(15) rem(15);
+  font-size: rem(16);
+  line-height: rem(20);
+  font-weight: 400;
+  font-family: var(--main-font);
+  color: var(--color-text-dark);
+  // background-color: var(--color-skeleton-bg);
+  border: 1px solid #DFDFDF;
+  // border: 1px solid transparent;
+  border-radius: 9px;
+  overflow: hidden;
+  outline: none;
+  transition: border-color $transition,  background-color $transition;
+
+  @include mobile-large {
+    font-size: rem(16);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  &:read-only {
+    // pointer-events: none;
+    background-color: var(--color-gray);
+  }
+
+  &::placeholder {
+    color: var(--color-text-muted);
+    font-family: inherit;
+  }
+
+  &:focus {
+    border-color: var(--color-brand);
+  }
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 rem(50) var(--color-white) inset !important;
+  }
+
+  &[type="password"] {
+    @supports (-moz-appearance:none) {
+      font-size: rem(10);
+    }
+
+    @media not all and (min-resolution:.001dpcm)
+    { @supports (-webkit-appearance:none) {
+      font-size: rem(10);
+    }}
+
+    &::placeholder {
+      font-size: rem(16);
+
+      @include mobile-large {
+        font-size: rem(15);
+      }
+    }
+  }
+
+  &_icon {
+    padding-left: rem(64);
+    border: 1px solid var(--color-stroke-dark);
+    background: var(--color-white);
+    font-weight: 500;
+    border-radius: rem(8);
+  }
+
+  &_passNoIcon {
+    padding-right: rem(55);
+  }
+
+  &_pass {
+    padding-left: rem(64);
+    padding-right: rem(64);
+    border: 1px solid var(--color-stroke-dark);
+    background: var(--color-white);
+    font-weight: 500;
+    border-radius: rem(8);
+  }
+
+  &_disabled {
+    padding-right: rem(55);
+  }
+
+  &_incDec {
+    padding-right: rem(55);
+  }
+}
+
+.error {
+  & > svg {
+    color: var(--color-error);
+  }
+
+  & > input {
+    border-color: var(--color-error);
+
+    &:focus {
+      border-color: var(--color-error);
+    }
+  }
+}
+
+.toggle {
+  position: absolute;
+  top: 50%;
+  right: rem(24);
+  width: rem(24);
+  height: rem(24);
+  color: var(--color-disabled-2);
+  background-color: var(--color-transparent);
+  border: none;
+  outline: none;
+  transform: translateY(-50%);
+  transition: color $transition;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-brand);
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    object-position: center;
+    object-fit: contain;
+  }
+}
+
+.incDecBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: rem(24);
+}
+
+#form-file-upload {
+  height: 16rem;
+  width: 28rem;
+  max-width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+#input-file-upload {
+  display: none;
+}
+
+#label-file-upload {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-width: 2px;
+  border-radius: 1rem;
+  border-style: dashed;
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+#label-file-upload.drag-active {
+  background-color: #ffffff;
+}
+
+.upload-button {
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1rem;
+  border: none;
+  font-family: 'Oswald', sans-serif;
+  background-color: transparent;
+}
+
+.upload-button:hover {
+  text-decoration-line: underline;
+}
+
+#drag-file-element {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}

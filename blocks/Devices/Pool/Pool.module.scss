@@ -1,0 +1,15 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.container {
+    grid-template-columns: 1fr 1fr 1fr;
+    height: auto;
+    overflow-y: hidden;
+}
+
+.reserveContainer {
+    grid-template-columns: 1fr 1fr;
+    height: auto;
+    overflow-y: hidden;
+}

@@ -1,0 +1,108 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: -1.025rem;
+
+  @include tablet-small {
+    flex-wrap: nowrap;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-bottom: 0;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1rem;
+    // flex-shrink: 1;
+  }
+}
+
+.control {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding-bottom: rem(10);
+
+  margin-right: rem(24);
+  margin-bottom: rem(10);
+
+  font-weight: 500;
+  font-size: rem(16);
+  line-height: rem(20);
+
+  font-family: var(--main-font);
+
+  color: var(--color-text-muted);
+  transition: color $transition, opacity $transition;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: var(--color-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform $transition;
+  }
+
+  &_active {
+    color: var(--color-text-dark);
+    pointer-events: none;
+
+    &::after {
+      transform: scaleX(1);
+      background-color: var(--color-brand);
+    }
+  }
+
+  @include desktop-only {
+    &:hover,
+    &:focus-visible {
+      opacity: 0.7;
+    }
+  }
+
+  @include tablet-small {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  span {
+    margin-left: rem(4);
+  }
+}
+
+.green {
+  color: var(--color-success);
+}
+
+.orange {
+  color: var(--color-warning-dark);
+}
+
+.red {
+  color: var(--color-red-light);
+}
+
+.grey {
+  color: var(--color-text-muted);
+}
+
+.black {
+  color: var(--color-text-light)
+}

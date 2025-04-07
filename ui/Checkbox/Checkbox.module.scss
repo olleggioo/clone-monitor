@@ -1,0 +1,145 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: inline-flex;
+  min-width: 100px;
+  min-height: rem(20);
+
+  &_small {
+    .label {
+      &::after {
+        width: rem(14);
+        height: rem(14);
+      }
+
+      &::before {
+        width: rem(16);
+        height: rem(16);
+        background-size: rem(12);
+      }
+    }
+  }
+
+  &_reverse {
+    flex-direction: row-reverse;
+    width: 100%;
+
+    .input:checked {
+      + .label {
+        color: var(--color-text-dark);
+      }
+    }
+
+    .label {
+      padding-left: 0;
+      font-style: normal;
+      font-weight: 500;
+      font-size: rem(15);
+      line-height: rem(24);
+      color: var(--color-text-dark);
+
+      @include tablet-small {
+        font-size: rem(16);
+      }
+
+      &::before {
+        left: auto;
+        right: 0;
+      }
+
+      &::after {
+        right: 0;
+        left: auto;
+      }
+    }
+  }
+}
+
+.label {
+  position: relative;
+  width: 100%;
+  padding-left: rem(30);
+  font-size: rem(14);
+  text-align: center;
+
+  display: inline-flex;
+  align-items: center;
+
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: color $transition, background-color $transition, border-color $transition;
+
+  -webkit-tap-highlight-color: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: rem(18);
+    height: rem(18);
+    border: 1px solid transparent;
+    border-color: var(--color-text-muted);
+    border-radius: rem(4);
+
+    transition: background-color $transition;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    width: rem(20);
+    height: rem(20);
+    background-image: url('/images/icons/check.svg');
+    background-size: rem(16);
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+
+    transition: opacity $transition;
+  }
+
+
+  @include desktop-only {
+    &:hover,
+    &:focus {
+      color: var(--color-brand);
+
+      &::after {
+        border-color: var(--color-brand);
+      }
+    }
+  }
+}
+
+.input {
+  @include visually-hidden;
+
+  &:checked {
+    + .label {
+      color: var(--color-text-muted);
+
+      &::after {
+        background-color: var(--color-brand);
+        border-color: var(--color-brand);
+      }
+
+      &:before {
+        opacity: 1;
+      }
+
+      @include desktop-only {
+        &:hover,
+        &:focus {
+          color: var(--color-brand);
+        }
+      }
+    }
+  }
+}

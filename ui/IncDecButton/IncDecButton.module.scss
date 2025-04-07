@@ -1,0 +1,46 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: flex;
+  flex-direction: column;
+  width: rem(26);
+}
+
+.button {
+  width: 100%;
+  height: rem(14);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 2px;
+
+  background-color: var(--color-sort);
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  transition: opacity $transition;
+
+  &:first-of-type {
+    margin-bottom: rem(4);
+  }
+
+  @include desktop-only {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  svg {
+    width: rem(14);
+    height: rem(14);
+  }
+}
+
+.inc svg {
+  transform: rotate(180deg);
+}

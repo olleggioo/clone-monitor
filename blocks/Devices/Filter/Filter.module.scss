@@ -1,0 +1,104 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.fields {
+  display: grid;
+  gap: rem(20);
+  grid-template-columns: repeat(6, 1fr);
+
+  @media (max-width: 1729px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1079px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 950px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldMedium {
+  grid-column: span 1;
+}
+
+.field {
+  grid-column: span 1;
+
+  // @media (max-width: 1500px) {
+  //   grid-column: span 20;
+  // }
+  
+  // &_small {
+  //   grid-column: span 2;
+  //   @media (max-width: 1500px) {
+  //     grid-column: span 10;
+  //   }
+
+  //   @media (max-width: 1854px) {
+  //     grid-column: span 4;
+  //   }
+  // }
+
+  // &_large {
+  //   grid-column: span 5;
+  // }
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+
+  font-size: rem(15);
+  line-height: rem(20);
+  font-weight: 500;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    gap: rem(30);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+}
+
+.resetBtn {
+  margin-right: rem(30);
+}
+
+.moreBtn {
+  svg {
+    transition: transform $transition;
+  }
+}
+
+.isFull {
+  .moreBtn {
+    svg {
+      transform: rotate(180deg);
+   }
+  }
+}
+
+/* Добавьте анимацию для плавного изменения высоты */
+// @keyframes slideIn {
+//   from {
+//     max-height: 0;
+//     opacity: 0;
+//   }
+//   to {
+//     max-height: 500px; /* Максимальная высота, на которую нужно раскрыть элемент */
+//     opacity: 1;
+//   }
+// }
+
+// /* Примените анимацию к элементу */
+// .slideIn {
+//   animation: slideIn 0.5s; /* Длительность анимации и функция сглаживания */
+// }

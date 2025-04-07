@@ -1,0 +1,39 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+
+.el {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(40);
+  align-items: flex-start;
+
+  padding-bottom: rem(20);
+  border-bottom: 1px solid var(--color-stroke-dark);
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include tablet-small {
+    grid-template-columns: 100%;
+  }
+}
+
+.fieldset {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(20);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(10);
+
+  @include mobile-large {
+    grid-template-columns: 100%;
+    gap: rem(20);
+  }
+}

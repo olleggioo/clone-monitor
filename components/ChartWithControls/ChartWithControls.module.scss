@@ -1,0 +1,78 @@
+@import "../../styles/functions";
+@import "../../styles/mixins";
+
+.el {
+  border-radius: rem(12);
+}
+
+.flexDates {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  @media (max-width: 1080px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-left: 0px;
+    align-items: center;
+    // row-gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+  }
+
+  @media (max-width: 628px) {
+    flex-direction: column;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 1080px) {
+    flex-direction: column;
+    align-items: inherit;
+    // row-gap: 2rem;
+  }
+}
+
+// .period {
+//   // margin-left: auto;
+// }
+
+.dataPicker {
+  margin-left: 10px;
+  div {
+    input {
+      width: rem(180);
+      padding: 14px 10px;
+      font-family: var(--main-font);
+      font-weight: bold;
+      font-size: 15px;
+      border-radius: 9px;
+      border: 1px solid #DFDFDF;
+    }
+  }
+  button::after {
+    background-color: white;
+    color: #000;
+    height: 29px;
+    width: 29px;
+    font-size: 29px;
+  }
+}
+
+.dataPicker {
+  div {
+    input:focus-visible {
+      outline: 1px solid #DFDFDF;
+    }
+  }
+}
+
+.box {
+  grid-column: 1 / -1;
+}

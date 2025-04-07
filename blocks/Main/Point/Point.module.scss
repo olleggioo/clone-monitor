@@ -1,0 +1,33 @@
+@import "../../../styles/functions.scss";
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+.group {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    z-index: 1;
+    width: 21px;
+}
+
+.point {    
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: #8F00FF;
+    border: 2px solid white;
+    transition: all 0.1s ease;
+}
+
+.point:hover {
+    width: 21px;
+    height: 21px;
+}
+
+.town {
+    color: white;
+    font-size: rem(12);
+    letter-spacing: rem(0.5);
+}

@@ -1,0 +1,30 @@
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: rem(20);
+  grid-column: span 4;
+
+  @media (max-width: 1080px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.list_small {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: rem(20);
+  grid-column: span 4;
+}
+
+.el {
+  border-radius: rem(12);
+}

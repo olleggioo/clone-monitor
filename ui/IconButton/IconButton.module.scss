@@ -1,0 +1,40 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  display: flex;
+  align-items: center;
+
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  color: var(--color-disable);
+
+  transition: color $transition;
+
+  svg {
+    width: rem(20);
+    height: rem(20);
+    transform: translateZ(0);
+  }
+
+  // @include desktop-only {
+  //   &:hover,
+  //   &:focus-visible {
+  //     color: var(--color-brand);
+  //   }
+  // }
+
+  &_text {
+    color: var(--color-text-dark);
+
+    svg {
+      margin-right: rem(16);
+      color: var(--color-red);
+    }
+  }
+}

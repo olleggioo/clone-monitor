@@ -1,0 +1,305 @@
+
+@import "../../../styles/functions";
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+  .container {
+    display: grid;
+    border-collapse: collapse;
+    min-width: 100%;
+    position: relative;
+    transition: all 0.3s ease;
+    transition: scroll-behavior 0.5s ease-in-out;
+    border-collapse: separate;
+    border-spacing: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;  
+    -moz-user-select: none;   
+    -ms-user-select: none;     
+    user-select: none; 
+    color: var(--color-text-dark);
+    grid-template-columns:
+        minmax(50px, 1fr)
+        minmax(50px, 2fr)
+        minmax(350px, 2fr)
+        minmax(130px, 1.67fr)
+        minmax(130px, 1.67fr)
+        minmax(130px, 3.33fr)
+        minmax(170px, 3.33fr)
+        minmax(170px, 3.33fr)
+        minmax(200px, 3.33fr)
+        minmax(200px, 3.33fr)
+        minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(120px, 1.67fr)
+        minmax(120px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(100px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr)
+        minmax(150px, 1.67fr);
+    overflow: auto;
+    max-height: 900px;
+    height: auto;
+  }
+  .container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;              
+    
+}
+
+.headCol {
+  display: flex;
+  flex-direction: row;
+}
+  
+.container::-webkit-scrollbar-track {
+    background: white;
+    // border: 1px solid var(--color-off);     
+    border-radius: 20px;   
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: var(--color-off);
+    border-radius: 20px;       
+    // border: 1px solid black;
+}
+  
+  .thead,
+  .tbody,
+  .tr {
+    display: contents;
+  }
+  
+  .th,
+  .td {
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // white-space: nowrap;
+    
+  }
+  
+  .th {
+    position: sticky;
+    top: 0;
+    background: #fafafa;
+    text-align: left;
+    font-weight: normal;
+    font-size: 1.1rem;
+    color: var(--color-text-dark);
+    z-index: 2;
+  }
+  
+  .th:last-child {
+    border: 0;
+  }
+  
+  .td {
+    position: relative;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    color: var(--color-text-dark);
+    font-size: rem(15);
+    line-height: rem(20);
+    font-weight: 600;
+    cursor: pointer;
+    word-wrap: break-word; /* для поддержки браузеров, где нет overflow-wrap */
+    overflow-wrap: break-word;
+    // text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+.text {
+  overflow-wrap: anywhere;
+}
+
+  .th {
+    // padding-top: 5px;
+    // padding-bottom: 5px;
+    // color: var(--color-text-dark);
+    // color: #B5BEC6;
+    font-size: rem(15);
+    line-height: rem(20);
+    // max-width: 150px;
+    font-weight: 600;
+    cursor: pointer;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    // text-overflow: ellipsis;
+    word-break: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+.tr:nth-child(even) td {
+    background: #fafafa;
+}
+
+.tr:nth-child(odd) td {
+    background: white;
+}
+
+.dropBlock:nth-child(even) td {
+    background: #fafafa;
+}
+
+.dropBlock:nth-child(odd) td {
+    background: white;
+}
+  
+  .otherDropdown {
+    div {
+        position: fixed;
+        right: 41px;
+        border: 1px solid var(--color-stroke);
+        border-radius: 9px;
+    }
+}
+
+.rowInput {
+    position: sticky;
+    left: 0;
+    background: white;
+    // z-index: 1;
+    z-index: 4;
+    align-content: center;
+    // padding-top: 20px;
+
+    input {
+        border-radius: 50px;
+        @media (min-width: 2400px) {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.headerCheckbox {
+    position: sticky;
+    left: 0;
+    top: 0;
+    // background: white;
+    // z-index: 1;
+    z-index: 5;
+    align-content: center;
+    // padding-top: 20px;
+
+    input {
+        border-radius: 50px;
+        @media (min-width: 2400px) {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.checkbox-column {
+    position: sticky;
+    width: 40px;
+    padding-right: 40px;
+    left: 0;
+    top: 0;
+    // align-content: center;
+    z-index: 222;
+    background-color: white;
+    width: 15px;
+    // @media (min-width: 2400px) {
+    //     width: 20px;
+    //     height: 20px;
+    // }
+}
+
+.toLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    // background: var(--color-brand);
+    background: var(--color-brand-light);
+    padding: rem(8);
+    border-radius: rem(10);
+    border: 1px solid var(--color-brand);
+  
+    color: var(--color-brand);
+  
+    transition: color $transition, background-color $transition;
+    cursor: pointer;
+  
+    width: rem(36);
+    height: rem(36);
+  
+    // @include desktop-only {
+    //   &:hover,
+    //   &:focus-visible {
+    //     background-color: var(--color-brand);
+    //     color: var(--color-white);
+    //   }
+    // }
+  
+    svg {
+      display: block;
+      width: 2.25rem;
+      height: 2.25rem;
+      g {
+        stroke: var(--color-brand);
+      }
+    }
+  }
+
+  .copyStatus {
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    z-index: 999;
+    background-color: var(--color-success);
+    color: #fff; 
+    font-family: var(--main-font);
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 1;
+    transition: opacity 1.3s ease;
+    font-size: rem(15);
+  }
+
+.copyStatus::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -10px;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent var(--color-success) transparent;
+}
+
+.changePoolStatusVerbose {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pending {
+  background-color: var(--color-warning-dark);
+  width: rem(12);
+  height: rem(12);
+  margin-right: rem(8);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color $transition;
+}
+
+.fail {
+  background-color: var(--color-error);
+  width: rem(12);
+  height: rem(12);
+  margin-right: rem(8);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color $transition;
+}

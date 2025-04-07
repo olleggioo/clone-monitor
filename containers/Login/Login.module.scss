@@ -1,0 +1,15 @@
+@import "../../styles/functions";
+
+.title {
+  text-align: center;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: rem(20);
+}
+
+.fields_mobile {
+  display: grid;
+}

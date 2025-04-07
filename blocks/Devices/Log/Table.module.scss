@@ -1,0 +1,29 @@
+.container {
+    grid-template-columns: 150px 1fr 1fr 1fr 1fr 1fr 300px;
+}
+
+.containerByUser {
+    grid-template-columns: 150px 1fr 1fr 1fr 1fr 1fr 1fr 300px;
+}
+
+.containerUser {
+    grid-template-columns: 150px 1fr 1fr 1fr 1fr 1fr 100px;
+}
+
+.logContainer {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.antminerLog {
+    grid-template-columns: 1fr 1fr;
+}
+
+.box {
+    grid-column: 1 / -1;
+}
+
+.updateBtn {
+    position: absolute;
+    top: 0.5rem;
+    left: 5rem;
+}

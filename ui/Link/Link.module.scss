@@ -1,0 +1,51 @@
+@import "../../styles/functions";
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.el {
+  @include text;
+  display: inline;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: rem(4);
+  text-decoration-thickness: 1px;
+  color: var(--color-brand);
+  background-color: var(--color-transparent);
+  border: none;
+  cursor: pointer;
+  transition: color $transition, text-decoration-color $transition;
+  transform: translateZ(0);
+
+  @include desktop-only {
+    &:hover {
+      color: var(--color-text-dark);
+      text-decoration-color: var(--color-text-dark);
+    }
+  }
+
+  @include tablet {
+    outline: none;
+  }
+
+  &_underline {
+    text-decoration-color: var(--color-brand);
+
+    @include desktop-only {
+      &:hover {
+        text-decoration-color: transparent;
+      }
+    }
+  }
+
+  &_gray {
+    color: var(--color-text-muted);
+
+    @include desktop-only {
+      &:hover {
+        color: var(--color-brand);
+        text-decoration-color: transparent;
+      }
+    }
+  }
+}
